@@ -13,7 +13,7 @@ public class Pasajero {
 
     public Pasajero() {
     }
-
+    
     public Pasajero(int idPasajero, String dni, String nombre,
                     String apellido, String correo,
                     String telefono, boolean estado) {
