@@ -1,7 +1,7 @@
 package modelo;
 
 
-/** Entidad Colectivo. La columna generada reserva_activa NO se asigna desde Java. */
+/* Entidad Colectivo. La columna generada reserva_activa NO se asigna desde Java. */
 public class Colectivo {
     private int idColectivo;
 

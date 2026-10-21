@@ -1,14 +1,52 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modelo;
 
-/**
- *
- * @author lbors
- */
 public class Asiento {
-    
+    private int idAsiento;
+
+    private int idColectivo;
+
+    private int numeroAsiento;
+
+    private boolean estado = true;
+
+    public Asiento() { }
+
+    public Asiento(int idAsiento, int idColectivo, int numeroAsiento, boolean estado) {
+        this.idAsiento = idAsiento;
+        this.idColectivo = idColectivo;
+        this.numeroAsiento = numeroAsiento;
+        this.estado = estado;
+    }
+
+    public int getIdAsiento() {
+        return idAsiento;
+    }
+
+    public void setIdAsiento(int idAsiento) {
+        this.idAsiento = idAsiento;
+    }
+
+    public int getIdColectivo() {
+        return idColectivo;
+    }
+
+    public void setIdColectivo(int idColectivo) {
+        this.idColectivo = idColectivo;
+    }
+
+    public int getNumeroAsiento() {
+        return numeroAsiento;
+    }
+
+    public void setNumeroAsiento(int numeroAsiento) {
+        this.numeroAsiento = numeroAsiento;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
 }
