@@ -4,36 +4,40 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 public class RutaViaje {
+
     private int idRuta;
-
     private String origen;
-
     private String destino;
-
     private LocalDate fechaViaje;
-
     private LocalTime horaSalida;
-
     private LocalTime horaLlegada;
-
-    private int idColectivo;
-
+    private Colectivo colectivo;
     private BigDecimal precio;
+    private boolean estado;
 
-    private boolean estado = true;
+    public RutaViaje() {
+    }
 
-    public RutaViaje() { }
+    public RutaViaje(String origen, String destino, LocalDate fechaViaje, LocalTime horaSalida, LocalTime horaLlegada, Colectivo colectivo, BigDecimal precio, boolean estado) {
+        this.origen = origen;
+        this.destino = destino;
+        this.fechaViaje = fechaViaje;
+        this.horaSalida = horaSalida;
+        this.horaLlegada = horaLlegada;
+        this.colectivo = colectivo;
+        this.precio = precio;
+        this.estado = estado;
+    }
 
-    public RutaViaje(int idRuta, String origen, String destino, LocalDate fechaViaje, LocalTime horaSalida, LocalTime horaLlegada, int idColectivo, BigDecimal precio, boolean estado) {
+    public RutaViaje(int idRuta, String origen, String destino, LocalDate fechaViaje, LocalTime horaSalida, LocalTime horaLlegada, Colectivo colectivo, BigDecimal precio, boolean estado) {
         this.idRuta = idRuta;
         this.origen = origen;
         this.destino = destino;
         this.fechaViaje = fechaViaje;
         this.horaSalida = horaSalida;
         this.horaLlegada = horaLlegada;
-        this.idColectivo = idColectivo;
+        this.colectivo = colectivo;
         this.precio = precio;
         this.estado = estado;
     }
@@ -86,12 +90,12 @@ public class RutaViaje {
         this.horaLlegada = horaLlegada;
     }
 
-    public int getIdColectivo() {
-        return idColectivo;
+    public Colectivo getColectivo() {
+        return colectivo;
     }
 
-    public void setIdColectivo(int idColectivo) {
-        this.idColectivo = idColectivo;
+    public void setColectivo(Colectivo colectivo) {
+        this.colectivo = colectivo;
     }
 
     public BigDecimal getPrecio() {
@@ -109,4 +113,10 @@ public class RutaViaje {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "RutaViaje{" + "idRuta=" + idRuta + ", origen=" + origen + ", destino=" + destino + ", fechaViaje=" + fechaViaje + ", horaSalida=" + horaSalida + ", horaLlegada=" + horaLlegada + ", colectivo=" + colectivo + ", precio=" + precio + ", estado=" + estado + '}';
+    }
+
 }
