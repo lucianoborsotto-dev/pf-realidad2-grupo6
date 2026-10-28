@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import modelo.RutaViaje;
 import org.mariadb.jdbc.Statement;
 
@@ -44,6 +46,34 @@ public class RutaViajeDAO {
             }
         }
         return true;
+    }
+    
+    public List<RutaViaje> listarRutas() throws SQLException {
+        String sql = "SELECT * FROM rutas";
+        List<RutaViaje> rutas = new ArrayList<>();
+        try (
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                rutas.add(leerRuta(rs));
+            }
+        }
+        return rutas;
+    }
+    
+    private RutaViaje leerRuta(ResultSet rs) throws SQLException {
+        
+        
+        
+        return new RutaViaje(
+                rs.getInt("id_ruta"),
+                rs.getString("origen"),
+                rs.getString("destino"),
+                rs.getDate("fecha_viaje"),
+                rs.getTime("hora_salida"),
+                rs.getTime("hora_llegada"),
+                colectivo
+        )
     }
 
 }

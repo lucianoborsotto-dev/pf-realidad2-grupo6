@@ -42,6 +42,10 @@ public class RutaViaje {
         this.estado = estado;
     }
 
+    public RutaViaje(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public int getIdRuta() {
         return idRuta;
     }

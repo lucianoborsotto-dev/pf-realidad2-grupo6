@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import javax.swing.JOptionPane;
 import modelo.Colectivo;
 import modelo.RutaViaje;
+import persistencia.ColectivoDAO;
 import persistencia.RutaViajeDAO;
 
 public class FlechaFlash {
@@ -17,10 +18,14 @@ public class FlechaFlash {
 
         try {
 
-            Colectivo c = new Colectivo(1,"AAA333", "VOLVO", "300X", 46, "Pablo Perez", true);
-            RutaViaje r = new RutaViaje("San Luis", "Mendoza", LocalDate.of(2026, 10, 2), LocalTime.of(20, 30), LocalTime.of(23, 00), c, BigDecimal.valueOf(2.33), true);
-            RutaViajeDAO rutaDAO = new RutaViajeDAO();
-            rutaDAO.insertar(r);
+            Colectivo c = new Colectivo("BBB444", "IVECO", "147PRO", 46, "ROMAN RIQUELME", true);
+            ColectivoDAO colectivoDAO = new ColectivoDAO();
+            colectivoDAO.insertar(c);
+            
+            
+//            RutaViaje r = new RutaViaje("San Luis", "Mendoza", LocalDate.of(2026, 10, 2), LocalTime.of(20, 30), LocalTime.of(23, 00), c, BigDecimal.valueOf(2.33), true);
+//            RutaViajeDAO rutaDAO = new RutaViajeDAO();
+//            rutaDAO.insertar(r);
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);

@@ -48,10 +48,10 @@ public class PasajeroDAO {
 
     // Incluye pasajeros activos e inactivos.
     public List<Pasajero> listar() throws SQLException, ClassNotFoundException {
-        String sql = "SELECT id_pasajero, dni, nombre, apellido, correo, telefono, estado "
+        String sql = "SELECT * "
                 + "FROM pasajeros ORDER BY id_pasajero";
         List<Pasajero> pasajeros = new ArrayList<>();
-        try (Connection con = Conexion.conectar();
+        try (
                 PreparedStatement ps = con.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -62,9 +62,9 @@ public class PasajeroDAO {
     }
 
     public Pasajero buscarPorId(int idPasajero) throws SQLException, ClassNotFoundException {
-        String sql = "SELECT id_pasajero, dni, nombre, apellido, correo, telefono, estado "
+        String sql = "SELECT * "
                 + "FROM pasajeros WHERE id_pasajero = ?";
-        try (Connection con = Conexion.conectar();
+        try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
             try (ResultSet rs = ps.executeQuery()) {
@@ -76,7 +76,7 @@ public class PasajeroDAO {
     public boolean actualizar(Pasajero pasajero) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE pasajeros SET dni = ?, nombre = ?, apellido = ?, "
                 + "correo = ?, telefono = ?, estado = ? WHERE id_pasajero = ?";
-        try (Connection con = Conexion.conectar();
+        try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, pasajero.getDni());
             ps.setString(2, pasajero.getNombre());
@@ -93,7 +93,7 @@ public class PasajeroDAO {
     public boolean darDeBaja(int idPasajero) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE pasajeros SET estado = 0 "
                 + "WHERE id_pasajero = ? AND estado <> 0";
-        try (Connection con = Conexion.conectar();
+        try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
             return ps.executeUpdate() == 1;
@@ -103,7 +103,7 @@ public class PasajeroDAO {
     public boolean reactivar(int idPasajero) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE pasajeros SET estado = 1 "
                 + "WHERE id_pasajero = ? AND estado = 0";
-        try (Connection con = Conexion.conectar();
+        try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
             return ps.executeUpdate() == 1;
