@@ -1,4 +1,3 @@
-
 package modelo;
 
 import java.math.BigDecimal;
@@ -7,15 +6,16 @@ import java.time.LocalTime;
 
 /* Entidad Pasaje. La columna generada reserva_activa NO se asigna desde Java */
 public class Pasaje {
+
     private int idPasaje;
 
-    private int idPasajero;
+    private Pasajero pasajero;
 
-    private int idLugar;
+    private Asiento asiento;
 
-    private int idRuta;
+    private RutaViaje ruta;
 
-    private int idColectivo;
+    private Colectivo colectivo;
 
     private LocalDate fechaVenta;
 
@@ -25,18 +25,18 @@ public class Pasaje {
 
     private boolean estado = true;
 
-    public Pasaje() { }
+    public Pasaje() {
+    }
 
-    public Pasaje(int idPasaje, int idPasajero, int idLugar, int idRuta, int idColectivo, LocalDate fechaVenta, LocalTime horaVenta, BigDecimal precio, boolean estado) {
+    public Pasaje(int idPasaje, Pasajero pasajero, Asiento asiento, RutaViaje ruta, Colectivo colectivo, LocalDate fechaVenta, LocalTime horaVenta, BigDecimal precio) {
         this.idPasaje = idPasaje;
-        this.idPasajero = idPasajero;
-        this.idLugar = idLugar;
-        this.idRuta = idRuta;
-        this.idColectivo = idColectivo;
+        this.pasajero = pasajero;
+        this.asiento = asiento;
+        this.ruta = ruta;
+        this.colectivo = colectivo;
         this.fechaVenta = fechaVenta;
         this.horaVenta = horaVenta;
         this.precio = precio;
-        this.estado = estado;
     }
 
     public int getIdPasaje() {
@@ -47,36 +47,36 @@ public class Pasaje {
         this.idPasaje = idPasaje;
     }
 
-    public int getIdPasajero() {
-        return idPasajero;
+    public Pasajero getPasajero() {
+        return pasajero;
     }
 
-    public void setIdPasajero(int idPasajero) {
-        this.idPasajero = idPasajero;
+    public void setPasajero(Pasajero pasajero) {
+        this.pasajero = pasajero;
     }
 
-    public int getIdLugar() {
-        return idLugar;
+    public Asiento getAsiento() {
+        return asiento;
     }
 
-    public void setIdLugar(int idLugar) {
-        this.idLugar = idLugar;
+    public void setAsiento(Asiento asiento) {
+        this.asiento = asiento;
     }
 
-    public int getIdRuta() {
-        return idRuta;
+    public RutaViaje getRuta() {
+        return ruta;
     }
 
-    public void setIdRuta(int idRuta) {
-        this.idRuta = idRuta;
+    public void setRuta(RutaViaje ruta) {
+        this.ruta = ruta;
     }
 
-    public int getIdColectivo() {
-        return idColectivo;
+    public Colectivo getColectivo() {
+        return colectivo;
     }
 
-    public void setIdColectivo(int idColectivo) {
-        this.idColectivo = idColectivo;
+    public void setColectivo(Colectivo colectivo) {
+        this.colectivo = colectivo;
     }
 
     public LocalDate getFechaVenta() {
@@ -110,4 +110,10 @@ public class Pasaje {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "Pasaje{" + "idPasaje=" + idPasaje + ", pasajero=" + pasajero + ", asiento=" + asiento + ", ruta=" + ruta + ", colectivo=" + colectivo + ", fechaVenta=" + fechaVenta + ", horaVenta=" + horaVenta + ", precio=" + precio + ", estado=" + estado + '}';
+    }
+
 }

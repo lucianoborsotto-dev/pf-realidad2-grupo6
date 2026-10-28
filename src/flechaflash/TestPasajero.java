@@ -12,7 +12,7 @@ public class TestPasajero {
     private static final Scanner ENTRADA = new Scanner(System.in);
     private static final PasajeroDAO DAO = new PasajeroDAO();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         boolean continuar = true;
         while (continuar) {
             System.out.println("\n=== FlechaFlash: ABM de pasajeros ===");
@@ -43,7 +43,7 @@ public class TestPasajero {
         }
     }
 
-    private static void alta() throws SQLException {
+    private static void alta() throws SQLException, ClassNotFoundException {
         String dni = pedir("DNI: ");
         String nombre = pedir("Nombre: ");
         String apellido = pedir("Apellido: ");
@@ -63,12 +63,12 @@ public class TestPasajero {
         }
     }
 
-    private static void buscar() throws SQLException {
+    private static void buscar() throws SQLException, ClassNotFoundException {
         int id = pedirId();
         mostrar(DAO.buscarPorId(id));
     }
 
-    private static void modificar() throws SQLException {
+    private static void modificar() throws SQLException, ClassNotFoundException {
         int id = pedirId();
         Pasajero pasajero = DAO.buscarPorId(id);
         if (pasajero == null) {
@@ -86,7 +86,7 @@ public class TestPasajero {
                 ? "Modificacion correcta." : "No se pudo modificar.");
     }
 
-    private static void baja() throws SQLException {
+    private static void baja() throws SQLException, ClassNotFoundException {
         int id = pedirId();
         Pasajero pasajero = DAO.buscarPorId(id);
         if (pasajero == null) {
@@ -109,7 +109,7 @@ public class TestPasajero {
                 : "No se pudo confirmar la baja.");
     }
 
-    private static void listar() throws SQLException {
+    private static void listar() throws SQLException, ClassNotFoundException {
         List<Pasajero> pasajeros = DAO.listar();
         if (pasajeros.isEmpty()) {
             System.out.println("No hay pasajeros registrados.");
