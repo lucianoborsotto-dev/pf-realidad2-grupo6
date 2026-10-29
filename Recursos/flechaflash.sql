@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-10-2026 a las 18:35:56
+-- Tiempo de generación: 28-10-2026 a las 01:33:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -36,8 +36,31 @@ CREATE TABLE `colectivos` (
   `modelo` varchar(50) NOT NULL,
   `capacidad` int(11) NOT NULL,
   `chofer` varchar(100) NOT NULL,
-  `estado` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `estado` tinyint(1) NOT NULL DEFAULT 1
+) ;
+
+--
+-- Disparadores `colectivos`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_colectivo_capacidad` BEFORE UPDATE ON `colectivos` FOR EACH ROW BEGIN
+  IF NEW.capacidad <> OLD.capacidad THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La capacidad no puede modificarse automaticamente; gestione los asientos primero';
+  END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_colectivo_crear_asientos` AFTER INSERT ON `colectivos` FOR EACH ROW BEGIN
+  DECLARE numero INT DEFAULT 1;
+  WHILE numero <= NEW.capacidad DO
+    INSERT INTO lugares (id_colectivo, numero_asiento, estado)
+    VALUES (NEW.id_colectivo, numero, 1);
+    SET numero = numero + 1;
+  END WHILE;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -49,8 +72,28 @@ CREATE TABLE `lugares` (
   `id_lugar` int(11) NOT NULL,
   `id_colectivo` int(11) NOT NULL,
   `numero_asiento` int(11) NOT NULL,
-  `estado` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `estado` tinyint(1) NOT NULL DEFAULT 1
+) ;
+
+--
+-- Disparadores `lugares`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_lugar_validar_insert` BEFORE INSERT ON `lugares` FOR EACH ROW BEGIN
+  IF NEW.numero_asiento < 1 OR NEW.numero_asiento > COALESCE((SELECT capacidad FROM colectivos WHERE id_colectivo = NEW.id_colectivo), 0) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Numero de asiento fuera de la capacidad del colectivo';
+  END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_lugar_validar_update` BEFORE UPDATE ON `lugares` FOR EACH ROW BEGIN
+  IF NEW.numero_asiento < 1 OR NEW.numero_asiento > COALESCE((SELECT capacidad FROM colectivos WHERE id_colectivo = NEW.id_colectivo), 0) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Numero de asiento fuera de la capacidad del colectivo';
+  END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -65,8 +108,8 @@ CREATE TABLE `pasajeros` (
   `apellido` varchar(100) NOT NULL,
   `correo` varchar(150) DEFAULT NULL,
   `telefono` varchar(20) DEFAULT NULL,
-  `estado` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `estado` tinyint(1) NOT NULL DEFAULT 1
+) ;
 
 -- --------------------------------------------------------
 
@@ -85,7 +128,37 @@ CREATE TABLE `pasajes` (
   `estado` tinyint(1) NOT NULL DEFAULT 1,
   `reserva_activa` tinyint(1) GENERATED ALWAYS AS (case when `estado` = 1 then 1 else NULL end) STORED,
   `id_colectivo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
+
+--
+-- Disparadores `pasajes`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_pasaje_validar_insert` BEFORE INSERT ON `pasajes` FOR EACH ROW BEGIN
+  IF NEW.estado = 1 THEN
+    IF NOT EXISTS (SELECT 1 FROM pasajeros p WHERE p.id_pasajero = NEW.id_pasajero AND p.estado = 1) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pasajero no existe o esta inactivo';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM rutas r JOIN colectivos c ON c.id_colectivo = r.id_colectivo JOIN lugares l ON l.id_colectivo = c.id_colectivo WHERE r.id_ruta = NEW.id_ruta AND c.id_colectivo = NEW.id_colectivo AND l.id_lugar = NEW.id_lugar AND r.estado = 1 AND c.estado = 1 AND l.estado = 1 AND TIMESTAMP(r.fecha_viaje, r.hora_salida) > NOW()) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Viaje no disponible, ya iniciado o asiento inhabilitado';
+    END IF;
+  END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_pasaje_validar_update` BEFORE UPDATE ON `pasajes` FOR EACH ROW BEGIN
+  IF NEW.estado = 1 AND (OLD.estado <> 1 OR NEW.id_pasajero <> OLD.id_pasajero OR NEW.id_lugar <> OLD.id_lugar OR NEW.id_ruta <> OLD.id_ruta OR NEW.id_colectivo <> OLD.id_colectivo) THEN
+    IF NOT EXISTS (SELECT 1 FROM pasajeros p WHERE p.id_pasajero = NEW.id_pasajero AND p.estado = 1) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pasajero no existe o esta inactivo';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM rutas r JOIN colectivos c ON c.id_colectivo = r.id_colectivo JOIN lugares l ON l.id_colectivo = c.id_colectivo WHERE r.id_ruta = NEW.id_ruta AND c.id_colectivo = NEW.id_colectivo AND l.id_lugar = NEW.id_lugar AND r.estado = 1 AND c.estado = 1 AND l.estado = 1 AND TIMESTAMP(r.fecha_viaje, r.hora_salida) > NOW()) THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Viaje no disponible, ya iniciado o asiento inhabilitado';
+    END IF;
+  END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -102,8 +175,37 @@ CREATE TABLE `rutas` (
   `hora_llegada` time NOT NULL,
   `id_colectivo` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `estado` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `estado` tinyint(1) NOT NULL DEFAULT 1
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vista_disponibilidad_asientos`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vista_disponibilidad_asientos` (
+`id_ruta` int(11)
+,`origen` varchar(100)
+,`destino` varchar(100)
+,`fecha_viaje` date
+,`hora_salida` time
+,`hora_llegada` time
+,`id_colectivo` int(11)
+,`id_lugar` int(11)
+,`numero_asiento` int(11)
+,`estado_lugar` tinyint(1)
+,`ocupado` int(1)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_disponibilidad_asientos`
+--
+DROP TABLE IF EXISTS `vista_disponibilidad_asientos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_disponibilidad_asientos`  AS SELECT `r`.`id_ruta` AS `id_ruta`, `r`.`origen` AS `origen`, `r`.`destino` AS `destino`, `r`.`fecha_viaje` AS `fecha_viaje`, `r`.`hora_salida` AS `hora_salida`, `r`.`hora_llegada` AS `hora_llegada`, `r`.`id_colectivo` AS `id_colectivo`, `l`.`id_lugar` AS `id_lugar`, `l`.`numero_asiento` AS `numero_asiento`, `l`.`estado` AS `estado_lugar`, CASE WHEN `p`.`id_pasaje` is null THEN 0 ELSE 1 END AS `ocupado` FROM ((`rutas` `r` join `lugares` `l` on(`l`.`id_colectivo` = `r`.`id_colectivo`)) left join `pasajes` `p` on(`p`.`id_ruta` = `r`.`id_ruta` and `p`.`id_lugar` = `l`.`id_lugar` and `p`.`estado` = 1)) ;
 
 --
 -- Índices para tablas volcadas

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /* Operaciones de acceso a la tabla pasajeros de la base flechaflash */
 public class PasajeroDAO {
@@ -69,8 +70,11 @@ public class PasajeroDAO {
             ps.setInt(1, idPasajero);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? leerPasajero(rs) : null;
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }
+        return null;
     }
 
     public boolean actualizar(Pasajero pasajero) throws SQLException, ClassNotFoundException {
@@ -93,21 +97,25 @@ public class PasajeroDAO {
     public boolean darDeBaja(int idPasajero) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE pasajeros SET estado = 0 "
                 + "WHERE id_pasajero = ? AND estado <> 0";
-        try (
-                PreparedStatement ps = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
             return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
+        return false;
     }
 
     public boolean reactivar(int idPasajero) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE pasajeros SET estado = 1 "
                 + "WHERE id_pasajero = ? AND estado = 0";
-        try (
-                PreparedStatement ps = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
             return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
+        return false;
     }
 
     private Pasajero leerPasajero(ResultSet rs) throws SQLException {

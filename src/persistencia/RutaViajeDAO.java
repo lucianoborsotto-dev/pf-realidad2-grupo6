@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import modelo.RutaViaje;
 import org.mariadb.jdbc.Statement;
 
@@ -43,11 +44,13 @@ public class RutaViajeDAO {
                 if (claves.next()) {
                     ruta.setIdRuta(claves.getInt(1));
                 }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }
         return true;
     }
-    
+
     public List<RutaViaje> listarRutas() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM rutas";
         List<RutaViaje> rutas = new ArrayList<>();
@@ -60,19 +63,18 @@ public class RutaViajeDAO {
         }
         return rutas;
     }
-    
+
     private RutaViaje leerRuta(ResultSet rs) throws SQLException, ClassNotFoundException {
-        
+
         ColectivoDAO cd = new ColectivoDAO();
-        
+
         boolean estado = false;
         int estadoRs = rs.getInt("estado");
-        
+
         if (estadoRs == 1) {
             estado = true;
         }
-        
-        
+
         return new RutaViaje(
                 rs.getInt("id_ruta"),
                 rs.getString("origen"),
@@ -86,4 +88,27 @@ public class RutaViajeDAO {
         );
     }
 
+    /**
+     * Método para modificar las rutas
+     */
+    public void actualizarRuta(RutaViaje r) {
+        String sql = "UPDATE rutas SET origen = ?, destino = ?, fecha_viaje = ?, hora_salida = ?, hora_llegada = ?, id_colectivo = ?, precio = ?, estado = ? WHERE id_ruta = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, r.getOrigen());
+            ps.setString(2, r.getDestino());
+            ps.setDate(3, Date.valueOf(r.getFechaViaje()));
+            ps.setTime(4, Time.valueOf(r.getHoraSalida()));
+            ps.setTime(5, Time.valueOf(r.getHoraLlegada()));
+            ps.setInt(6, r.getColectivo().getIdColectivo());
+            ps.setBigDecimal(7, r.getPrecio());
+            ps.setBoolean(8, r.isEstado());
+            ps.setInt(9, r.getIdRuta());
+
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("No se pudo actualizar la ruta");
+        }
+    }
 }
