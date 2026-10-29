@@ -20,14 +20,14 @@ public class FlechaFlash {
 
         try {
 
-            Colectivo c = new Colectivo(1 ,"AAA444", "CHEVROLET", "16PROMAX", 46, "CHIQUI TAPIA", true);
+            Colectivo c = new Colectivo(2 ,"AAA444", "CHEVROLET", "16PROMAX", 46, "CHIQUI TAPIA", true);
             ColectivoDAO cd = new ColectivoDAO();
 //            cd.insertar(c);
-            System.out.println(cd.buscarColectivoId(1));
+            cd.actualizar(c);
             
-            RutaViaje r = new RutaViaje(6, "Vos", "A mi casa", LocalDate.of(2026, 11, 2), LocalTime.of(10, 30), LocalTime.of(11, 00), c, BigDecimal.valueOf(2.33), true);
-            RutaViajeDAO rd = new RutaViajeDAO();
-            rd.actualizarRuta(r);
+//            RutaViaje r = new RutaViaje(6, "Vos", "A mi casa", LocalDate.of(2026, 11, 2), LocalTime.of(10, 30), LocalTime.of(11, 00), c, BigDecimal.valueOf(2.33), true);
+//            RutaViajeDAO rd = new RutaViajeDAO();
+//            rd.actualizarRuta(r);
 //            rd.insertar(r);
 //            System.out.println(rd.listarRutas());
 

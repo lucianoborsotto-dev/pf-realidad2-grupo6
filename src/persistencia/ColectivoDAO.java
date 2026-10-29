@@ -69,6 +69,43 @@ public class ColectivoDAO {
             }
         }
     }
+    
+    public boolean actualizar(Colectivo colectivo) throws SQLException, ClassNotFoundException {
+        String sql = "UPDATE colectivos SET matricula = ?, marca = ?, modelo = ?, "
+                + "capacidad = ?, chofer = ?, estado = ? WHERE id_colectivo = ?";
+        try (
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, colectivo.getMatricula());
+            ps.setString(2, colectivo.getMarca());
+            ps.setString(3, colectivo.getModelo());
+            ps.setInt(4, colectivo.getCapacidad());
+            ps.setString(5, colectivo.getChofer());
+            ps.setBoolean(6, colectivo.isEstado());
+            ps.setInt(7, colectivo.getIdColectivo());
+            return ps.executeUpdate() == 1;
+        }
+    }
+
+    // Baja lógica: conserva el registro y sus pasajes relacionados.
+    public boolean darDeBaja(int idColectivo) throws SQLException, ClassNotFoundException {
+        String sql = "UPDATE colectivos SET estado = 0 "
+                + "WHERE id_colectivo = ? AND estado <> 0";
+        try (
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idColectivo);
+            return ps.executeUpdate() == 1;
+        }
+    }
+
+    public boolean reactivar(int idColectivo) throws SQLException, ClassNotFoundException {
+        String sql = "UPDATE colectivos SET estado = 1 "
+                + "WHERE id_colectivo = ? AND estado = 0";
+        try (
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idColectivo);
+            return ps.executeUpdate() == 1;
+        }
+    }
 
     private Colectivo leerColectivo(ResultSet rs) throws SQLException {
 
