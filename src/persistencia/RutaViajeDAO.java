@@ -48,7 +48,7 @@ public class RutaViajeDAO {
         return true;
     }
     
-    public List<RutaViaje> listarRutas() throws SQLException {
+    public List<RutaViaje> listarRutas() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM rutas";
         List<RutaViaje> rutas = new ArrayList<>();
         try (
@@ -61,19 +61,29 @@ public class RutaViajeDAO {
         return rutas;
     }
     
-    private RutaViaje leerRuta(ResultSet rs) throws SQLException {
+    private RutaViaje leerRuta(ResultSet rs) throws SQLException, ClassNotFoundException {
         
+        ColectivoDAO cd = new ColectivoDAO();
+        
+        boolean estado = false;
+        int estadoRs = rs.getInt("estado");
+        
+        if (estadoRs == 1) {
+            estado = true;
+        }
         
         
         return new RutaViaje(
                 rs.getInt("id_ruta"),
                 rs.getString("origen"),
                 rs.getString("destino"),
-                rs.getDate("fecha_viaje"),
-                rs.getTime("hora_salida"),
-                rs.getTime("hora_llegada"),
-                colectivo
-        )
+                rs.getDate("fecha_viaje").toLocalDate(),
+                rs.getTime("hora_salida").toLocalTime(),
+                rs.getTime("hora_llegada").toLocalTime(),
+                cd.buscarColectivoId(rs.getInt("id_colectivo")),
+                rs.getBigDecimal("precio"),
+                estado
+        );
     }
 
 }

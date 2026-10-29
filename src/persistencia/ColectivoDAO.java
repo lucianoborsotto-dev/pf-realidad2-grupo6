@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import modelo.Colectivo;
 
 public class ColectivoDAO {
@@ -38,5 +40,51 @@ public class ColectivoDAO {
             }
             return true;
         }
+    }
+    
+    public List<Colectivo> listarColectivos() throws SQLException {
+        String sql = "SELECT * FROM colectivos";
+        List<Colectivo> colectivos = new ArrayList<>();
+        try (
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                colectivos.add(leerColectivo(rs));
+            }
+        }
+        return colectivos;
+    }
+    
+    public Colectivo buscarColectivoId(int id) throws SQLException {
+        String sql = "SELECT * "
+                + "FROM colectivos WHERE id_colectivo = ?";
+        try (
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? leerColectivo(rs) : null;
+            }
+        }
+    }
+    
+    private Colectivo leerColectivo(ResultSet rs) throws SQLException {
+        
+        boolean estado = false;
+        int estadoRs = rs.getInt("estado");
+        
+        if (estadoRs == 1) {
+            estado = true;
+        }
+        
+        return new Colectivo(
+                rs.getInt("id_colectivo"),
+                rs.getString("matricula"),
+                rs.getString("marca"),
+                rs.getString("modelo"),
+                rs.getInt("capacidad"),
+                rs.getString("chofer"),
+                estado
+        );
+        
     }
 }
