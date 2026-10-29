@@ -20,7 +20,7 @@ public class ColectivoDAO {
     }
 
     public boolean insertar(Colectivo colectivo) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO colectivos "
+        String sql = "INSERT INTO colectivo "
                 + "(matricula, marca, modelo, capacidad, chofer, estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -47,7 +47,7 @@ public class ColectivoDAO {
     }
 
     public List<Colectivo> listarColectivos() throws SQLException {
-        String sql = "SELECT * FROM colectivos";
+        String sql = "SELECT * FROM colectivo";
         List<Colectivo> colectivos = new ArrayList<>();
         try (
                 PreparedStatement ps = con.prepareStatement(sql);
@@ -61,7 +61,7 @@ public class ColectivoDAO {
 
     public Colectivo buscarColectivoId(int id) throws SQLException {
         String sql = "SELECT * "
-                + "FROM colectivos WHERE id_colectivo = ?";
+                + "FROM colectivo WHERE id_colectivo = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -71,7 +71,7 @@ public class ColectivoDAO {
     }
     
     public boolean actualizar(Colectivo colectivo) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE colectivos SET matricula = ?, marca = ?, modelo = ?, "
+        String sql = "UPDATE colectivo SET matricula = ?, marca = ?, modelo = ?, "
                 + "capacidad = ?, chofer = ?, estado = ? WHERE id_colectivo = ?";
         try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -88,7 +88,7 @@ public class ColectivoDAO {
 
     // Baja lógica: conserva el registro y sus pasajes relacionados.
     public boolean darDeBaja(int idColectivo) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE colectivos SET estado = 0 "
+        String sql = "UPDATE colectivo SET estado = 0 "
                 + "WHERE id_colectivo = ? AND estado <> 0";
         try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -98,7 +98,7 @@ public class ColectivoDAO {
     }
 
     public boolean reactivar(int idColectivo) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE colectivos SET estado = 1 "
+        String sql = "UPDATE colectivo SET estado = 1 "
                 + "WHERE id_colectivo = ? AND estado = 0";
         try (
                 PreparedStatement ps = con.prepareStatement(sql)) {

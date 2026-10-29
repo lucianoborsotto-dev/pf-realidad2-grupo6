@@ -22,19 +22,18 @@ public class RutaViajeDAO {
     }
 
     public boolean insertar(RutaViaje ruta) throws SQLException {
-        String sql = "INSERT INTO rutas "
-                + "(origen, destino, fecha_viaje, hora_salida, hora_llegada, id_colectivo, precio, estado)"
-                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO viaje "
+                + "(origen, destino,  HoraSalida, HoraLlegada, id_colectivo, precio, estado)"
+                + " VALUES (?, ?, ?,  ?, ?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, ruta.getOrigen());
             ps.setString(2, ruta.getDestino());
-            ps.setDate(3, Date.valueOf(ruta.getFechaViaje()));
-            ps.setTime(4, Time.valueOf(ruta.getHoraSalida()));
-            ps.setTime(5, Time.valueOf(ruta.getHoraLlegada()));
-            ps.setInt(6, ruta.getColectivo().getIdColectivo());
-            ps.setBigDecimal(7, ruta.getPrecio());
-            ps.setBoolean(8, ruta.isEstado());
+            ps.setTime(3, Time.valueOf(ruta.getHoraSalida()));
+            ps.setTime(4, Time.valueOf(ruta.getHoraLlegada()));
+            ps.setInt(5, ruta.getColectivo().getIdColectivo());
+            ps.setBigDecimal(6, ruta.getPrecio());
+            ps.setBoolean(7, ruta.isEstado());
 
             if (ps.executeUpdate() != 1) {
                 return false;
@@ -50,9 +49,33 @@ public class RutaViajeDAO {
         }
         return true;
     }
+    public RutaViaje buscarRuta(int id) throws SQLException, ClassNotFoundException{
+        RutaViaje rv = null;
+        ColectivoDAO cd = new ColectivoDAO();
+        String sql = "SELECT * FROM viaje WHERE ID_Viaje = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {                
+                rv = new RutaViaje();
+                rv.setIdRuta(rs.getInt("ID_Viaje"));
+                rv.setOrigen(rs.getString("Origen"));
+                rv.setDestino(rs.getString("Destino"));
+                rv.setHoraSalida(rs.getTime("HoraSalida").toLocalTime());
+                rv.setHoraLlegada(rs.getTime("HoraLlegada").toLocalTime());
+                rv.setColectivo(cd.buscarColectivoId(rs.getInt("ID_Colectivo")));
+                rv.setPrecio(rs.getBigDecimal("Precio"));
+                rv.setEstado(rs.getBoolean("Estado"));
+            }
+         } catch (SQLException ex) {
+            System.out.println("No se pudo obtener la ruta");
+        }
+        return rv;
+    }
 
     public List<RutaViaje> listarRutas() throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM rutas";
+        String sql = "SELECT * FROM viaje";
         List<RutaViaje> rutas = new ArrayList<>();
         try (
                 PreparedStatement ps = con.prepareStatement(sql);
@@ -76,14 +99,13 @@ public class RutaViajeDAO {
         }
 
         return new RutaViaje(
-                rs.getInt("id_ruta"),
-                rs.getString("origen"),
-                rs.getString("destino"),
-                rs.getDate("fecha_viaje").toLocalDate(),
-                rs.getTime("hora_salida").toLocalTime(),
-                rs.getTime("hora_llegada").toLocalTime(),
-                cd.buscarColectivoId(rs.getInt("id_colectivo")),
-                rs.getBigDecimal("precio"),
+                rs.getInt("ID_Viaje"),
+                rs.getString("Origen"),
+                rs.getString("Destino"),
+                rs.getTime("HoraSalida").toLocalTime(),
+                rs.getTime("HoraLlegada").toLocalTime(),
+                cd.buscarColectivoId(rs.getInt("ID_colectivo")),
+                rs.getBigDecimal("Precio"),
                 estado
         );
     }
@@ -92,23 +114,41 @@ public class RutaViajeDAO {
      * Método para modificar las rutas
      */
     public void actualizarRuta(RutaViaje r) {
-        String sql = "UPDATE rutas SET origen = ?, destino = ?, fecha_viaje = ?, hora_salida = ?, hora_llegada = ?, id_colectivo = ?, precio = ?, estado = ? WHERE id_ruta = ?";
+        String sql = "UPDATE viaje SET Origen = ?, Destino = ?, HoraSalida = ?, HoraLlegada = ?, ID_Colectivo = ?, Precio = ?, Estado = ? WHERE ID_Viaje = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, r.getOrigen());
             ps.setString(2, r.getDestino());
-            ps.setDate(3, Date.valueOf(r.getFechaViaje()));
-            ps.setTime(4, Time.valueOf(r.getHoraSalida()));
-            ps.setTime(5, Time.valueOf(r.getHoraLlegada()));
-            ps.setInt(6, r.getColectivo().getIdColectivo());
-            ps.setBigDecimal(7, r.getPrecio());
-            ps.setBoolean(8, r.isEstado());
-            ps.setInt(9, r.getIdRuta());
+            ps.setTime(3, Time.valueOf(r.getHoraSalida()));
+            ps.setTime(4, Time.valueOf(r.getHoraLlegada()));
+            ps.setInt(5, r.getColectivo().getIdColectivo());
+            ps.setBigDecimal(6, r.getPrecio());
+            ps.setBoolean(7, r.isEstado());
+            ps.setInt(8, r.getIdRuta());
 
             ps.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("No se pudo actualizar la ruta");
         }
+    }
+
+    public void borrarRuta(int id) {
+        String sql = "DELETE FROM viaje WHERE ID_Viaje = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("No se pudo borrar la ruta");
+        }
+
+    }
+    public void altaBajaLogica(int id , boolean estado) throws SQLException, ClassNotFoundException{
+             
+        RutaViaje rv = buscarRuta(id);
+        rv.setEstado(estado);
+        actualizarRuta(rv);
+        System.out.println("se actualizo el estado de la ruta");
+        
     }
 }

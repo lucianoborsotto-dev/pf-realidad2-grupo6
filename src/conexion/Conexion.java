@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Conexion {
 
-    private static final String URL = "jdbc:mariadb://localhost:3306/flechaflash";
+    private static final String URL = "jdbc:mariadb://localhost:3306/flechaflashh";
     private static final String USUARIO = "root";
     private static final String CLAVE = "";
     private static Connection connection;

@@ -9,7 +9,6 @@ public class RutaViaje {
     private int idRuta;
     private String origen;
     private String destino;
-    private LocalDate fechaViaje;
     private LocalTime horaSalida;
     private LocalTime horaLlegada;
     private Colectivo colectivo;
@@ -19,10 +18,10 @@ public class RutaViaje {
     public RutaViaje() {
     }
 
-    public RutaViaje(String origen, String destino, LocalDate fechaViaje, LocalTime horaSalida, LocalTime horaLlegada, Colectivo colectivo, BigDecimal precio, boolean estado) {
+    public RutaViaje(int idRuta, String origen, String destino, LocalTime horaSalida, LocalTime horaLlegada, Colectivo colectivo, BigDecimal precio, boolean estado) {
+        this.idRuta = idRuta;
         this.origen = origen;
         this.destino = destino;
-        this.fechaViaje = fechaViaje;
         this.horaSalida = horaSalida;
         this.horaLlegada = horaLlegada;
         this.colectivo = colectivo;
@@ -30,11 +29,9 @@ public class RutaViaje {
         this.estado = estado;
     }
 
-    public RutaViaje(int idRuta, String origen, String destino, LocalDate fechaViaje, LocalTime horaSalida, LocalTime horaLlegada, Colectivo colectivo, BigDecimal precio, boolean estado) {
-        this.idRuta = idRuta;
+    public RutaViaje(String origen, String destino, LocalTime horaSalida, LocalTime horaLlegada, Colectivo colectivo, BigDecimal precio, boolean estado) {
         this.origen = origen;
         this.destino = destino;
-        this.fechaViaje = fechaViaje;
         this.horaSalida = horaSalida;
         this.horaLlegada = horaLlegada;
         this.colectivo = colectivo;
@@ -68,14 +65,6 @@ public class RutaViaje {
 
     public void setDestino(String destino) {
         this.destino = destino;
-    }
-
-    public LocalDate getFechaViaje() {
-        return fechaViaje;
-    }
-
-    public void setFechaViaje(LocalDate fechaViaje) {
-        this.fechaViaje = fechaViaje;
     }
 
     public LocalTime getHoraSalida() {
@@ -120,7 +109,7 @@ public class RutaViaje {
 
     @Override
     public String toString() {
-        return "RutaViaje{" + "idRuta=" + idRuta + ", origen=" + origen + ", destino=" + destino + ", fechaViaje=" + fechaViaje + ", horaSalida=" + horaSalida + ", horaLlegada=" + horaLlegada + ", colectivo=" + colectivo + ", precio=" + precio + ", estado=" + estado + '}';
+        return "RutaViaje{" + "idRuta=" + idRuta + ", origen=" + origen + ", destino=" + destino + ", horaSalida=" + horaSalida + ", horaLlegada=" + horaLlegada + ", colectivo=" + colectivo + ", precio=" + precio + ", estado=" + estado + '}';
     }
 
 }
