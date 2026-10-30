@@ -69,7 +69,7 @@ public class ColectivoDAO {
             }
         }
     }
-    
+
     public boolean actualizar(Colectivo colectivo) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE colectivo SET matricula = ?, marca = ?, modelo = ?, "
                 + "capacidad = ?, chofer = ?, estado = ? WHERE id_colectivo = ?";
@@ -126,6 +126,5 @@ public class ColectivoDAO {
                 estado
         );
     }
-    
-    
+
 }

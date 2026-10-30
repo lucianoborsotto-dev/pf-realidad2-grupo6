@@ -49,15 +49,16 @@ public class RutaViajeDAO {
         }
         return true;
     }
-    public RutaViaje buscarRuta(int id) throws SQLException, ClassNotFoundException{
+
+    public RutaViaje buscarRuta(int id) throws SQLException, ClassNotFoundException {
         RutaViaje rv = null;
         ColectivoDAO cd = new ColectivoDAO();
         String sql = "SELECT * FROM viaje WHERE ID_Viaje = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {                
+
+            while (rs.next()) {
                 rv = new RutaViaje();
                 rv.setIdRuta(rs.getInt("ID_Viaje"));
                 rv.setOrigen(rs.getString("Origen"));
@@ -68,7 +69,7 @@ public class RutaViajeDAO {
                 rv.setPrecio(rs.getBigDecimal("Precio"));
                 rv.setEstado(rs.getBoolean("Estado"));
             }
-         } catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("No se pudo obtener la ruta");
         }
         return rv;
@@ -141,14 +142,12 @@ public class RutaViajeDAO {
         } catch (SQLException ex) {
             System.out.println("No se pudo borrar la ruta");
         }
-
     }
-    public void altaBajaLogica(int id , boolean estado) throws SQLException, ClassNotFoundException{
-             
+
+    public void altaBajaLogica(int id, boolean estado) throws SQLException, ClassNotFoundException {
         RutaViaje rv = buscarRuta(id);
         rv.setEstado(estado);
         actualizarRuta(rv);
         System.out.println("se actualizo el estado de la ruta");
-        
     }
 }

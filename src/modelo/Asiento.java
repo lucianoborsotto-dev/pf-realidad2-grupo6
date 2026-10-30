@@ -3,18 +3,22 @@ package modelo;
 public class Asiento {
 
     private int idAsiento;
-    private Colectivo colectivo;
+    private RutaViaje ruta;
     private int numeroAsiento;
     private boolean estado = true;
 
     public Asiento() {
     }
 
-    public Asiento(int idAsiento, Colectivo colectivo, int numeroAsiento, boolean estado) {
+    public Asiento(int idAsiento, RutaViaje ruta, int numeroAsiento) {
         this.idAsiento = idAsiento;
-        this.colectivo = colectivo;
+        this.ruta = ruta;
         this.numeroAsiento = numeroAsiento;
-        this.estado = estado;
+    }
+
+    public Asiento(RutaViaje ruta, int numeroAsiento) {
+        this.ruta = ruta;
+        this.numeroAsiento = numeroAsiento;
     }
 
     public int getIdAsiento() {
@@ -25,12 +29,12 @@ public class Asiento {
         this.idAsiento = idAsiento;
     }
 
-    public Colectivo getColectivo() {
-        return colectivo;
+    public RutaViaje getRuta() {
+        return ruta;
     }
 
-    public void setColectivo(Colectivo colectivo) {
-        this.colectivo = colectivo;
+    public void setRuta(RutaViaje ruta) {
+        this.ruta = ruta;
     }
 
     public int getNumeroAsiento() {
@@ -48,4 +52,10 @@ public class Asiento {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "Asiento{" + "idAsiento=" + idAsiento + ", ruta=" + ruta + ", numeroAsiento=" + numeroAsiento + ", estado=" + estado + '}';
+    }
+
 }
