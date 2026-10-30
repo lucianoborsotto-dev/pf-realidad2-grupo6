@@ -1,22 +1,22 @@
 package modelo;
 
-public class Asiento {
+public class Lugar {
 
     private int idAsiento;
     private RutaViaje ruta;
     private int numeroAsiento;
     private boolean estado = true;
 
-    public Asiento() {
+    public Lugar() {
     }
 
-    public Asiento(int idAsiento, RutaViaje ruta, int numeroAsiento) {
+    public Lugar(int idAsiento, RutaViaje ruta, int numeroAsiento) {
         this.idAsiento = idAsiento;
         this.ruta = ruta;
         this.numeroAsiento = numeroAsiento;
     }
 
-    public Asiento(RutaViaje ruta, int numeroAsiento) {
+    public Lugar(RutaViaje ruta, int numeroAsiento) {
         this.ruta = ruta;
         this.numeroAsiento = numeroAsiento;
     }
@@ -56,6 +56,10 @@ public class Asiento {
     @Override
     public String toString() {
         return "Asiento{" + "idAsiento=" + idAsiento + ", ruta=" + ruta + ", numeroAsiento=" + numeroAsiento + ", estado=" + estado + '}';
+    }
+
+    public int getColectivo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
