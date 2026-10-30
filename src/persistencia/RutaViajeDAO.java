@@ -143,6 +143,8 @@ public class RutaViajeDAO {
             System.out.println("No se pudo borrar la ruta");
         }
     }
+    
+    
 
     public void altaBajaLogica(int id, boolean estado) throws SQLException, ClassNotFoundException {
         RutaViaje rv = buscarRuta(id);

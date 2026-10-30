@@ -50,7 +50,7 @@ public class PasajeroDAO {
     // Incluye pasajeros activos e inactivos.
     public List<Pasajero> listar() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * "
-                + "FROM pasajeros ORDER BY id_pasajero";
+                + "FROM pasajeros ORDER BY ID_Pasajero";
         List<Pasajero> pasajeros = new ArrayList<>();
         try (
                 PreparedStatement ps = con.prepareStatement(sql);
@@ -64,7 +64,7 @@ public class PasajeroDAO {
 
     public Pasajero buscarPorId(int idPasajero) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * "
-                + "FROM pasajeros WHERE id_pasajero = ?";
+                + "FROM pasajeros WHERE ID_Pasajero = ?";
         try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
@@ -79,7 +79,7 @@ public class PasajeroDAO {
 
     public boolean actualizar(Pasajero pasajero) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE pasajeros SET dni = ?, nombre = ?, apellido = ?, "
-                + "correo = ?, telefono = ?, estado = ? WHERE id_pasajero = ?";
+                + "correo = ?, telefono = ?, estado = ? WHERE ID_Pasajero = ?";
         try (
                 PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, pasajero.getDni());
@@ -96,7 +96,7 @@ public class PasajeroDAO {
     // Baja lógica: conserva el registro y sus pasajes relacionados.
     public boolean darDeBaja(int idPasajero) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE pasajeros SET estado = 0 "
-                + "WHERE id_pasajero = ? AND estado <> 0";
+                + "WHERE ID_Pasajero = ? AND estado <> 0";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
             return ps.executeUpdate() == 1;
@@ -107,8 +107,8 @@ public class PasajeroDAO {
     }
 
     public boolean reactivar(int idPasajero) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE pasajeros SET estado = 1 "
-                + "WHERE id_pasajero = ? AND estado = 0";
+        String sql = "UPDATE pasajeros SET Estado = 1 "
+                + "WHERE ID_Pasajero = ? AND Estado = 0";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
             return ps.executeUpdate() == 1;
@@ -120,13 +120,13 @@ public class PasajeroDAO {
 
     private Pasajero leerPasajero(ResultSet rs) throws SQLException {
         return new Pasajero(
-                rs.getInt("id_pasajero"),
-                rs.getString("dni"),
-                rs.getString("nombre"),
-                rs.getString("apellido"),
-                rs.getString("correo"),
-                rs.getString("telefono"),
-                rs.getBoolean("estado")
+                rs.getInt("ID_Pasajero"),
+                rs.getString("Dni"),
+                rs.getString("Nombre"),
+                rs.getString("Apellido"),
+                rs.getString("Correo"),
+                rs.getString("Telefono"),
+                rs.getBoolean("Estado")
         );
     }
 }
