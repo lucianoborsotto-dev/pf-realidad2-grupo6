@@ -10,6 +10,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import modelo.Lugar;
 import modelo.RutaViaje;
 import org.mariadb.jdbc.Statement;
 
@@ -21,7 +22,7 @@ public class RutaViajeDAO {
         con = Conexion.conectar();
     }
 
-    public boolean insertar(RutaViaje ruta) throws SQLException {
+    public boolean insertar(RutaViaje ruta) throws SQLException, ClassNotFoundException {
         String sql = "INSERT INTO viaje "
                 + "(origen, destino,  HoraSalida, HoraLlegada, id_colectivo, precio, estado)"
                 + " VALUES (?, ?, ?,  ?, ?, ?, ?)";
@@ -37,6 +38,14 @@ public class RutaViajeDAO {
 
             if (ps.executeUpdate() != 1) {
                 return false;
+            }
+            
+            int capacidadColectivo = ruta.getColectivo().getCapacidad();
+            
+            for (int i = 1; i <= capacidadColectivo; i++) {
+                LugarDAO ld = new LugarDAO();
+                Lugar lugar = new Lugar(ruta, i, true);
+                ld.crear(lugar);
             }
 
             try (ResultSet claves = ps.getGeneratedKeys()) {
