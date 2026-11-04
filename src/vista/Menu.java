@@ -1,8 +1,8 @@
 package vista;
 
-public class FrmPasajeros extends javax.swing.JFrame {
+public class Menu extends javax.swing.JFrame {
 
-    public FrmPasajeros() {
+    public Menu() {
         initComponents();
     }
 
@@ -20,13 +20,16 @@ public class FrmPasajeros extends javax.swing.JFrame {
         JMIver = new javax.swing.JMenuItem();
         JMIallColeChof = new javax.swing.JMenuItem();
         JMadministrar = new javax.swing.JMenu();
+        JMIpasajero = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         JLbienvenido.setFont(new java.awt.Font("Dubai Medium", 1, 36)); // NOI18N
+        JLbienvenido.setForeground(new java.awt.Color(255, 255, 255));
         JLbienvenido.setText("Bienvenido a TodoViaje!");
 
         JLcreadores.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
+        JLcreadores.setForeground(new java.awt.Color(255, 255, 255));
         JLcreadores.setText("Creadores:");
 
         JListIntegrantes.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
@@ -88,6 +91,15 @@ public class FrmPasajeros extends javax.swing.JFrame {
         JMBventanas.add(JMinicio);
 
         JMadministrar.setText("Administrar");
+
+        JMIpasajero.setText("Cargar Pasajero");
+        JMIpasajero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIpasajeroActionPerformed(evt);
+            }
+        });
+        JMadministrar.add(JMIpasajero);
+
         JMBventanas.add(JMadministrar);
 
         setJMenuBar(JMBventanas);
@@ -110,6 +122,16 @@ public class FrmPasajeros extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JMIverActionPerformed
 
+    private void JMIpasajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIpasajeroActionPerformed
+        JDPescritorio.removeAll();
+        JDPescritorio.revalidate();
+        JDPescritorio.repaint();
+        CargarPasajero ventanaP = new CargarPasajero();
+        ventanaP.setVisible(true);
+        JDPescritorio.add(ventanaP);
+        JDPescritorio.moveToFront(ventanaP);
+    }//GEN-LAST:event_JMIpasajeroActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -124,20 +146,21 @@ public class FrmPasajeros extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmPasajeros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmPasajeros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmPasajeros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPasajeros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmPasajeros().setVisible(true);
+                new Menu().setVisible(true);
             }
         });
     }
@@ -149,6 +172,7 @@ public class FrmPasajeros extends javax.swing.JFrame {
     private javax.swing.JList<String> JListIntegrantes;
     private javax.swing.JMenuBar JMBventanas;
     private javax.swing.JMenuItem JMIallColeChof;
+    private javax.swing.JMenuItem JMIpasajero;
     private javax.swing.JMenuItem JMIver;
     private javax.swing.JMenu JMadministrar;
     private javax.swing.JMenu JMinicio;
