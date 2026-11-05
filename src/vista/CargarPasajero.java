@@ -312,57 +312,58 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBguardarActionPerformed
-//        try {
-//            //Variables para almacenar los datos extraidos.
-//            String dniTexto = JTFdni.getText().trim();
-//            String nombre = JTFnombre.getText().trim();
-//            LocalDate fechaNacimiento = JDCfechaNac.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//            boolean activo = JCactivo.isSelected();
-//            Alumno a;
-//
-//            //Varibales para la verificacion de datos.
-//            int longitudDni = dniTexto.length();
-//            boolean disparador = true;
-//
-//            //Verificacion de datos.
-//            if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
-//                int dni = Integer.parseInt(dniTexto);
-//                for (Alumno alu : allAlumnos) { //Recorre el Arraylist para verficacion de DNI repetido.
-//                    if (alu.getDni() == dni) {
-//                        disparador = false;
-//                        break;
-//                    }
-//                }
-//                if (disparador) { //Verficacion de DNI repetido.
-//                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
-//                        if (nombre.length() <= 20) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
-//                            if (fechaNacimiento.isBefore(fechaMaxima) || fechaNacimiento.isEqual(fechaMaxima)) { //Verificacion de fecha de nacimiento.
-//                                a = new Alumno(dni, nombre, fechaNacimiento, activo);
-//                                ad.guardarAlumno(a);
-//                                allAlumnos.add(a);
-//                                limpiar();
-//                                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-//                                JOptionPane.showMessageDialog(this, "Alumno guardado!");
-//                            } else {
-//                                JOptionPane.showMessageDialog(this, "Fecha no admitida", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                            }
-//                        }else{
-//                            JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 20 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                        }
-//                    } else {
-//                        JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                    }
-//                } else {
-//                    JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros,\nse aceptan solo numeros, sin puntos y espacios", "ERROR", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (NumberFormatException nf) {
-//            JOptionPane.showMessageDialog(this, "Datos incompletos/incorrectos", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        } catch (NullPointerException np) {
-//            JOptionPane.showMessageDialog(this, "Fecha invalida", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            //Variables para almacenar los datos extraidos.
+            String dni = JTFdni.getText().trim();
+            String nombre = JTFnombre.getText().trim();
+            String apellido = JTFapellido.getText().trim();
+            String correo = JTFemail.getText().trim();
+            String telefono = JTFphone.getText().trim();            
+
+            //Varibales para la verificacion de datos.
+            Pasajero p;
+            int longitudDni = dni.length();
+            boolean trigger = true;
+
+            //Verificacion de datos.
+            if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
+                int dniNumber = Integer.parseInt(dni); //Se pasa a un int para verficar que solo haya numeros, si hay letras larga una excepcion al momento de convertir.
+                for (Pasajero pasajero : allPasajeros) { //Recorre el Arraylist para verficacion de DNI repetido.
+                    if (pasajero.getDni() == ) {
+                        trigger = false;
+                        break;
+                    }
+                }
+                if (trigger) { //Verficacion de DNI repetido.
+                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
+                        if (nombre.length() <= 20) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
+                            if (fechaNacimiento.isBefore(fechaMaxima) || fechaNacimiento.isEqual(fechaMaxima)) { //Verificacion de fecha de nacimiento.
+                                a = new Alumno(dni, nombre, fechaNacimiento, activo);
+                                ad.guardarAlumno(a);
+                                allAlumnos.add(a);
+                                limpiar();
+                                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                                JOptionPane.showMessageDialog(this, "Alumno guardado!");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Fecha no admitida", "ERROR", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 20 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros,\nse aceptan solo numeros, sin puntos y espacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException nf) {
+            JOptionPane.showMessageDialog(this, "Datos incompletos/incorrectos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (NullPointerException np) {
+            JOptionPane.showMessageDialog(this, "Fecha invalida", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBguardarActionPerformed
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
