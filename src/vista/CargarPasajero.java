@@ -3,8 +3,6 @@ package vista;
 import java.awt.Image;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -356,32 +354,54 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
             //Varibales para la verificacion de datos.
             Pasajero p;
             int longitudDni = dni.length();
-            boolean trigger = true;
+            boolean triggerDni = true;
+            boolean triggerCorreo = true;
+            boolean triggerPhone = true;
 
             //Verificacion de datos.
             if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
                 int dniNumber = Integer.parseInt(dni); //Se pasa a un int para verficar que solo haya numeros, si hay letras larga una excepcion al momento de convertir.
-                for (Pasajero pasajero : allPasajeros) { //Recorre el Arraylist para verficacion de DNI repetido.
-                    if (pasajero.getDni().equals(dni)) {
-                        trigger = false;
+                for (Pasajero pasaDni : allPasajeros) { //Recorre el Arraylist para verficacion de DNI repetido.
+                    if (pasaDni.getDni().equals(dni)) {
+                        triggerDni = false;
                         break;
                     }
                 }
-                if (trigger) { //Verficacion de DNI repetido.
-                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
-                        if (nombre.length() <= 100) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
+                if (triggerDni) { //Verficacion de DNI repetido.
+                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes.
+                        if (nombre.length() <= 100) { //Verificacion para que el nombre no supere los 100 caracteres admitidos por la base de datos.
                             if (apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verificación de apellido con solo letras
                                 if (apellido.length() <= 100) { // Verificación de apellido con menos de 100 dígitos
                                     if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { // Validación para correo con formato ejemplo@ejemplo.com
-                                        if (telefono.matches("\\d{7,15}")) { // Validación que permite solo números de 7 a 15 dígitos. 
-                                            p = new Pasajero(dni, nombre, apellido, correo, telefono, true);
-                                            pd.insertar(p);
-                                            allPasajeros.add(p);
-                                            limpiar();
-                                            mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-                                            JOptionPane.showMessageDialog(this, "Pasajero guardado!");
+                                        for (Pasajero pasaCorreo : allPasajeros) { 
+                                            if (pasaCorreo.getCorreo().equalsIgnoreCase(correo)) {
+                                                triggerCorreo = false;
+                                                break;
+                                            }
+                                        }
+                                        if (triggerCorreo) {
+                                            if (telefono.matches("\\d{7,15}")) { // Validación que permite solo números de 7 a 15 dígitos, evita letras, simbolos... 
+                                                for (Pasajero pasaPhone : allPasajeros) {
+                                                    if (pasaPhone.getTelefono().equalsIgnoreCase(telefono)) {
+                                                        triggerPhone = false;
+                                                        break;
+                                                    }
+                                                }
+                                                if (triggerPhone) {
+                                                    p = new Pasajero(dni, nombre, apellido, correo, telefono, true);
+                                                    pd.insertar(p);
+                                                    allPasajeros.add(p);
+                                                    limpiar();
+                                                    mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                                                    JOptionPane.showMessageDialog(this, "Pasajero guardado!");
+                                                }else{
+                                                    JOptionPane.showMessageDialog(this, "El numero de telefono ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                                }
+                                            } else {
+                                                JOptionPane.showMessageDialog(this, "Solo se permite números, sin espacios de 7 a 15 dígitos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                            }
                                         } else {
-                                            JOptionPane.showMessageDialog(this, "Solo se permite números, sin espacios de 7 a 15 dígitos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(this, "La direccion de correo ya se encuentra registrada", "ERROR", JOptionPane.ERROR_MESSAGE);
                                         }
                                     } else {
                                         JOptionPane.showMessageDialog(this, "Formato inválido de correo", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -408,9 +428,9 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         } catch (NumberFormatException nf) {
             JOptionPane.showMessageDialog(this, "Solo se permiten dígitos sin espacios y puntos para el documento.", "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            Logger.getLogger(CargarPasajero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CargarPasajero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_JBguardarActionPerformed
 
