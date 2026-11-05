@@ -22,6 +22,7 @@ public class Menu extends javax.swing.JFrame {
         JMadministrar = new javax.swing.JMenu();
         JMIpasajero = new javax.swing.JMenuItem();
         JMIcargarCole = new javax.swing.JMenuItem();
+        JMIcargarViaje = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,6 +109,14 @@ public class Menu extends javax.swing.JFrame {
         });
         JMadministrar.add(JMIcargarCole);
 
+        JMIcargarViaje.setText("Cargar Viaje");
+        JMIcargarViaje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIcargarViajeActionPerformed(evt);
+            }
+        });
+        JMadministrar.add(JMIcargarViaje);
+
         JMBventanas.add(JMadministrar);
 
         setJMenuBar(JMBventanas);
@@ -150,6 +159,16 @@ public class Menu extends javax.swing.JFrame {
         JDPescritorio.moveToFront(ventanaC);
     }//GEN-LAST:event_JMIcargarColeActionPerformed
 
+    private void JMIcargarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIcargarViajeActionPerformed
+       JDPescritorio.removeAll();
+        JDPescritorio.revalidate();
+        JDPescritorio.repaint();
+        CargarViaje ventanaCV = new CargarViaje();
+        ventanaCV.setVisible(true);
+        JDPescritorio.add(ventanaCV);
+        JDPescritorio.moveToFront(ventanaCV);
+    }//GEN-LAST:event_JMIcargarViajeActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -191,6 +210,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuBar JMBventanas;
     private javax.swing.JMenuItem JMIallColeChof;
     private javax.swing.JMenuItem JMIcargarCole;
+    private javax.swing.JMenuItem JMIcargarViaje;
     private javax.swing.JMenuItem JMIpasajero;
     private javax.swing.JMenuItem JMIver;
     private javax.swing.JMenu JMadministrar;
