@@ -244,14 +244,29 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFnombre">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFnombreKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFapellido">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFapellidoKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFdni">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFdniKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFemail">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFemailKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFphone">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFphoneKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="JLnombre">
           <Properties>

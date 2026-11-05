@@ -1,4 +1,3 @@
-
 package modelo;
 
 public class Pasajero {
@@ -13,10 +12,19 @@ public class Pasajero {
 
     public Pasajero() {
     }
-    
+
+    public Pasajero(String dni, String nombre, String apellido, String correo, String telefono, boolean estado) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.estado = estado;
+    }
+
     public Pasajero(int idPasajero, String dni, String nombre,
-                    String apellido, String correo,
-                    String telefono, boolean estado) {
+            String apellido, String correo,
+            String telefono, boolean estado) {
 
         this.idPasajero = idPasajero;
         this.dni = dni;
@@ -85,8 +93,7 @@ public class Pasajero {
 
     @Override
     public String toString() {
-        return "Pasajero{" + "idPasajero=" + idPasajero + ", dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + ", correo=" + correo + ", telefono=" + telefono + ", estado=" + estado + '}';
+        return "idPasajero: " + idPasajero + "\nDni: " + dni + "\nNombre=" + nombre + "\nApellido=" + apellido + "\nCorreo=" + correo + "\nTelefono=" + telefono + "\nEstado=" + estado + '}';
     }
-    
-    
+
 }

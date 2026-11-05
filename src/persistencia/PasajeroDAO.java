@@ -22,7 +22,7 @@ public class PasajeroDAO {
     }
 
     // Requiere que pasajeros.id_pasajero sea autoincremental
-    public boolean insertar(Pasajero pasajero) throws SQLException, ClassNotFoundException {
+    public void insertar(Pasajero pasajero) throws SQLException, ClassNotFoundException {
         String sql = "INSERT INTO pasajeros "
                 + "(dni, nombre, apellido, correo, telefono, estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -34,16 +34,17 @@ public class PasajeroDAO {
             ps.setString(4, pasajero.getCorreo());
             ps.setString(5, pasajero.getTelefono());
             ps.setBoolean(6, pasajero.isEstado());
+            ps.executeUpdate();
 
-            if (ps.executeUpdate() != 1) {
-                return false;
+            ResultSet rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                pasajero.setIdPasajero(rs.getInt(1));
+                System.out.println("Pasajero guardado.");
+            } else {
+                System.out.println("No se pudo obtener el ID.");
             }
-            try (ResultSet claves = ps.getGeneratedKeys()) {
-                if (claves.next()) {
-                    pasajero.setIdPasajero(claves.getInt(1));
-                }
-            }
-            return true;
+
         }
     }
 

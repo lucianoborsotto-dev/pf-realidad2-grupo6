@@ -3,6 +3,8 @@ package vista;
 import java.awt.Image;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -10,6 +12,7 @@ import modelo.Pasajero;
 import persistencia.PasajeroDAO;
 
 public class CargarPasajero extends javax.swing.JInternalFrame {
+
     //Crea el modelo por default de la tabla y sobrescribe el metodo de la clase para hacer que las celdas no sean editabes.
     private DefaultTableModel modeloP = new DefaultTableModel() {
         @Override
@@ -17,7 +20,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
             return false;
         }
     };
-    
+
     //Creacion de un objeto PasajeroDAO y el ArrayList donde estaran todos los pasajeros traidos de la base de datos.
     PasajeroDAO pd;
     List<Pasajero> allPasajeros;
@@ -26,7 +29,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         initComponents();
         UtilidadesGenerales.ocultarMenu(this);
         cargarCabecera();
-        
+
         try {
             pd = new PasajeroDAO();
             allPasajeros = pd.listar();
@@ -35,9 +38,9 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         cargarDatos();
-        
+
         //Redimensionar iconos con el metodo.
         JBborrar.setIcon(redimensionIcon("/Imagen/eliminar.png", 30, 30));
         JBguardar.setIcon(redimensionIcon("/Imagen/guardar.png", 40, 40));
@@ -122,6 +125,36 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
 
         JLtelefono.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLtelefono.setText("TELEFONO:");
+
+        JTFnombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTFnombreKeyTyped(evt);
+            }
+        });
+
+        JTFapellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTFapellidoKeyTyped(evt);
+            }
+        });
+
+        JTFdni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTFdniKeyTyped(evt);
+            }
+        });
+
+        JTFemail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTFemailKeyTyped(evt);
+            }
+        });
+
+        JTFphone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTFphoneKeyTyped(evt);
+            }
+        });
 
         JLnombre.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLnombre.setText("NOMBRE:");
@@ -318,7 +351,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
             String nombre = JTFnombre.getText().trim();
             String apellido = JTFapellido.getText().trim();
             String correo = JTFemail.getText().trim();
-            String telefono = JTFphone.getText().trim();            
+            String telefono = JTFphone.getText().trim();
 
             //Varibales para la verificacion de datos.
             Pasajero p;
@@ -329,26 +362,39 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
             if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
                 int dniNumber = Integer.parseInt(dni); //Se pasa a un int para verficar que solo haya numeros, si hay letras larga una excepcion al momento de convertir.
                 for (Pasajero pasajero : allPasajeros) { //Recorre el Arraylist para verficacion de DNI repetido.
-                    if (pasajero.getDni() == ) {
+                    if (pasajero.getDni().equals(dni)) {
                         trigger = false;
                         break;
                     }
                 }
                 if (trigger) { //Verficacion de DNI repetido.
-                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
-                        if (nombre.length() <= 20) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
-                            if (fechaNacimiento.isBefore(fechaMaxima) || fechaNacimiento.isEqual(fechaMaxima)) { //Verificacion de fecha de nacimiento.
-                                a = new Alumno(dni, nombre, fechaNacimiento, activo);
-                                ad.guardarAlumno(a);
-                                allAlumnos.add(a);
-                                limpiar();
-                                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-                                JOptionPane.showMessageDialog(this, "Alumno guardado!");
+                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
+                        if (nombre.length() <= 100) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
+                            if (apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verificación de apellido con solo letras
+                                if (apellido.length() <= 100) { // Verificación de apellido con menos de 100 dígitos
+                                    if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { // Validación para correo con formato ejemplo@ejemplo.com
+                                        if (telefono.matches("\\d{7,15}")) { // Validación que permite solo números de 7 a 15 dígitos. 
+                                            p = new Pasajero(dni, nombre, apellido, correo, telefono, true);
+                                            pd.insertar(p);
+                                            allPasajeros.add(p);
+                                            limpiar();
+                                            mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                                            JOptionPane.showMessageDialog(this, "Pasajero guardado!");
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, "Solo se permite números, sin espacios de 7 a 15 dígitos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    } else {
+                                        JOptionPane.showMessageDialog(this, "Formato inválido de correo", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "El apellido debe contener máximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                }
+
                             } else {
-                                JOptionPane.showMessageDialog(this, "Fecha no admitida", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(this, "Apellido inválido", "ERROR", JOptionPane.ERROR_MESSAGE);
                             }
-                        }else{
-                            JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 20 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -357,12 +403,14 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros,\nse aceptan solo numeros, sin puntos y espacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros.", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException nf) {
-            JOptionPane.showMessageDialog(this, "Datos incompletos/incorrectos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } catch (NullPointerException np) {
-            JOptionPane.showMessageDialog(this, "Fecha invalida", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Solo se permiten dígitos sin espacios y puntos para el documento.", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            Logger.getLogger(CargarPasajero.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CargarPasajero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JBguardarActionPerformed
 
@@ -573,6 +621,26 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_JTFfiltrarKeyReleased
 
+    private void JTFnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFnombreKeyTyped
+        habilitarGuardar();
+    }//GEN-LAST:event_JTFnombreKeyTyped
+
+    private void JTFapellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFapellidoKeyTyped
+        habilitarGuardar();
+    }//GEN-LAST:event_JTFapellidoKeyTyped
+
+    private void JTFdniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFdniKeyTyped
+        habilitarGuardar();
+    }//GEN-LAST:event_JTFdniKeyTyped
+
+    private void JTFemailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFemailKeyTyped
+        habilitarGuardar();
+    }//GEN-LAST:event_JTFemailKeyTyped
+
+    private void JTFphoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFphoneKeyTyped
+        habilitarGuardar();
+    }//GEN-LAST:event_JTFphoneKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBactualizar;
@@ -599,7 +667,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     private javax.swing.JTable JTpasajero;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
-    
+
     /**
      * Permite redimensionar a gusto las imagenes.
      *
@@ -615,7 +683,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
 
         return new ImageIcon(imagenRedimensionada);
     }
-    
+
     /**
      * Agrega las cabeceras a la tabla con sus respectivos nombres.
      */
@@ -630,7 +698,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
 
         JTpasajero.setModel(modeloP);
     }
-    
+
     /**
      * Carga los alumnos a la tabla.
      */
@@ -639,7 +707,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
             modeloP.addRow(new Object[]{p.getIdPasajero(), p.getDni(), p.getNombre(), p.getApellido(), p.getCorreo(), p.getTelefono(), p.isEstado()});
         }
     }
-    
+
     /**
      * Permite borrar las filas mientras se encribe en los campos de filtrar.
      */
@@ -649,7 +717,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
             modeloP.removeRow(f);
         }
     }
-    
+
     /**
      * Vacia/restablece todos los campos.
      */
@@ -665,5 +733,23 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         JBguardar.setEnabled(false);
         JBborrar.setEnabled(false);
         JBactualizar.setEnabled(false);
+    }
+
+    private void mostrarLista() {
+        System.out.println("------------------------");
+        for (Pasajero p : allPasajeros) {
+            System.out.println(p);
+            System.out.println("------------------------");
+        }
+        System.out.println("");
+        System.out.println("");
+    }
+
+    private void habilitarGuardar() {
+        if (!JTFnombre.getText().trim().isEmpty() && !JTFapellido.getText().isEmpty() && !JTFdni.getText().isEmpty() && !JTFemail.getText().isEmpty() && !JTFphone.getText().isEmpty()) {
+            JBguardar.setEnabled(true);
+        } else {
+            JBguardar.setEnabled(false);
+        }
     }
 }
