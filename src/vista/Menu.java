@@ -21,6 +21,7 @@ public class Menu extends javax.swing.JFrame {
         JMIallColeChof = new javax.swing.JMenuItem();
         JMadministrar = new javax.swing.JMenu();
         JMIpasajero = new javax.swing.JMenuItem();
+        JMIcargarCole = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,28 +50,27 @@ public class Menu extends javax.swing.JFrame {
         JDPescritorioLayout.setHorizontalGroup(
             JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JDPescritorioLayout.createSequentialGroup()
-                .addGroup(JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(JDPescritorioLayout.createSequentialGroup()
-                        .addGap(255, 255, 255)
-                        .addComponent(JLbienvenido))
-                    .addGroup(JDPescritorioLayout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(JLcreadores)
-                        .addGap(18, 18, 18)
-                        .addComponent(JSPintegrantes, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(279, Short.MAX_VALUE))
+                .addGap(68, 68, 68)
+                .addComponent(JLcreadores)
+                .addGap(18, 18, 18)
+                .addComponent(JSPintegrantes, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(511, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JDPescritorioLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(JLbienvenido)
+                .addGap(253, 253, 253))
         );
         JDPescritorioLayout.setVerticalGroup(
             JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JDPescritorioLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(JLbienvenido)
                 .addGroup(JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JDPescritorioLayout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                        .addGap(18, 18, 18)
+                        .addComponent(JLbienvenido)
+                        .addGap(36, 36, 36)
                         .addComponent(JSPintegrantes, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(JDPescritorioLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(93, 93, 93)
                         .addComponent(JLcreadores)))
                 .addContainerGap(402, Short.MAX_VALUE))
         );
@@ -99,6 +99,14 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         JMadministrar.add(JMIpasajero);
+
+        JMIcargarCole.setText("Cargar Colectivo");
+        JMIcargarCole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIcargarColeActionPerformed(evt);
+            }
+        });
+        JMadministrar.add(JMIcargarCole);
 
         JMBventanas.add(JMadministrar);
 
@@ -131,6 +139,16 @@ public class Menu extends javax.swing.JFrame {
         JDPescritorio.add(ventanaP);
         JDPescritorio.moveToFront(ventanaP);
     }//GEN-LAST:event_JMIpasajeroActionPerformed
+
+    private void JMIcargarColeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIcargarColeActionPerformed
+        JDPescritorio.removeAll();
+        JDPescritorio.revalidate();
+        JDPescritorio.repaint();
+        CargarColectivo ventanaC = new CargarColectivo();
+        ventanaC.setVisible(true);
+        JDPescritorio.add(ventanaC);
+        JDPescritorio.moveToFront(ventanaC);
+    }//GEN-LAST:event_JMIcargarColeActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -172,6 +190,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JList<String> JListIntegrantes;
     private javax.swing.JMenuBar JMBventanas;
     private javax.swing.JMenuItem JMIallColeChof;
+    private javax.swing.JMenuItem JMIcargarCole;
     private javax.swing.JMenuItem JMIpasajero;
     private javax.swing.JMenuItem JMIver;
     private javax.swing.JMenu JMadministrar;

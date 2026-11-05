@@ -73,7 +73,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         JBlimpiar = new javax.swing.JButton();
         JBalta = new javax.swing.JButton();
         JBbaja = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        JSCpasajeros = new javax.swing.JScrollPane();
         JTpasajero = new javax.swing.JTable();
 
         setClosable(true);
@@ -280,7 +280,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                 JTpasajeroMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(JTpasajero);
+        JSCpasajeros.setViewportView(JTpasajero);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -309,7 +309,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                                 .addComponent(JBactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(JBlimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 712, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(JSCpasajeros, javax.swing.GroupLayout.PREFERRED_SIZE, 712, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -335,7 +335,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JBbaja, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(JSCpasajeros, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(61, Short.MAX_VALUE))
         );
 
@@ -678,6 +678,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     private javax.swing.JLabel JLtelefono;
     private javax.swing.JPanel JPdatos;
     private javax.swing.JPanel JPfiltrado;
+    private javax.swing.JScrollPane JSCpasajeros;
     private javax.swing.JTextField JTFapellido;
     private javax.swing.JTextField JTFdni;
     private javax.swing.JTextField JTFemail;
@@ -685,7 +686,6 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     private javax.swing.JTextField JTFnombre;
     private javax.swing.JTextField JTFphone;
     private javax.swing.JTable JTpasajero;
-    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -764,7 +764,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         System.out.println("");
         System.out.println("");
     }
-
+    
     private void habilitarGuardar() {
         if (!JTFnombre.getText().trim().isEmpty() && !JTFapellido.getText().isEmpty() && !JTFdni.getText().isEmpty() && !JTFemail.getText().isEmpty() && !JTFphone.getText().isEmpty()) {
             JBguardar.setEnabled(true);
