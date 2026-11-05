@@ -15,8 +15,6 @@ public class Pasaje {
 
     private RutaViaje ruta;
 
-    private Colectivo colectivo;
-
     private LocalDate fechaVenta;
 
     private LocalTime horaVenta;
@@ -28,12 +26,11 @@ public class Pasaje {
     public Pasaje() {
     }
 
-    public Pasaje(int idPasaje, Pasajero pasajero, Lugar asiento, RutaViaje ruta, Colectivo colectivo, LocalDate fechaVenta, LocalTime horaVenta, BigDecimal precio) {
+    public Pasaje(int idPasaje, Pasajero pasajero, Lugar asiento, RutaViaje ruta, LocalDate fechaVenta, LocalTime horaVenta, BigDecimal precio) {
         this.idPasaje = idPasaje;
         this.pasajero = pasajero;
         this.asiento = asiento;
         this.ruta = ruta;
-        this.colectivo = colectivo;
         this.fechaVenta = fechaVenta;
         this.horaVenta = horaVenta;
         this.precio = precio;
@@ -71,14 +68,6 @@ public class Pasaje {
         this.ruta = ruta;
     }
 
-    public Colectivo getColectivo() {
-        return colectivo;
-    }
-
-    public void setColectivo(Colectivo colectivo) {
-        this.colectivo = colectivo;
-    }
-
     public LocalDate getFechaVenta() {
         return fechaVenta;
     }
@@ -113,7 +102,7 @@ public class Pasaje {
 
     @Override
     public String toString() {
-        return "Pasaje{" + "idPasaje=" + idPasaje + ", pasajero=" + pasajero + ", asiento=" + asiento + ", ruta=" + ruta + ", colectivo=" + colectivo + ", fechaVenta=" + fechaVenta + ", horaVenta=" + horaVenta + ", precio=" + precio + ", estado=" + estado + '}';
+        return "Pasaje{" + "idPasaje=" + idPasaje + ", pasajero=" + pasajero + ", asiento=" + asiento + ", ruta=" + ruta + ", fechaVenta=" + fechaVenta + ", horaVenta=" + horaVenta + ", precio=" + precio + ", estado=" + estado + '}';
     }
 
 }
