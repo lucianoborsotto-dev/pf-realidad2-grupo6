@@ -31,12 +31,10 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         JTFfiltrar = new javax.swing.JTextField();
         JPdatos = new javax.swing.JPanel();
         JLmarca = new javax.swing.JLabel();
-        JLcapacidad = new javax.swing.JLabel();
         JLchofer = new javax.swing.JLabel();
         JTFmatricula = new javax.swing.JTextField();
         JTFmarca = new javax.swing.JTextField();
         JTFmodelo = new javax.swing.JTextField();
-        JTFcapacidad = new javax.swing.JTextField();
         JTFchofer = new javax.swing.JTextField();
         JLmatricula = new javax.swing.JLabel();
         JLmodelo = new javax.swing.JLabel();
@@ -121,9 +119,6 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         JLmarca.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLmarca.setText("MARCA:");
 
-        JLcapacidad.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
-        JLcapacidad.setText("CAPACIDAD:");
-
         JLchofer.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLchofer.setText("CHOFER:");
 
@@ -142,12 +137,6 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         JTFmodelo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 JTFmodeloKeyTyped(evt);
-            }
-        });
-
-        JTFcapacidad.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFcapacidadKeyTyped(evt);
             }
         });
 
@@ -171,10 +160,6 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
                 .addGap(34, 34, 34)
                 .addGroup(JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JPdatosLayout.createSequentialGroup()
-                        .addComponent(JLchofer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(JTFchofer, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(JPdatosLayout.createSequentialGroup()
                         .addComponent(JLmodelo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JTFmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -183,16 +168,16 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JTFmatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(57, 57, 57)
-                .addGroup(JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(JPdatosLayout.createSequentialGroup()
-                        .addComponent(JLcapacidad)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(JTFcapacidad))
+                .addGroup(JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JPdatosLayout.createSequentialGroup()
                         .addComponent(JLmarca)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(JTFmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                        .addComponent(JTFmarca, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(JPdatosLayout.createSequentialGroup()
+                        .addComponent(JLchofer)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JTFchofer, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         JPdatosLayout.setVerticalGroup(
             JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,14 +191,10 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
                 .addGap(32, 32, 32)
                 .addGroup(JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLmodelo)
-                    .addComponent(JLcapacidad)
                     .addComponent(JTFmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTFcapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLchofer)
                     .addComponent(JTFchofer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         JBguardar.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
@@ -408,10 +389,6 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
     private void JTFmodeloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFmodeloKeyTyped
 //        habilitarGuardar();
     }//GEN-LAST:event_JTFmodeloKeyTyped
-
-    private void JTFcapacidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFcapacidadKeyTyped
-//        habilitarGuardar();
-    }//GEN-LAST:event_JTFcapacidadKeyTyped
 
     private void JTFchoferKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFchoferKeyTyped
 //        habilitarGuardar();
@@ -639,7 +616,6 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
     private javax.swing.JButton JBguardar;
     private javax.swing.JButton JBlimpiar;
     private javax.swing.JLabel JLbuscar;
-    private javax.swing.JLabel JLcapacidad;
     private javax.swing.JLabel JLcargarColectivo;
     private javax.swing.JLabel JLchofer;
     private javax.swing.JLabel JLmarca;
@@ -648,7 +624,6 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel JPdatos;
     private javax.swing.JPanel JPfiltrado;
     private javax.swing.JScrollPane JSPcolectivos;
-    private javax.swing.JTextField JTFcapacidad;
     private javax.swing.JTextField JTFchofer;
     private javax.swing.JTextField JTFfiltrar;
     private javax.swing.JTextField JTFmarca;

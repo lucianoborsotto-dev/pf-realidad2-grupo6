@@ -205,11 +205,6 @@
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="JLchofer" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="JTFchofer" min="-2" pref="187" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
                           <Component id="JLmodelo" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="JTFmodelo" min="-2" pref="165" max="-2" attributes="0"/>
@@ -221,19 +216,19 @@
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="JLcapacidad" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="JTFcapacidad" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Component id="JLmarca" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="JTFmarca" min="-2" pref="183" max="-2" attributes="0"/>
                       </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="JLchofer" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="JTFchofer" min="-2" pref="187" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="35" max="32767" attributes="0"/>
+                  <EmptySpace pref="24" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -250,16 +245,11 @@
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="JLmodelo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="JLcapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="JTFmodelo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="JTFcapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="JLchofer" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="JTFchofer" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="68" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -271,14 +261,6 @@
               <Font name="Dubai Medium" size="16" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="MARCA:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="JLcapacidad">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Dubai Medium" size="16" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="CAPACIDAD:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="JLchofer">
@@ -302,11 +284,6 @@
         <Component class="javax.swing.JTextField" name="JTFmodelo">
           <Events>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFmodeloKeyTyped"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="JTFcapacidad">
-          <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFcapacidadKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFchofer">
