@@ -1,8 +1,15 @@
 package vista;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Colectivo;
+import persistencia.ColectivoDAO;
 
 public class CargarColectivo extends javax.swing.JInternalFrame {
+
     //Crea el modelo por default de la tabla y sobrescribe el metodo de la clase para hacer que las celdas no sean editabes.
     private DefaultTableModel modeloC = new DefaultTableModel() {
         @Override
@@ -11,10 +18,25 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         }
     };
 
+    ColectivoDAO cd;
+
     public CargarColectivo() {
         initComponents();
         UtilidadesGenerales.ocultarMenu(this);
         cargarCabecera();
+
+        try {
+            cd = new ColectivoDAO();
+            cargarColectivos();
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al conectar con la base de datos",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+
+            Logger.getLogger(CargarColectivo.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -293,318 +315,199 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBaltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBaltaActionPerformed
-        //        int filaS = JTalumnos.getSelectedRow(); //Traer la fila que estoy seleccionando.
-        //        if (filaS != -1) {
-            //            int id = (int) JTalumnos.getValueAt(filaS, 0);
-            //            boolean estado = (boolean) JTalumnos.getValueAt(filaS, 4);
-            //            if (estado) {
-                //                JOptionPane.showMessageDialog(this, "No puede dar de alta a un alumno que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //            } else {
-                //                ad.altaBajaLogica(id, true);
-                //                for (Alumno a : allAlumnos) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
-                    //                    if (a.getIdAlumno() == id) {
-                        //                        a.setActivo(true);
-                        //                        modelo.setValueAt(true, filaS, 4);
-                        //                        JCactivo.setSelected(true);
-                        //                        break;
-                        //                    }
-                    //                }
-                //                JOptionPane.showMessageDialog(this, "El alumno ha sido dado de alta con exito!");
-                //            }
-            //        } else {
-            //            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-            //        }
+        int filaS = JTcolectivos.getSelectedRow(); //Traer la fila que estoy seleccionando.
+        if (filaS != -1) {
+            int id = (int) JTcolectivos.getValueAt(filaS, 0);
+            boolean estado = (boolean) JTcolectivos.getValueAt(filaS, 6);
+            if (estado) {
+                JOptionPane.showMessageDialog(this, "No puede dar de alta a un colectivo que ya lo esta.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    if (cd.reactivar(id)) {
+                        // Actualiza el estado en la tabla
+                        modeloC.setValueAt(true, filaS, 6);
+
+                        JOptionPane.showMessageDialog(this,
+                                "El colectivo ha sido dado de alta con exito!");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBaltaActionPerformed
 
     private void JBbajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBbajaActionPerformed
-        //        int filaS = JTalumnos.getSelectedRow();
-        //        if (filaS != -1) { //Solo entra si hay una fila seleccionada.
-            //            int id = (int) JTalumnos.getValueAt(filaS, 0);
-            //            boolean estado = (boolean) JTalumnos.getValueAt(filaS, 4);
-            //            if (estado) {
-                //                ad.altaBajaLogica(id, false);
-                //                for (Alumno a : allAlumnos) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
-                    //                    if (a.getIdAlumno() == id) {
-                        //                        a.setActivo(false);
-                        //                        modelo.setValueAt(false, filaS, 4);
-                        //                        JCactivo.setSelected(false);
-                        //                        break;
-                        //                    }
-                    //                }
-                //                try {
-                    //                    //Permite que si se da de baja un alumno, se va a eliminar la cursada que contenga el id del alumno dado de baja.
-                    //                    Menu.cd.borrarInscripcion(id);
-                    //                } catch (SQLException ex) {
-                    //                    JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    //                } catch (ClassNotFoundException ex) {
-                    //                    JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    //                }
-                //                JOptionPane.showMessageDialog(this, "El alumno ha sido dado de baja con exito!");
-                //            } else {
-                //                JOptionPane.showMessageDialog(this, "No puede dar de baja a un alumno que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //            }
-            //        } else {
-            //            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-            //        }
+        int filaS = JTcolectivos.getSelectedRow(); //Traer la fila que estoy seleccionando.
+        if (filaS != -1) {
+            int id = (int) JTcolectivos.getValueAt(filaS, 0);
+            boolean estado = (boolean) JTcolectivos.getValueAt(filaS, 6);
+            if (!estado) {
+                JOptionPane.showMessageDialog(this, "No puede dar de baja a un colectivo que ya lo esta.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    if (cd.darDeBaja(id)) {
+                        // Actualiza el estado en la tabla
+                        modeloC.setValueAt(false, filaS, 6);
+
+                        JOptionPane.showMessageDialog(this,
+                                "El colectivo ha sido dado de baja con exito!");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBbajaActionPerformed
 
     private void JTcolectivosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTcolectivosMouseClicked
-//        int filaS = JTcolectivos.getSelectedRow();
-//        if (filaS != -1) {
-//            String dni = (String) JTcolectivos.getValueAt(filaS, 1);
-//            String nombre = (String) JTcolectivos.getValueAt(filaS, 2);
-//            String apellido = (String) JTcolectivos.getValueAt(filaS, 3);
-//            String correo = (String) JTcolectivos.getValueAt(filaS, 4);
-//            String telefono = (String) JTcolectivos.getValueAt(filaS, 5);
-//
-//            JTFmodelo.setText(dni);
-//            JTFmatricula.setText(nombre);
-//            JTFmarca.setText(apellido);
-//            JTFcapacidad.setText(correo);
-//            JTFchofer.setText(telefono);
-//        }
-//
-//        JBborrar.setEnabled(true);
-//        JBactualizar.setEnabled(true);
+        int filaS = JTcolectivos.getSelectedRow();
+        if (filaS != -1) {
+            String matricula = (String) JTcolectivos.getValueAt(filaS, 1);
+            String marca = (String) JTcolectivos.getValueAt(filaS, 2);
+            String modelo = (String) JTcolectivos.getValueAt(filaS, 3);
+            String chofer = (String) JTcolectivos.getValueAt(filaS, 5);
+
+            JTFmodelo.setText(modelo);
+            JTFmatricula.setText(matricula);
+            JTFmarca.setText(marca);
+            JTFchofer.setText(chofer);
+        }
+
+        JBborrar.setEnabled(true);
+        JBactualizar.setEnabled(true);
     }//GEN-LAST:event_JTcolectivosMouseClicked
 
     private void JTFfiltrarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFfiltrarKeyReleased
-//        borrarFilas();
-//        for (Pasajero p : allPasajeros) {
-//            String dni = p.getDni();
-//            if (dni.startsWith(JTFfiltrar.getText())) {
-//                modeloP.addRow(new Object[]{p.getIdPasajero(), p.getDni(), p.getNombre(), p.getApellido(), p.getCorreo(), p.getTelefono(), p.isEstado()});
-//            }
-//        }
+
     }//GEN-LAST:event_JTFfiltrarKeyReleased
 
     private void JTFmatriculaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFmatriculaKeyTyped
-//        habilitarGuardar();
+        habilitarGuardar();
     }//GEN-LAST:event_JTFmatriculaKeyTyped
 
     private void JTFmarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFmarcaKeyTyped
-//        habilitarGuardar();
+        habilitarGuardar();
     }//GEN-LAST:event_JTFmarcaKeyTyped
 
     private void JTFmodeloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFmodeloKeyTyped
-//        habilitarGuardar();
+        habilitarGuardar();
     }//GEN-LAST:event_JTFmodeloKeyTyped
 
     private void JTFchoferKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFchoferKeyTyped
-//        habilitarGuardar();
+        habilitarGuardar();
     }//GEN-LAST:event_JTFchoferKeyTyped
 
     private void JBguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBguardarActionPerformed
-//        try {
-//            //Variables para almacenar los datos extraidos.
-//            String dni = JTFmodelo.getText().trim();
-//            String nombre = JTFmatricula.getText().trim();
-//            String apellido = JTFmarca.getText().trim();
-//            String correo = JTFcapacidad.getText().trim();
-//            String telefono = JTFchofer.getText().trim();
-//
-//            //Varibales para la verificacion de datos.
-//            Pasajero p;
-//            int longitudDni = dni.length();
-//            boolean triggerDni = true;
-//            boolean triggerCorreo = true;
-//            boolean triggerPhone = true;
-//
-//            //Verificacion de datos.
-//            if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
-//                int dniNumber = Integer.parseInt(dni); //Se pasa a un int para verficar que solo haya numeros, si hay letras larga una excepcion al momento de convertir.
-//                for (Pasajero pasaDni : allPasajeros) { //Recorre el Arraylist para verficacion de DNI repetido.
-//                    if (pasaDni.getDni().equals(dni)) {
-//                        triggerDni = false;
-//                        break;
-//                    }
-//                }
-//                if (triggerDni) { //Verficacion de DNI repetido.
-//                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes.
-//                        if (nombre.length() <= 100) { //Verificacion para que el nombre no supere los 100 caracteres admitidos por la base de datos.
-//                            if (apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verificación de apellido con solo letras
-//                                if (apellido.length() <= 100) { // Verificación de apellido con menos de 100 dígitos
-//                                    if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { // Validación para correo con formato ejemplo@ejemplo.com
-//                                        for (Pasajero pasaCorreo : allPasajeros) {
-//                                            if (pasaCorreo.getCorreo().equalsIgnoreCase(correo)) {
-//                                                triggerCorreo = false;
-//                                                break;
-//                                            }
-//                                        }
-//                                        if (triggerCorreo) {
-//                                            if (telefono.matches("\\d{7,15}")) { // Validación que permite solo números de 7 a 15 dígitos, evita letras, simbolos...
-//                                                for (Pasajero pasaPhone : allPasajeros) {
-//                                                    if (pasaPhone.getTelefono().equalsIgnoreCase(telefono)) {
-//                                                        triggerPhone = false;
-//                                                        break;
-//                                                    }
-//                                                }
-//                                                if (triggerPhone) {
-//                                                    p = new Pasajero(dni, nombre, apellido, correo, telefono, true);
-//                                                    pd.insertar(p);
-//                                                    allPasajeros.add(p);
-//                                                    limpiar();
-//                                                    mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-//                                                    JOptionPane.showMessageDialog(this, "Pasajero guardado!");
-//                                                }else{
-//                                                    JOptionPane.showMessageDialog(this, "El numero de telefono ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                                                }
-//                                            } else {
-//                                                JOptionPane.showMessageDialog(this, "Solo se permite números, sin espacios de 7 a 15 dígitos", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                                            }
-//                                        } else {
-//                                            JOptionPane.showMessageDialog(this, "La direccion de correo ya se encuentra registrada", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                                        }
-//                                    } else {
-//                                        JOptionPane.showMessageDialog(this, "Formato inválido de correo", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                                    }
-//                                } else {
-//                                    JOptionPane.showMessageDialog(this, "El apellido debe contener máximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                                }
-//
-//                            } else {
-//                                JOptionPane.showMessageDialog(this, "Apellido inválido", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                            }
-//                        } else {
-//                            JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                        }
-//                    } else {
-//                        JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                    }
-//                } else {
-//                    JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros.", "ERROR", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (NumberFormatException nf) {
-//            JOptionPane.showMessageDialog(this, "Solo se permiten dígitos sin espacios y puntos para el documento.", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        } catch (ClassNotFoundException ex) {
-//            JOptionPane.showMessageDialog(this, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        }
+        String matricula = JTFmatricula.getText();
+        String marca = JTFmarca.getText();
+        String modelo = JTFmodelo.getText();
+        String chofer = JTFchofer.getText();
+
+        Colectivo existeColectivo = null;
+
+        try {
+            existeColectivo = cd.buscarColectivoMatricula(matricula);
+        } catch (SQLException ex) {
+            Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (matricula.length() <= 0 | marca.length() <= 0 | modelo.length() <= 0 | chofer.length() <= 0) {
+            JOptionPane.showMessageDialog(null, "Ningun campo puede estar vacio");
+            return;
+        }
+
+        if (existeColectivo != null) {
+            JOptionPane.showMessageDialog(null, "La matricula ya existe en la base de datos");
+            return;
+        }
+
+        if (!marca.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de marca. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes.
+            JOptionPane.showMessageDialog(null, "Marca invalida");
+            return;
+        }
+
+        if (!chofer.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de chofer. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes.
+            JOptionPane.showMessageDialog(null, "Nombre de chofer invalido");
+            return;
+        }
+
+        Colectivo colectivoNuevo = new Colectivo(matricula, marca, modelo, 46, chofer, true);
+
+        try {
+            if (cd.insertar(colectivoNuevo)) {
+
+                modeloC.addRow(new Object[]{
+                    colectivoNuevo.getIdColectivo(),
+                    colectivoNuevo.getMatricula(),
+                    colectivoNuevo.getMarca(),
+                    colectivoNuevo.getModelo(),
+                    colectivoNuevo.getCapacidad(),
+                    colectivoNuevo.getChofer(),
+                    colectivoNuevo.isEstado()
+                });
+
+                JOptionPane.showMessageDialog(null, "Colectivo cargado correctamente");
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_JBguardarActionPerformed
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
-        //        Iterator<Alumno> it = allAlumnos.iterator(); //Se crea para borrar tambien al alumno del ArrayList.
-        //        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al alumno?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        //        int filaS = JTalumnos.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
-        //        if (filaS != -1) {
-            //
-            //            int id = (int) JTalumnos.getValueAt(filaS, 0); //Obtiene el valor que se encuentra en esa fila justo en esa columna.
-            //            if (respuesta == JOptionPane.YES_OPTION) { //Si la respuesta fue "Si".
-                //                while (it.hasNext()) {
-                    //                    if (it.next().getIdAlumno() == id) { //Se fija que el valor del idAlumno coincide con el valor extraido de esa fila seleccionada en la columna idAlumno.
-                        //                        it.remove(); //Si coincide lo elimina.
-                        //                        break;
-                        //                    }
-                    //                }
-                //
-                //                try {
-                    //                    //Permite que si se borra el alumno, tambien se va a eliminar la cursada que contenga el id del alumno eliminado.
-                    //                    Menu.cd.borrarInscripcion(id);
-                    //                } catch (SQLException ex) {
-                    //                    JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    //                } catch (ClassNotFoundException ex) {
-                    //                    JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    //                }
-                //
-                //                ad.borrarAlumno(id); //Ejecuta el metodo de AlumnoData para borrar al alumno de la base de datos.
-                //                modelo.removeRow(filaS); //Elimina al alumno seleccionado de la tabla.
-                //                limpiar(); //Limpia todo al terminar.
-                //                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-                //                JOptionPane.showMessageDialog(this, "Alumno eliminado!");
-                //            }
-            //        } else {
-            //            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-            //        }
+        int filaS = JTcolectivos.getSelectedRow(); //Traer la fila que estoy seleccionando.
+        if (filaS != -1) {
+            int id = (int) JTcolectivos.getValueAt(filaS, 0);
+            try {
+                if (cd.borrar(id)) {
+                    // borra el cole de la tabla
+                    modeloC.removeRow(filaS);
+                    JOptionPane.showMessageDialog(this,
+                            "El colectivo ha sido borrado con exito");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un colectivo");
+        }
     }//GEN-LAST:event_JBborrarActionPerformed
 
     private void JBactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBactualizarActionPerformed
-        //        try {
-            //            //Variables para almacenar los datos extraidos.
-            //            String dniTexto = JTFdni.getText().trim();
-            //            String nombre = JTFnombre.getText().trim();
-            //            LocalDate fechaNacimiento = JDCfechaNac.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            //            boolean activo = JCactivo.isSelected();
-            //            Alumno a;
-            //
-            //            //Varibales para la verificacion de datos.
-            //            int longitudDni = dniTexto.length();
-            //            boolean disparador = true;
-            //            LocalDate fechaActual = LocalDate.now();
-            //            LocalDate fechaMaxima = fechaActual.minusYears(16);
-            //            int filaS = JTalumnos.getSelectedRow();
-            //
-            //            //Verificacion de datos.
-            //            if (filaS != -1) { //Todo funcionara si hay una fila seleccionada.
-                //                int id = (int) JTalumnos.getValueAt(filaS, 0);
-                //                if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
-                    //                    int dni = Integer.parseInt(dniTexto);
-                    //                    for (Alumno alu : allAlumnos) { //Recorre el Arraylist para verficacion de DNI repetido, evita el DNI del alumno seleccionado.
-                        //                        if (alu.getIdAlumno() == id) {
-                            //                            continue;
-                            //                        }
-                        //                        if (alu.getDni() == dni) {
-                            //                            disparador = false;
-                            //                            break;
-                            //                        }
-                        //                    }
-                    //                    if (disparador) { //Verficacion de DNI repetido.
-                        //                        if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
-                            //                            if (nombre.length() <= 20) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
-                                //                                if (fechaNacimiento.isBefore(fechaMaxima) || fechaNacimiento.isEqual(fechaMaxima)) { //Verificacion de fecha de nacimiento.
-                                    //                                    a = new Alumno(dni, nombre, fechaNacimiento, activo);
-                                    //                                    a.setIdAlumno(id);
-                                    //                                    for (Alumno act : allAlumnos) { //Actualizacion del alumno en el ArrayList para actualizar la tabla.
-                                        //                                        if (act.getIdAlumno() == id) {
-                                            //                                            if (act.getDni() != dni) {
-                                                //                                                act.setDni(dni);
-                                                //                                                modelo.setValueAt(dni, filaS, 1);
-                                                //                                            }
-                                            //                                            if (!act.getNombre().equals(nombre)) {
-                                                //                                                act.setNombre(nombre);
-                                                //                                                modelo.setValueAt(nombre, filaS, 2);
-                                                //                                            }
-                                            //                                            if (!act.getFechaNac().equals(fechaNacimiento)) {
-                                                //                                                act.setFechaNac(fechaNacimiento);
-                                                //                                                modelo.setValueAt(fechaNacimiento, filaS, 3);
-                                                //                                            }
-                                            //                                            break;
-                                            //                                        }
-                                        //                                    }
-                                    //                                    ad.actualizarAlumno(a);
-                                    //                                    limpiar();
-                                    //                                    mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-                                    //                                    JOptionPane.showMessageDialog(this, "Alumno actualizado!");
-                                    //                                } else {
-                                    //                                    JOptionPane.showMessageDialog(this, "Fecha no admitida", "ERROR", JOptionPane.ERROR_MESSAGE);
-                                    //                                }
-                                //                            }else{
-                                //                                JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 20 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-                                //                            }
-                            //                        } else {
-                            //                            JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
-                            //                        }
-                        //                    } else {
-                        //                        JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-                        //                    }
-                    //                } else {
-                    //                    JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros,\nse aceptan solo numeros, sin puntos y espacios", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    //                }
-                //            } else {
-                //                JOptionPane.showMessageDialog(this, "Debe seleccionar una fila para actualizar", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //            }
-            //        } catch (NumberFormatException nf) {
-            //            JOptionPane.showMessageDialog(this, "Datos incompletos/incorrectos", "ERROR", JOptionPane.ERROR_MESSAGE);
-            //        } catch (NullPointerException np) {
-            //            JOptionPane.showMessageDialog(this, "Fecha invalida", "ERROR", JOptionPane.ERROR_MESSAGE);
-            //        }
+        int filaS = JTcolectivos.getSelectedRow(); //Traer la fila que estoy seleccionando.
+        if (filaS != -1) {
+            int id = (int) JTcolectivos.getValueAt(filaS, 0);
+            try {
+                if (cd.borrar(id)) {
+                    // Actualiza el estado en la tabla
+                    modeloC.setValueAt(false, filaS, 6);
+
+                    JOptionPane.showMessageDialog(this,
+                            "El colectivo ha sido borrado con exito");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_JBactualizarActionPerformed
 
     private void JBlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBlimpiarActionPerformed
-//        limpiar();
+        limpiar();
     }//GEN-LAST:event_JBlimpiarActionPerformed
 
 
@@ -645,5 +548,37 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         modeloC.addColumn("Estado");
 
         JTcolectivos.setModel(modeloC);
+    }
+
+    private void habilitarGuardar() {
+        JBguardar.setEnabled(true);
+    }
+
+    private void cargarColectivos() {
+        modeloC.setRowCount(0); // reseteo filas
+
+        try {
+            for (Colectivo c : cd.listarColectivos()) {
+                modeloC.addRow(new Object[]{
+                    c.getIdColectivo(),
+                    c.getMatricula(),
+                    c.getMarca(),
+                    c.getModelo(),
+                    c.getCapacidad(),
+                    c.getChofer(),
+                    c.isEstado()
+                });
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CargarColectivo.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void limpiar() {
+        JTFmatricula.setText("");
+        JTFmarca.setText("");
+        JTFmodelo.setText("");
+        JTFchofer.setText("");
     }
 }
