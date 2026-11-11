@@ -56,7 +56,8 @@ public class FlechaFlash {
                     BigDecimal.valueOf(2500)
             );
 
-            pjd.generar(pasaje);
+            //pjd.generar(pasaje);
+            System.out.println(pjd.listarPasajes());
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException x) {

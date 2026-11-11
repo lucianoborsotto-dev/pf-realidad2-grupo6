@@ -31,7 +31,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="JMIpasajero">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cargar Pasajero"/>
+                <Property name="text" type="java.lang.String" value="1- Cargar Pasajero"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIpasajeroActionPerformed"/>
@@ -39,7 +39,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIcargarCole">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cargar Colectivo"/>
+                <Property name="text" type="java.lang.String" value="2- Cargar Colectivo"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIcargarColeActionPerformed"/>
@@ -47,7 +47,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIcargarViaje">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cargar Viaje"/>
+                <Property name="text" type="java.lang.String" value="3- Cargar Viaje"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIcargarViajeActionPerformed"/>
@@ -55,7 +55,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIlugar">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cargar Lugar"/>
+                <Property name="text" type="java.lang.String" value="4- Comprar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIlugarActionPerformed"/>

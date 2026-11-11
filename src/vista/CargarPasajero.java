@@ -2,6 +2,7 @@ package vista;
 
 import java.awt.Image;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -27,7 +28,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         initComponents();
         UtilidadesGenerales.ocultarMenu(this);
         cargarCabecera();
-
+        
         try {
             pd = new PasajeroDAO();
             allPasajeros = pd.listar();
@@ -372,7 +373,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                         if (nombre.length() <= 100) { //Verificacion para que el nombre no supere los 100 caracteres admitidos por la base de datos.
                             if (apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verificación de apellido con solo letras
                                 if (apellido.length() <= 100) { // Verificación de apellido con menos de 100 dígitos
-                                    if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { // Validación para correo con formato ejemplo@ejemplo.com
+                                    if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { //Validación para correo con formato ejemplo@ejemplo.com
                                         for (Pasajero pasaCorreo : allPasajeros) { 
                                             if (pasaCorreo.getCorreo().equalsIgnoreCase(correo)) {
                                                 triggerCorreo = false;
@@ -435,120 +436,42 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBguardarActionPerformed
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
-//        Iterator<Alumno> it = allAlumnos.iterator(); //Se crea para borrar tambien al alumno del ArrayList.
-//        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al alumno?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-//        int filaS = JTalumnos.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
-//        if (filaS != -1) {
-//
-//            int id = (int) JTalumnos.getValueAt(filaS, 0); //Obtiene el valor que se encuentra en esa fila justo en esa columna.
-//            if (respuesta == JOptionPane.YES_OPTION) { //Si la respuesta fue "Si".
-//                while (it.hasNext()) {
-//                    if (it.next().getIdAlumno() == id) { //Se fija que el valor del idAlumno coincide con el valor extraido de esa fila seleccionada en la columna idAlumno.
-//                        it.remove(); //Si coincide lo elimina.
-//                        break;
-//                    }
-//                }
-//
-//                try {
-//                    //Permite que si se borra el alumno, tambien se va a eliminar la cursada que contenga el id del alumno eliminado.
-//                    Menu.cd.borrarInscripcion(id);
-//                } catch (SQLException ex) {
-//                    JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                } catch (ClassNotFoundException ex) {
-//                    JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                }
-//
-//                ad.borrarAlumno(id); //Ejecuta el metodo de AlumnoData para borrar al alumno de la base de datos.
-//                modelo.removeRow(filaS); //Elimina al alumno seleccionado de la tabla.
-//                limpiar(); //Limpia todo al terminar.
-//                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-//                JOptionPane.showMessageDialog(this, "Alumno eliminado!");
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        }
+        Iterator<Pasajero> it = allPasajeros.iterator(); //Se crea para borrar tambien al pasajero del ArrayList.
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al alumno?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int filaS = JTpasajero.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
+        if (filaS != -1) {
+
+            int id = (int) JTpasajero.getValueAt(filaS, 0); //Obtiene el valor que se encuentra en esa fila justo en esa columna.
+            if (respuesta == JOptionPane.YES_OPTION) { //Si la respuesta fue "Si".
+                while (it.hasNext()) {
+                    if (it.next().getIdPasajero() == id) { //Se fija que el valor del idAlumno coincide con el valor extraido de esa fila seleccionada en la columna idAlumno.
+                        it.remove(); //Si coincide lo elimina.
+                        break;
+                    }
+                }
+
+                try {
+                    //Permite que si se borra el pasajero, tambien se va a eliminar del pasaje que compro que contenga el id del pasajero eliminado.
+                    Menu.cd.borrarInscripcion(id);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+
+                ad.borrarAlumno(id); //Ejecuta el metodo de AlumnoData para borrar al alumno de la base de datos.
+                modelo.removeRow(filaS); //Elimina al alumno seleccionado de la tabla.
+                limpiar(); //Limpia todo al terminar.
+                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                JOptionPane.showMessageDialog(this, "Alumno eliminado!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBborrarActionPerformed
 
     private void JBactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBactualizarActionPerformed
-//        try {
-//            //Variables para almacenar los datos extraidos.
-//            String dniTexto = JTFdni.getText().trim();
-//            String nombre = JTFnombre.getText().trim();
-//            LocalDate fechaNacimiento = JDCfechaNac.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//            boolean activo = JCactivo.isSelected();
-//            Alumno a;
-//
-//            //Varibales para la verificacion de datos.
-//            int longitudDni = dniTexto.length();
-//            boolean disparador = true;
-//            LocalDate fechaActual = LocalDate.now();
-//            LocalDate fechaMaxima = fechaActual.minusYears(16);
-//            int filaS = JTalumnos.getSelectedRow();
-//
-//            //Verificacion de datos.
-//            if (filaS != -1) { //Todo funcionara si hay una fila seleccionada.
-//                int id = (int) JTalumnos.getValueAt(filaS, 0);
-//                if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
-//                    int dni = Integer.parseInt(dniTexto);
-//                    for (Alumno alu : allAlumnos) { //Recorre el Arraylist para verficacion de DNI repetido, evita el DNI del alumno seleccionado.
-//                        if (alu.getIdAlumno() == id) {
-//                            continue;
-//                        }
-//                        if (alu.getDni() == dni) {
-//                            disparador = false;
-//                            break;
-//                        }
-//                    }
-//                    if (disparador) { //Verficacion de DNI repetido.
-//                        if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
-//                            if (nombre.length() <= 20) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
-//                                if (fechaNacimiento.isBefore(fechaMaxima) || fechaNacimiento.isEqual(fechaMaxima)) { //Verificacion de fecha de nacimiento.
-//                                    a = new Alumno(dni, nombre, fechaNacimiento, activo);
-//                                    a.setIdAlumno(id);
-//                                    for (Alumno act : allAlumnos) { //Actualizacion del alumno en el ArrayList para actualizar la tabla.
-//                                        if (act.getIdAlumno() == id) {
-//                                            if (act.getDni() != dni) {
-//                                                act.setDni(dni);
-//                                                modelo.setValueAt(dni, filaS, 1);
-//                                            }
-//                                            if (!act.getNombre().equals(nombre)) {
-//                                                act.setNombre(nombre);
-//                                                modelo.setValueAt(nombre, filaS, 2);
-//                                            }
-//                                            if (!act.getFechaNac().equals(fechaNacimiento)) {
-//                                                act.setFechaNac(fechaNacimiento);
-//                                                modelo.setValueAt(fechaNacimiento, filaS, 3);
-//                                            }
-//                                            break;
-//                                        }
-//                                    }
-//                                    ad.actualizarAlumno(a);
-//                                    limpiar();
-//                                    mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-//                                    JOptionPane.showMessageDialog(this, "Alumno actualizado!");
-//                                } else {
-//                                    JOptionPane.showMessageDialog(this, "Fecha no admitida", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                                }
-//                            }else{
-//                                JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 20 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                            }
-//                        } else {
-//                            JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                        }
-//                    } else {
-//                        JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                    }
-//                } else {
-//                    JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros,\nse aceptan solo numeros, sin puntos y espacios", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Debe seleccionar una fila para actualizar", "ERROR", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (NumberFormatException nf) {
-//            JOptionPane.showMessageDialog(this, "Datos incompletos/incorrectos", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        } catch (NullPointerException np) {
-//            JOptionPane.showMessageDialog(this, "Fecha invalida", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        }
+
     }//GEN-LAST:event_JBactualizarActionPerformed
 
     private void JBlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBlimpiarActionPerformed

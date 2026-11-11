@@ -94,7 +94,7 @@ public class Menu extends javax.swing.JFrame {
 
         JMadministrar.setText("Administrar");
 
-        JMIpasajero.setText("Cargar Pasajero");
+        JMIpasajero.setText("1- Cargar Pasajero");
         JMIpasajero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIpasajeroActionPerformed(evt);
@@ -102,7 +102,7 @@ public class Menu extends javax.swing.JFrame {
         });
         JMadministrar.add(JMIpasajero);
 
-        JMIcargarCole.setText("Cargar Colectivo");
+        JMIcargarCole.setText("2- Cargar Colectivo");
         JMIcargarCole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIcargarColeActionPerformed(evt);
@@ -110,7 +110,7 @@ public class Menu extends javax.swing.JFrame {
         });
         JMadministrar.add(JMIcargarCole);
 
-        JMIcargarViaje.setText("Cargar Viaje");
+        JMIcargarViaje.setText("3- Cargar Viaje");
         JMIcargarViaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIcargarViajeActionPerformed(evt);
@@ -118,7 +118,7 @@ public class Menu extends javax.swing.JFrame {
         });
         JMadministrar.add(JMIcargarViaje);
 
-        JMIlugar.setText("Cargar Lugar");
+        JMIlugar.setText("4- Comprar");
         JMIlugar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIlugarActionPerformed(evt);
@@ -148,15 +148,26 @@ public class Menu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JMIverActionPerformed
 
-    private void JMIpasajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIpasajeroActionPerformed
+    private void JMIlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIlugarActionPerformed
         JDPescritorio.removeAll();
         JDPescritorio.revalidate();
         JDPescritorio.repaint();
-        CargarPasajero ventanaP = new CargarPasajero();
-        ventanaP.setVisible(true);
-        JDPescritorio.add(ventanaP);
-        JDPescritorio.moveToFront(ventanaP);
-    }//GEN-LAST:event_JMIpasajeroActionPerformed
+        Comprar ventanaCL = new Comprar();
+        ventanaCL.setVisible(true);
+        JDPescritorio.add(ventanaCL);
+        JDPescritorio.moveToFront(ventanaCL);
+
+    }//GEN-LAST:event_JMIlugarActionPerformed
+
+    private void JMIcargarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIcargarViajeActionPerformed
+        JDPescritorio.removeAll();
+        JDPescritorio.revalidate();
+        JDPescritorio.repaint();
+        CargarViaje ventanaCV = new CargarViaje();
+        ventanaCV.setVisible(true);
+        JDPescritorio.add(ventanaCV);
+        JDPescritorio.moveToFront(ventanaCV);
+    }//GEN-LAST:event_JMIcargarViajeActionPerformed
 
     private void JMIcargarColeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIcargarColeActionPerformed
         JDPescritorio.removeAll();
@@ -168,26 +179,15 @@ public class Menu extends javax.swing.JFrame {
         JDPescritorio.moveToFront(ventanaC);
     }//GEN-LAST:event_JMIcargarColeActionPerformed
 
-    private void JMIcargarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIcargarViajeActionPerformed
-       JDPescritorio.removeAll();
-        JDPescritorio.revalidate();
-        JDPescritorio.repaint();
-        CargarViaje ventanaCV = new CargarViaje();
-        ventanaCV.setVisible(true);
-        JDPescritorio.add(ventanaCV);
-        JDPescritorio.moveToFront(ventanaCV);
-    }//GEN-LAST:event_JMIcargarViajeActionPerformed
-
-    private void JMIlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIlugarActionPerformed
+    private void JMIpasajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIpasajeroActionPerformed
         JDPescritorio.removeAll();
         JDPescritorio.revalidate();
         JDPescritorio.repaint();
-        CargarLugar ventanaCL = new CargarLugar();
-        ventanaCL.setVisible(true);
-        JDPescritorio.add(ventanaCL);
-        JDPescritorio.moveToFront(ventanaCL);
-                                            
-    }//GEN-LAST:event_JMIlugarActionPerformed
+        CargarPasajero ventanaP = new CargarPasajero();
+        ventanaP.setVisible(true);
+        JDPescritorio.add(ventanaP);
+        JDPescritorio.moveToFront(ventanaP);
+    }//GEN-LAST:event_JMIpasajeroActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

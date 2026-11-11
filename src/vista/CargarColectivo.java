@@ -85,6 +85,7 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         JLcargarColectivo.setText("Cargar Colectivo");
 
         JPfiltrado.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        JPfiltrado.setEnabled(false);
 
         JLbuscar.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLbuscar.setText("BUSCAR COLECTIVO:       MATRICULA");

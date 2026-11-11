@@ -8,9 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Lugar;
 import modelo.Pasaje;
+import modelo.Pasajero;
+import modelo.RutaViaje;
 import org.mariadb.jdbc.Statement;
 
 public class PasajeDAO {
@@ -83,4 +87,53 @@ public class PasajeDAO {
             return true;
         }
     }
+    
+    public void borrarPasaje(int idPasajero) throws SQLException, ClassNotFoundException {
+        PasajeroDAO pd = new PasajeroDAO();
+        Pasajero p = pd.buscarPorId(idPasajero);
+
+        String sql = "DELETE FROM pasajes WHERE ID_Pasajero = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, p.getIdPasajero());
+            ps.executeUpdate();
+
+            System.out.println("Pasaje eliminado correctamente");
+        } catch (SQLException ex) {
+            System.out.println("No se pudo eliminar el pasaje");
+        }
+    }
+    
+    public List<Pasaje> listarPasajes() throws SQLException, ClassNotFoundException {
+        Pasaje p = null;
+        Pasajero pasa = null;
+        Lugar l = null;
+        RutaViaje rv = null;
+        
+        PasajeroDAO pd = new PasajeroDAO();
+        LugarDAO ld = new LugarDAO();
+        RutaViajeDAO rvd = new RutaViajeDAO();
+        
+        ArrayList<Pasaje> listaPasaje = new ArrayList<>();
+        String sql = "SELECT * FROM pasajes";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                p = new Pasaje();
+                p.setIdPasaje(rs.getInt(1));
+                p.setPasajero(pd.buscarPorId(rs.getInt(2)));
+                p.setAsiento(ld.buscarPorId(rs.getInt(3)));
+                p.setRuta(rvd.buscarRuta(rs.getInt(4)));
+                p.setFechaVenta(rs.getDate("FechaVenta").toLocalDate());
+                p.setHoraVenta(rs.getTime("HoraVenta").toLocalTime());
+                p.setPrecio(rs.getBigDecimal("Precio"));
+                p.setEstado(rs.getBoolean("Estado"));
+                
+                listaPasaje.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al hacer la consulta");
+        }
+        return listaPasaje;
+    }
 }
+    
