@@ -47,8 +47,8 @@ public class PasajeroDAO {
 
         }
     }
-    
-    public void borrarPasajero(int idPasajero){
+
+    public void borrarPasajero(int idPasajero) {
         String sql = "DELETE FROM pasajeros WHERE ID_Pasajero = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idPasajero);
@@ -57,7 +57,9 @@ public class PasajeroDAO {
         } catch (SQLException ex) {
             System.out.println("No se pudo eliminar el pasajero");
         }
-    };
+    }
+
+    ;
 
     // Incluye pasajeros activos e inactivos.
     public List<Pasajero> listar() throws SQLException, ClassNotFoundException {
@@ -106,7 +108,7 @@ public class PasajeroDAO {
     }
 
     // Baja lógica: conserva el registro y sus pasajes relacionados.
-    public boolean darDeBaja(int idPasajero) throws SQLException, ClassNotFoundException {
+    public boolean darDeBaja(int idPasajero) {
         String sql = "UPDATE pasajeros SET estado = 0 "
                 + "WHERE ID_Pasajero = ? AND estado <> 0";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -118,7 +120,7 @@ public class PasajeroDAO {
         return false;
     }
 
-    public boolean reactivar(int idPasajero) throws SQLException, ClassNotFoundException {
+    public boolean reactivar(int idPasajero) {
         String sql = "UPDATE pasajeros SET Estado = 1 "
                 + "WHERE ID_Pasajero = ? AND Estado = 0";
         try (PreparedStatement ps = con.prepareStatement(sql)) {

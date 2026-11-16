@@ -30,7 +30,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         initComponents();
         UtilidadesGenerales.ocultarMenu(this);
         cargarCabecera();
-        
+
         try {
             pjd = new PasajeDAO();
             pd = new PasajeroDAO();
@@ -377,7 +377,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                             if (apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verificación de apellido con solo letras
                                 if (apellido.length() <= 100) { // Verificación de apellido con menos de 100 dígitos
                                     if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { //Validación para correo con formato ejemplo@ejemplo.com
-                                        for (Pasajero pasaCorreo : allPasajeros) { 
+                                        for (Pasajero pasaCorreo : allPasajeros) {
                                             if (pasaCorreo.getCorreo().equalsIgnoreCase(correo)) {
                                                 triggerCorreo = false;
                                                 break;
@@ -398,7 +398,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                                                     limpiar();
                                                     mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
                                                     JOptionPane.showMessageDialog(this, "Pasajero guardado!");
-                                                }else{
+                                                } else {
                                                     JOptionPane.showMessageDialog(this, "El numero de telefono ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
                                                 }
                                             } else {
@@ -474,7 +474,139 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBborrarActionPerformed
 
     private void JBactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBactualizarActionPerformed
+        try {
+            //Variables para almacenar los datos extraidos.
+            String dni = JTFdni.getText().trim();
+            String nombre = JTFnombre.getText().trim();
+            String apellido = JTFapellido.getText().trim();
+            String correo = JTFemail.getText().trim();
+            String telefono = JTFphone.getText().trim();
+            Pasajero p;
 
+            //Variables para la verificación de datos.
+            int longitudDni = dni.length();
+            boolean triggerDni = true;
+            boolean triggerCorreo = true;
+            boolean triggerPhone = true;
+            int filaS = JTpasajero.getSelectedRow();
+
+            //Verificacion de datos.
+            if (filaS != -1) {
+                int id = (int) JTpasajero.getValueAt(filaS, 0);
+
+                if (longitudDni == 7 || longitudDni == 8) { //Verificación de DNI (cantidad de digitos).
+                    int dniNumber = Integer.parseInt(dni); //Se pasa a un int para verficar que solo haya numeros, si hay letras larga una excepcion al momento de convertir.
+                    for (Pasajero pasaDni : allPasajeros) { //Recorre el Arraylist para verficacion de DNI repetido.
+                        if (pasaDni.getIdPasajero() == id) {
+                            continue;
+                        }
+                        if (pasaDni.getDni().equals(dni)) {
+                            triggerDni = false;
+                            break;
+                        }
+
+                    }
+
+                    if (triggerDni) { //Verficacion de DNI repetido.
+                        if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes.
+                            if (nombre.length() <= 100) { //Verificacion para que el nombre no supere los 100 caracteres admitidos por la base de datos.
+                                if (apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verificación de apellido con solo letras
+                                    if (apellido.length() <= 100) { // Verificación de apellido con menos de 100 dígitos
+                                        if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { //Validación para correo con formato ejemplo@ejemplo.com
+                                            for (Pasajero pasaCorreo : allPasajeros) {
+                                                if (pasaCorreo.getIdPasajero() == id) {
+                                                    continue;
+                                                }
+                                                if (pasaCorreo.getCorreo().equalsIgnoreCase(correo)) {
+                                                    triggerCorreo = false;
+                                                    break;
+                                                }
+                                            }
+                                            if (triggerCorreo) {
+                                                if (telefono.matches("\\d{7,15}")) { // Validación que permite solo números de 7 a 15 dígitos, evita letras, simbolos... 
+                                                    for (Pasajero pasaPhone : allPasajeros) {
+                                                        if (pasaPhone.getIdPasajero() == id) {
+                                                            continue;
+                                                        }
+                                                        if (pasaPhone.getTelefono().equalsIgnoreCase(telefono)) {
+                                                            triggerPhone = false;
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (triggerPhone) {
+                                                        p = new Pasajero(dni, nombre, apellido, correo, telefono, true);
+                                                        p.setIdPasajero(id);
+
+                                                        for (Pasajero pasajero : allPasajeros) {
+                                                            if (pasajero.getIdPasajero() == id) {
+                                                                if (pasajero.getDni() != dni) {
+                                                                    pasajero.setDni(dni);
+                                                                    modeloP.setValueAt(dni, filaS, 1);
+                                                                }
+                                                                if (!pasajero.getNombre().equalsIgnoreCase(nombre)) {
+                                                                    pasajero.setNombre(nombre);
+                                                                    modeloP.setValueAt(nombre, filaS, 2);
+                                                                }
+                                                                if (!pasajero.getApellido().equalsIgnoreCase(apellido)) {
+                                                                    pasajero.setApellido(apellido);
+                                                                    modeloP.setValueAt(apellido, filaS, 3);
+                                                                }
+                                                                if (!pasajero.getCorreo().equalsIgnoreCase(correo)) {
+                                                                    pasajero.setCorreo(correo);
+                                                                    modeloP.setValueAt(correo, filaS, 4);
+                                                                }
+                                                                if (!pasajero.getTelefono().equalsIgnoreCase(telefono)) {
+                                                                    pasajero.setTelefono(telefono);
+                                                                    modeloP.setValueAt(telefono, filaS, 5);
+                                                                }
+                                                                break;
+                                                            }
+                                                        }
+                                                        pd.actualizar(p);
+                                                        limpiar();
+                                                        mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                                                        JOptionPane.showMessageDialog(this, "¡Pasajero actualizado!");
+                                                    } else {
+                                                        JOptionPane.showMessageDialog(this, "El numero de telefono ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                                    }
+                                                } else {
+                                                    JOptionPane.showMessageDialog(this, "Solo se permite números, sin espacios de 7 a 15 dígitos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                                }
+                                            } else {
+                                                JOptionPane.showMessageDialog(this, "La direccion de correo ya se encuentra registrada", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, "Formato inválido de correo", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    } else {
+                                        JOptionPane.showMessageDialog(this, "El apellido debe contener máximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                    }
+
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "Apellido inválido", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una fila para actualizar", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException nf) {
+            JOptionPane.showMessageDialog(this, "Solo se permiten dígitos sin espacios y puntos para el documento.", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBactualizarActionPerformed
 
     private void JBlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBlimpiarActionPerformed
@@ -482,59 +614,53 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBlimpiarActionPerformed
 
     private void JBaltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBaltaActionPerformed
-//        int filaS = JTalumnos.getSelectedRow(); //Traer la fila que estoy seleccionando.
-//        if (filaS != -1) {
-//            int id = (int) JTalumnos.getValueAt(filaS, 0);
-//            boolean estado = (boolean) JTalumnos.getValueAt(filaS, 4);
-//            if (estado) {
-//                JOptionPane.showMessageDialog(this, "No puede dar de alta a un alumno que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
-//            } else {
-//                ad.altaBajaLogica(id, true);
-//                for (Alumno a : allAlumnos) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
-//                    if (a.getIdAlumno() == id) {
-//                        a.setActivo(true);
-//                        modelo.setValueAt(true, filaS, 4);
-//                        JCactivo.setSelected(true);
-//                        break;
-//                    }
-//                }
-//                JOptionPane.showMessageDialog(this, "El alumno ha sido dado de alta con exito!");
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        }
+        int filaS = JTpasajero.getSelectedRow();
+        if (filaS != -1) {
+            int id = (int) JTpasajero.getValueAt(filaS, 0);
+            boolean estado = (boolean) JTpasajero.getValueAt(filaS, 6);
+
+            if (estado) {
+                JOptionPane.showMessageDialog(this, "El pasajero ya está dado de alta.");
+            } else {
+                pd.reactivar(id);
+
+                for (Pasajero p : allPasajeros) {
+                    if (p.getIdPasajero() == id) {
+                        p.setEstado(true);
+                        modeloP.setValueAt(true, filaS, 6);
+                        break;
+                    }
+                }
+
+                JOptionPane.showMessageDialog(this, "El pasajero ha sido dado de alta correctamente.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila.", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBaltaActionPerformed
 
     private void JBbajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBbajaActionPerformed
-//        int filaS = JTalumnos.getSelectedRow();
-//        if (filaS != -1) { //Solo entra si hay una fila seleccionada.
-//            int id = (int) JTalumnos.getValueAt(filaS, 0);
-//            boolean estado = (boolean) JTalumnos.getValueAt(filaS, 4);
-//            if (estado) {
-//                ad.altaBajaLogica(id, false);
-//                for (Alumno a : allAlumnos) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
-//                    if (a.getIdAlumno() == id) {
-//                        a.setActivo(false);
-//                        modelo.setValueAt(false, filaS, 4);
-//                        JCactivo.setSelected(false);
-//                        break;
-//                    }
-//                }
-//                try {
-//                    //Permite que si se da de baja un alumno, se va a eliminar la cursada que contenga el id del alumno dado de baja.
-//                    Menu.cd.borrarInscripcion(id);
-//                } catch (SQLException ex) {
-//                    JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                } catch (ClassNotFoundException ex) {
-//                    JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-//                }
-//                JOptionPane.showMessageDialog(this, "El alumno ha sido dado de baja con exito!");
-//            } else {
-//                JOptionPane.showMessageDialog(this, "No puede dar de baja a un alumno que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-//        }
+        int filaS = JTpasajero.getSelectedRow();
+        if (filaS != -1) {
+            int id = (int) JTpasajero.getValueAt(filaS, 0);
+            boolean estado = (boolean) JTpasajero.getValueAt(filaS, 6);
+
+            if (estado) {
+                pd.darDeBaja(id);
+                for (Pasajero p : allPasajeros) {
+                    if (p.getIdPasajero() == id) {
+                        p.setEstado(false);
+                        modeloP.setValueAt(false, filaS, 6);
+                        break;
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "El pasajero ha sido dado de baja correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "El pasajero ya está dado de baja.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila.", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBbajaActionPerformed
 
     private void JTpasajeroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTpasajeroMouseClicked
@@ -646,7 +772,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Carga los alumnos a la tabla.
+     * Carga los pasajeros a la tabla.
      */
     private void cargarDatos() {
         for (Pasajero p : allPasajeros) {
@@ -690,7 +816,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         System.out.println("");
         System.out.println("");
     }
-    
+
     private void habilitarGuardar() {
         if (!JTFnombre.getText().trim().isEmpty() && !JTFapellido.getText().isEmpty() && !JTFdni.getText().isEmpty() && !JTFemail.getText().isEmpty() && !JTFphone.getText().isEmpty()) {
             JBguardar.setEnabled(true);
