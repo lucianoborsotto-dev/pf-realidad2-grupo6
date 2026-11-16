@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Pasajero;
+import persistencia.PasajeDAO;
 import persistencia.PasajeroDAO;
 
 public class CargarPasajero extends javax.swing.JInternalFrame {
@@ -22,6 +23,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
 
     //Creacion de un objeto PasajeroDAO y el ArrayList donde estaran todos los pasajeros traidos de la base de datos.
     PasajeroDAO pd;
+    PasajeDAO pjd;
     List<Pasajero> allPasajeros;
 
     public CargarPasajero() {
@@ -30,6 +32,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         cargarCabecera();
         
         try {
+            pjd = new PasajeDAO();
             pd = new PasajeroDAO();
             allPasajeros = pd.listar();
         } catch (ClassNotFoundException ex) {
@@ -437,7 +440,7 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
         Iterator<Pasajero> it = allPasajeros.iterator(); //Se crea para borrar tambien al pasajero del ArrayList.
-        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al alumno?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al pasajero?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         int filaS = JTpasajero.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
         if (filaS != -1) {
 
@@ -452,18 +455,18 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
 
                 try {
                     //Permite que si se borra el pasajero, tambien se va a eliminar del pasaje que compro que contenga el id del pasajero eliminado.
-                    Menu.cd.borrarInscripcion(id);
+                    pjd.borrarPasaje(id);
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (ClassNotFoundException ex) {
                     JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
 
-                ad.borrarAlumno(id); //Ejecuta el metodo de AlumnoData para borrar al alumno de la base de datos.
-                modelo.removeRow(filaS); //Elimina al alumno seleccionado de la tabla.
+                pd.borrarPasajero(id); //Ejecuta el metodo de PasajeroDAO para borrar al pasajero de la base de datos.
+                modeloP.removeRow(filaS); //Elimina al pasajero seleccionado de la tabla.
                 limpiar(); //Limpia todo al terminar.
                 mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-                JOptionPane.showMessageDialog(this, "Alumno eliminado!");
+                JOptionPane.showMessageDialog(this, "Pasajero eliminado!");
             }
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);

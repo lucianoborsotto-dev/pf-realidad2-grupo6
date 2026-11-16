@@ -47,6 +47,17 @@ public class PasajeroDAO {
 
         }
     }
+    
+    public void borrarPasajero(int idPasajero){
+        String sql = "DELETE FROM pasajeros WHERE ID_Pasajero = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idPasajero);
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("No se pudo eliminar el pasajero");
+        }
+    };
 
     // Incluye pasajeros activos e inactivos.
     public List<Pasajero> listar() throws SQLException, ClassNotFoundException {

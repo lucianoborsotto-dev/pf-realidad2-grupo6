@@ -24,7 +24,8 @@ public class PasajeDAO {
     public PasajeDAO() throws SQLException, ClassNotFoundException {
         con = Conexion.conectar();
     }
-
+    
+    //Metodos
     public boolean generar(Pasaje pasaje) throws SQLException, ClassNotFoundException {
         LocalTime horaActual = LocalTime.now();
         LocalTime horaSalida = pasaje.getRuta().getHoraSalida();
@@ -87,7 +88,7 @@ public class PasajeDAO {
             return true;
         }
     }
-    
+   
     public void borrarPasaje(int idPasajero) throws SQLException, ClassNotFoundException {
         PasajeroDAO pd = new PasajeroDAO();
         Pasajero p = pd.buscarPorId(idPasajero);
