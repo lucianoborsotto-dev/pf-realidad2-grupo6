@@ -58,6 +58,18 @@ public class ColectivoDAO {
         }
         return colectivos;
     }
+    public List<Colectivo> listarColectivosT() throws SQLException {
+        String sql = "SELECT * FROM colectivo WHERE Estado = true";
+        List<Colectivo> colectivos = new ArrayList<>();
+        try (
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                colectivos.add(leerColectivo(rs));
+            }
+        }
+        return colectivos;
+    }
 
     public Colectivo buscarColectivoId(int id) throws SQLException {
         String sql = "SELECT * "

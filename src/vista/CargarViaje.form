@@ -30,35 +30,33 @@
                       <Component id="JLcargarViaje" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="JPdatos" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="JBguardar" min="-2" pref="226" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="JBbaja" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="JBalta" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="JBborrar" alignment="0" min="-2" pref="127" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="JBactualizar" min="-2" pref="127" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="JBlimpiar" min="-2" pref="127" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="165" max="-2" attributes="0"/>
                       <Component id="JPfiltrado" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="JSPcolectivos" min="-2" pref="712" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="JPdatos" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="JBguardar" min="-2" pref="226" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="JBbaja" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="JBalta" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="JBborrar" alignment="0" min="-2" pref="127" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="JBactualizar" min="-2" pref="127" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="JBlimpiar" min="-2" pref="127" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                  </Group>
               </Group>
               <EmptySpace pref="47" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              <Component id="JSPcolectivos" min="-2" pref="712" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -89,7 +87,7 @@
               <Component id="JBbaja" min="-2" pref="45" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="JSPcolectivos" min="-2" pref="120" max="-2" attributes="0"/>
-              <EmptySpace pref="17" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -106,12 +104,12 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="JLchofer" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                          <Component id="JCBcole" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="JLmodelo" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="JTFmodelo" min="-2" pref="165" max="-2" attributes="0"/>
+                          <Component id="TPsalida" min="-2" pref="108" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="JLmatricula" min="-2" max="-2" attributes="0"/>
@@ -119,24 +117,22 @@
                           <Component id="JTForigen" min="-2" pref="208" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="JLcapacidad" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="JTFcapacidad" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="JLmarca" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="JTFdestino" min="-2" pref="183" max="-2" attributes="0"/>
-                              </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="JLmarca" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="JTFdestino" min="-2" pref="183" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="JLcapacidad" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="TPllegada" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                           <Component id="JLcapacidad1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="JTFprecio" max="32767" attributes="0"/>
@@ -160,8 +156,8 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="JLmodelo" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="JLcapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="JTFmodelo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="JTFcapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="TPsalida" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="TPllegada" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -170,7 +166,7 @@
                           <Component id="JLcapacidad1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="JTFprecio" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                      <Component id="JCBcole" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="13" max="32767" attributes="0"/>
               </Group>
@@ -212,16 +208,6 @@
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFdestinoKeyTyped"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="JTFmodelo">
-          <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFmodeloKeyTyped"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="JTFcapacidad">
-          <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFcapacidadKeyTyped"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JLabel" name="JLmatricula">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -238,19 +224,14 @@
             <Property name="text" type="java.lang.String" value="HORA DE SALIDA:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox1">
+        <Component class="javax.swing.JComboBox" name="JCBcole">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Colectivo&gt;"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="JLcapacidad1">
@@ -265,6 +246,10 @@
           <Events>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFprecioKeyTyped"/>
           </Events>
+        </Component>
+        <Component class="com.github.lgooddatepicker.components.TimePicker" name="TPsalida">
+        </Component>
+        <Component class="com.github.lgooddatepicker.components.TimePicker" name="TPllegada">
         </Component>
       </SubComponents>
     </Container>
