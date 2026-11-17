@@ -4,17 +4,19 @@ public class Menu extends javax.swing.JFrame {
 
     public Menu() {
         initComponents();
+        try {
+        // Carga la imagen desde las imagenes del proyecto y la establece como ícono
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagen/colectivo-icon.png")).getImage());
+    } catch (Exception e) {
+        System.out.println("No se pudo cargar el ícono de la ventana: " + e.getMessage());
+    }
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        JDPescritorio = new javax.swing.JDesktopPane();
-        JLbienvenido = new javax.swing.JLabel();
-        JLcreadores = new javax.swing.JLabel();
-        JSPintegrantes = new javax.swing.JScrollPane();
-        JListIntegrantes = new javax.swing.JList<>();
+        JDPescritorio = new DesktopConFondo("/Imagen/fondo-principal.jpg");
         JMBventanas = new javax.swing.JMenuBar();
         JMinicio = new javax.swing.JMenu();
         JMIver = new javax.swing.JMenuItem();
@@ -27,54 +29,17 @@ public class Menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        JLbienvenido.setFont(new java.awt.Font("Dubai Medium", 1, 36)); // NOI18N
-        JLbienvenido.setForeground(new java.awt.Color(255, 255, 255));
-        JLbienvenido.setText("Bienvenido a TodoViaje!");
-
-        JLcreadores.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
-        JLcreadores.setForeground(new java.awt.Color(255, 255, 255));
-        JLcreadores.setText("Creadores:");
-
-        JListIntegrantes.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
-        JListIntegrantes.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "- Martin Ezequiel Ramos.", "- Luciano Emanuel Borsotto.", "- Roman Ezequiel Castro.", "- Enzo Roman Valverde.", "- Franco Emmanuel Orozco." };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        JSPintegrantes.setViewportView(JListIntegrantes);
-
-        JDPescritorio.setLayer(JLbienvenido, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        JDPescritorio.setLayer(JLcreadores, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        JDPescritorio.setLayer(JSPintegrantes, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        JDPescritorio.setAutoscrolls(true);
 
         javax.swing.GroupLayout JDPescritorioLayout = new javax.swing.GroupLayout(JDPescritorio);
         JDPescritorio.setLayout(JDPescritorioLayout);
         JDPescritorioLayout.setHorizontalGroup(
             JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JDPescritorioLayout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(JLcreadores)
-                .addGap(18, 18, 18)
-                .addComponent(JSPintegrantes, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(511, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JDPescritorioLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JLbienvenido)
-                .addGap(253, 253, 253))
+            .addGap(0, 1037, Short.MAX_VALUE)
         );
         JDPescritorioLayout.setVerticalGroup(
             JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JDPescritorioLayout.createSequentialGroup()
-                .addGroup(JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(JDPescritorioLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(JLbienvenido)
-                        .addGap(36, 36, 36)
-                        .addComponent(JSPintegrantes, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(JDPescritorioLayout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(JLcreadores)))
-                .addContainerGap(402, Short.MAX_VALUE))
+            .addGap(0, 800, Short.MAX_VALUE)
         );
 
         JMinicio.setText("Ver");
@@ -224,9 +189,6 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane JDPescritorio;
-    private javax.swing.JLabel JLbienvenido;
-    private javax.swing.JLabel JLcreadores;
-    private javax.swing.JList<String> JListIntegrantes;
     private javax.swing.JMenuBar JMBventanas;
     private javax.swing.JMenuItem JMIallColeChof;
     private javax.swing.JMenuItem JMIcargarCole;
@@ -236,6 +198,26 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIver;
     private javax.swing.JMenu JMadministrar;
     private javax.swing.JMenu JMinicio;
-    private javax.swing.JScrollPane JSPintegrantes;
     // End of variables declaration//GEN-END:variables
+}
+
+//Permite cargarle una imagen al JDesktopPane.
+class DesktopConFondo extends javax.swing.JDesktopPane {
+    private java.awt.Image imagen;
+
+    public DesktopConFondo(String rutaImagen) {
+        try {
+            this.imagen = new javax.swing.ImageIcon(getClass().getResource(rutaImagen)).getImage();
+        } catch (Exception e) {
+            System.out.println("Error al cargar la imagen de fondo: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void paintComponent(java.awt.Graphics g) {
+        super.paintComponent(g);
+        if (imagen != null) {
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 }

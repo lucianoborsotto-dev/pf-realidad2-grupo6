@@ -22,13 +22,13 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             return false;
         }
     };
+    
     RutaViajeDAO rvd;
     ColectivoDAO cd;
     List<Colectivo> allColectivos;
     List<RutaViaje> allViajes;
 
     public CargarViaje() {
-
         initComponents();
         UtilidadesGenerales.ocultarMenu(this);
         cargarCabecera();
@@ -46,6 +46,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         }
         cargarDatos();
         cargarComboBox();
+        JCBcole.setSelectedIndex(-1);
 
         //Redimensionar iconos con el metodo.
         JBborrar.setIcon(redimensionIcon("/Imagen/eliminar.png", 30, 30));
@@ -89,14 +90,14 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
 
-        JLmarca.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLmarca.setText("DESTINO:");
+        JLmarca.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
-        JLcapacidad.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLcapacidad.setText("HORA DE LLEGADA:");
+        JLcapacidad.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
-        JLchofer.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLchofer.setText("COLECTIVO:");
+        JLchofer.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
         JTForigen.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -110,20 +111,14 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             }
         });
 
-        JLmatricula.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLmatricula.setText("ORIGEN:");
+        JLmatricula.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
-        JLmodelo.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLmodelo.setText("HORA DE SALIDA:");
+        JLmodelo.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
-        JLcapacidad1.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLcapacidad1.setText("PRECIO:");
-
-        JTFprecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFprecioKeyTyped(evt);
-            }
-        });
+        JLcapacidad1.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
         javax.swing.GroupLayout JPdatosLayout = new javax.swing.GroupLayout(JPdatos);
         JPdatos.setLayout(JPdatosLayout);
@@ -187,51 +182,51 @@ public class CargarViaje extends javax.swing.JInternalFrame {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        JBguardar.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
         JBguardar.setText("Guardar");
         JBguardar.setEnabled(false);
+        JBguardar.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
         JBguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBguardarActionPerformed(evt);
             }
         });
 
-        JBborrar.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBborrar.setText("Borrar");
         JBborrar.setEnabled(false);
+        JBborrar.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBborrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBborrarActionPerformed(evt);
             }
         });
 
-        JBactualizar.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBactualizar.setText("Actualizar");
         JBactualizar.setEnabled(false);
+        JBactualizar.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBactualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBactualizarActionPerformed(evt);
             }
         });
 
-        JBalta.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBalta.setText("Dar de Alta");
+        JBalta.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBalta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBaltaActionPerformed(evt);
             }
         });
 
-        JBbaja.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBbaja.setText("Dar de Baja");
+        JBbaja.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBbaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBbajaActionPerformed(evt);
             }
         });
 
-        JBlimpiar.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBlimpiar.setText("Limpiar");
+        JBlimpiar.setFont(new java.awt.Font("Dubai Medium", 1, 12)); // NOI18N
         JBlimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBlimpiarActionPerformed(evt);
@@ -256,19 +251,14 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         });
         JSPcolectivos.setViewportView(JTviajes);
 
-        JLcargarViaje.setFont(new java.awt.Font("Dubai Medium", 1, 24)); // NOI18N
         JLcargarViaje.setText("Cargar Viaje");
+        JLcargarViaje.setFont(new java.awt.Font("Dubai Medium", 1, 24)); // NOI18N
 
         JPfiltrado.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        JLbuscar.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLbuscar.setText("BUSCAR VIAJE:       DESTINO:");
+        JLbuscar.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
-        JTFfiltrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JTFfiltrarActionPerformed(evt);
-            }
-        });
         JTFfiltrar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 JTFfiltrarKeyReleased(evt);
@@ -676,14 +666,6 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_JTFfiltrarKeyReleased
 
-    private void JTFfiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTFfiltrarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JTFfiltrarActionPerformed
-
-    private void JTFprecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFprecioKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JTFprecioKeyTyped
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBactualizar;
@@ -712,7 +694,10 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     private com.github.lgooddatepicker.components.TimePicker TPllegada;
     private com.github.lgooddatepicker.components.TimePicker TPsalida;
     // End of variables declaration//GEN-END:variables
-
+    
+    /**
+     * Agrega las cabeceras a la tabla con sus respectivos nombres.
+     */
     private void cargarCabecera() {
         modeloV.addColumn("idViaje");
         modeloV.addColumn("Origen");
@@ -727,8 +712,8 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Carga los viajes a la tabla.
-     */
+    * Carga los viajes a la tabla.
+    */
     private void cargarDatos() {
         for (RutaViaje rv : allViajes) {
             modeloV.addRow(new Object[]{rv.getIdRuta(), rv.getOrigen(), rv.getDestino(), rv.getHoraSalida(), rv.getHoraLlegada(), rv.getColectivo(), rv.getPrecio(), rv.isEstado()});
@@ -736,8 +721,8 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Carga los colectivos al combobox
-     */
+    * Carga los colectivos al combobox
+    */
     private void cargarComboBox() {
         for (Colectivo c : allColectivos) {
             JCBcole.addItem(c);
@@ -746,8 +731,8 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Permite borrar las filas mientras se encribe en los campos de filtrar.
-     */
+    * Permite borrar las filas mientras se encribe en los campos de filtrar.
+    */
     private void borrarFilas() {
         int filas = JTviajes.getRowCount() - 1;
         for (int f = filas; f >= 0; f--) {
@@ -756,13 +741,13 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Permite redimensionar a gusto las imagenes.
-     *
-     * @param ruta
-     * @param ancho
-     * @param alto
-     * @return
-     */
+    * Permite redimensionar a gusto las imagenes.
+    *
+    * @param ruta
+    * @param ancho
+    * @param alto
+    * @return
+    */
     private ImageIcon redimensionIcon(String ruta, int ancho, int alto) {
         ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
         Image imagen = icono.getImage();
@@ -770,7 +755,10 @@ public class CargarViaje extends javax.swing.JInternalFrame {
 
         return new ImageIcon(imagenRedimensionada);
     }
-
+    
+    /**
+     * Vacia/restablece todos los campos.
+     */
     private void limpiar() {
         
         JTForigen.setText("");

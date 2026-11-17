@@ -791,8 +791,8 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Vacia/restablece todos los campos.
-     */
+    * Vacia/restablece todos los campos.
+    */
     private void limpiar() {
         JTFdni.setText("");
         JTFnombre.setText("");
