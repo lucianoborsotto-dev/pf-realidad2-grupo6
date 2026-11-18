@@ -46,6 +46,15 @@ public class ColectivoDAO {
         }
     }
 
+    public boolean borrar(int idColectivo) throws SQLException, ClassNotFoundException {
+        String sql = "DELETE FROM colectivo "
+                + "WHERE id_colectivo = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idColectivo);
+            return ps.executeUpdate() == 1;
+        }
+    }
+
     public List<Colectivo> listarColectivos() throws SQLException {
         String sql = "SELECT * FROM colectivo";
         List<Colectivo> colectivos = new ArrayList<>();
@@ -69,6 +78,17 @@ public class ColectivoDAO {
             }
         }
         return colectivos;
+    }
+
+    public Colectivo buscarColectivoMatricula(String matricula) throws SQLException {
+        String sql = "SELECT * "
+                + "FROM colectivo WHERE matricula = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, matricula);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? leerColectivo(rs) : null;
+            }
+        }
     }
 
     public Colectivo buscarColectivoId(int id) throws SQLException {
