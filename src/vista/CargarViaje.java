@@ -371,7 +371,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBguardarActionPerformed
-        // 1. Extracción de datos
+        //Datos extraidos.
         String origen = JTForigen.getText().trim();
         String destino = JTFdestino.getText().trim();
         String precio = JTFprecio.getText().trim().replace(',', '.');
@@ -380,7 +380,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         LocalTime horaL = TPllegada.getTime();
         RutaViaje rv;
 
-        // 2. Validaciones de formato de texto y números
+        //Validar origen, destino y precio.
         if (!origen.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+$") || origen.length() > 100) {
             JOptionPane.showMessageDialog(this, "Origen no válido o excede los 100 caracteres.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
@@ -396,57 +396,79 @@ public class CargarViaje extends javax.swing.JInternalFrame {
 
         BigDecimal precioLimpio = new BigDecimal(precio);
         if (precioLimpio.compareTo(BigDecimal.ZERO) <= 0) {
-            JOptionPane.showMessageDialog(this, "El precio debe ser mayor a 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El precio debe ser mayor a 0$.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 3. Validación de horario del propio viaje
+        //Verificacion horario de salida.
         if (!horaS.isBefore(horaL)) {
             JOptionPane.showMessageDialog(this, "La hora de salida debe ser anterior a la hora de llegada.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 4. Verificaciones contra los viajes existentes del colectivo seleccionado
+        //Verificaciones contra los viajes existentes del colectivo seleccionado.
         RutaViaje viajeAnterior = null;
+        RutaViaje viajeSiguiente = null;
 
         for (RutaViaje viaje : allViajes) {
             if (viaje.getColectivo().equals(cole)) {
                 LocalTime hSalidaVieja = viaje.getHoraSalida();
                 LocalTime hLlegadaVieja = viaje.getHoraLlegada();
 
-                // A) Control de solape de horarios
-                // Se cruzan si el nuevo viaje empieza antes de que termine el viejo Y termina después de que empiece el viejo
+                //Verificacion para que los horarios no se solapen.
                 boolean seCruzan = horaS.isBefore(hLlegadaVieja) && horaL.isAfter(hSalidaVieja);
                 if (seCruzan) {
                     JOptionPane.showMessageDialog(this, "Conflicto de horario: El colectivo ya tiene un viaje asignado en ese intervalo.", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    return; // Frena el guardado
+                    return;
                 }
 
-                // B) Buscar si este viaje existente es previo al nuevo que queremos cargar
-                // Un viaje es previo si su hora de llegada es anterior o igual a la hora de salida del nuevo viaje
+                //Buscar el viaje ANTERIOR inmediato (el último que termina antes de que empiece este)
                 if (hLlegadaVieja.isBefore(horaS) || hLlegadaVieja.equals(horaS)) {
-                    // Guardamos el viaje previo que termine más tarde (el más cercano al nuevo viaje)
                     if (viajeAnterior == null || hLlegadaVieja.isAfter(viajeAnterior.getHoraLlegada())) {
                         viajeAnterior = viaje;
+                    }
+                }
+
+                //Buscar el viaje SIGUIENTE inmediato (el primero que empieza después de que termine este)
+                if (hSalidaVieja.isAfter(horaL) || hSalidaVieja.equals(horaL)) {
+                    if (viajeSiguiente == null || hSalidaVieja.isBefore(viajeSiguiente.getHoraSalida())) {
+                        viajeSiguiente = viaje;
                     }
                 }
             }
         }
 
-        // 5. Validar la ubicación de salida del colectivo
+        //Validar la ubicación de salida (comparando con el viaje anterior).
         if (viajeAnterior != null) {
-            // Si tiene un viaje previo, obligatoriamente debe salir desde el destino de ese viaje anterior
             if (!origen.equalsIgnoreCase(viajeAnterior.getDestino())) {
                 JOptionPane.showMessageDialog(this,
                         "El colectivo se encuentra en '" + viajeAnterior.getDestino()
                         + "' (finalizó su viaje anterior a las " + viajeAnterior.getHoraLlegada()
                         + "). Debe partir desde allí.",
                         "ERROR", JOptionPane.ERROR_MESSAGE);
-                return; // Frena el guardado
+                return;
             }
         }
 
-        // 6. ¡Todo validado con éxito! Guardamos el viaje una sola vez
+        //Validar que el colectivo llegue a tiempo al viaje siguiente.
+        if (viajeSiguiente != null) {
+            /* Si este nuevo viaje termina después de que empiece el siguiente, o si el destino 
+             no coincide con el origen del viaje siguiente, no se puede realizar. */
+            if (horaL.isAfter(viajeSiguiente.getHoraSalida())) {
+                JOptionPane.showMessageDialog(this, "Conflicto en los viajes", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            //El destino de este viaje tiene que coincidir con el origen del viaje siguiente.
+            if (!destino.equalsIgnoreCase(viajeSiguiente.getOrigen())) {
+                JOptionPane.showMessageDialog(this,
+                        "Conflicto de ruta: El siguiente viaje del colectivo sale desde '"
+                        + viajeSiguiente.getOrigen() + "'. Su destino actual debe coincidir con ese origen.",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         rv = new RutaViaje(origen, destino, horaS, horaL, cole, precioLimpio, true);
         rvd.insertar(rv);
         allViajes.add(rv);
@@ -484,141 +506,187 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBborrarActionPerformed
 
     private void JBactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBactualizarActionPerformed
-        //        try {
-        //            //Variables para almacenar los datos extraidos.
-        //            String dniTexto = JTFdni.getText().trim();
-        //            String nombre = JTFnombre.getText().trim();
-        //            LocalDate fechaNacimiento = JDCfechaNac.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        //            boolean activo = JCactivo.isSelected();
-        //            Alumno a;
-        //
-        //            //Varibales para la verificacion de datos.
-        //            int longitudDni = dniTexto.length();
-        //            boolean disparador = true;
-        //            LocalDate fechaActual = LocalDate.now();
-        //            LocalDate fechaMaxima = fechaActual.minusYears(16);
-        //            int filaS = JTalumnos.getSelectedRow();
-        //
-        //            //Verificacion de datos.
-        //            if (filaS != -1) { //Todo funcionara si hay una fila seleccionada.
-        //                int id = (int) JTalumnos.getValueAt(filaS, 0);
-        //                if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
-        //                    int dni = Integer.parseInt(dniTexto);
-        //                    for (Alumno alu : allAlumnos) { //Recorre el Arraylist para verficacion de DNI repetido, evita el DNI del alumno seleccionado.
-        //                        if (alu.getIdAlumno() == id) {
-        //                            continue;
-        //                        }
-        //                        if (alu.getDni() == dni) {
-        //                            disparador = false;
-        //                            break;
-        //                        }
-        //                    }
-        //                    if (disparador) { //Verficacion de DNI repetido.
-        //                        if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes (no acepta espacios).
-        //                            if (nombre.length() <= 20) { //Verificacion para que el nombre no supere los 20 caracteres admitidos por la base de datos.
-        //                                if (fechaNacimiento.isBefore(fechaMaxima) || fechaNacimiento.isEqual(fechaMaxima)) { //Verificacion de fecha de nacimiento.
-        //                                    a = new Alumno(dni, nombre, fechaNacimiento, activo);
-        //                                    a.setIdAlumno(id);
-        //                                    for (Alumno act : allAlumnos) { //Actualizacion del alumno en el ArrayList para actualizar la tabla.
-        //                                        if (act.getIdAlumno() == id) {
-        //                                            if (act.getDni() != dni) {
-        //                                                act.setDni(dni);
-        //                                                modelo.setValueAt(dni, filaS, 1);
-        //                                            }
-        //                                            if (!act.getNombre().equals(nombre)) {
-        //                                                act.setNombre(nombre);
-        //                                                modelo.setValueAt(nombre, filaS, 2);
-        //                                            }
-        //                                            if (!act.getFechaNac().equals(fechaNacimiento)) {
-        //                                                act.setFechaNac(fechaNacimiento);
-        //                                                modelo.setValueAt(fechaNacimiento, filaS, 3);
-        //                                            }
-        //                                            break;
-        //                                        }
-        //                                    }
-        //                                    ad.actualizarAlumno(a);
-        //                                    limpiar();
-        //                                    mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-        //                                    JOptionPane.showMessageDialog(this, "Alumno actualizado!");
-        //                                } else {
-        //                                    JOptionPane.showMessageDialog(this, "Fecha no admitida", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                                }
-        //                            }else{
-        //                                JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 20 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                            }
-        //                        } else {
-        //                            JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                        }
-        //                    } else {
-        //                        JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                    }
-        //                } else {
-        //                    JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros,\nse aceptan solo numeros, sin puntos y espacios", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                }
-        //            } else {
-        //                JOptionPane.showMessageDialog(this, "Debe seleccionar una fila para actualizar", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //            }
-        //        } catch (NumberFormatException nf) {
-        //            JOptionPane.showMessageDialog(this, "Datos incompletos/incorrectos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        } catch (NullPointerException np) {
-        //            JOptionPane.showMessageDialog(this, "Fecha invalida", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        }
+        // 1. Verificar que haya una fila seleccionada
+        int filaS = JTviajes.getSelectedRow();
+        if (filaS == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila para actualizar.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Obtener el ID del viaje que se está editando
+        int idRuta = (int) JTviajes.getValueAt(filaS, 0);
+
+        // 2. Extraer los datos nuevos de la interfaz
+        String origen = JTForigen.getText().trim();
+        String destino = JTFdestino.getText().trim();
+        String precio = JTFprecio.getText().trim().replace(',', '.');
+        Colectivo cole = (Colectivo) JCBcole.getSelectedItem();
+        LocalTime horaS = TPsalida.getTime();
+        LocalTime horaL = TPllegada.getTime();
+
+        // 3. Validaciones de formato (iguales a las de guardar)
+        if (!origen.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+$") || origen.length() > 100) {
+            JOptionPane.showMessageDialog(this, "Origen no válido o excede los 100 caracteres.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!destino.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+$") || destino.length() > 100) {
+            JOptionPane.showMessageDialog(this, "Destino no válido o excede los 100 caracteres.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!precio.matches("^\\d+(\\.\\d+)?$")) {
+            JOptionPane.showMessageDialog(this, "Precio inválido.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BigDecimal precioLimpio = new BigDecimal(precio);
+        if (precioLimpio.compareTo(BigDecimal.ZERO) <= 0) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser mayor a 0$.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!horaS.isBefore(horaL)) {
+            JOptionPane.showMessageDialog(this, "La hora de salida debe ser anterior a la hora de llegada.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 4. Verificaciones contra los demás viajes, OMITIENDO el viaje actual
+        RutaViaje viajeAnterior = null;
+        RutaViaje viajeSiguiente = null;
+
+        for (RutaViaje viaje : allViajes) {
+            // ¡CRUCIAL! Si es el mismo viaje que estamos editando, lo salteamos
+            if (viaje.getIdRuta() == idRuta) {
+                continue;
+            }
+
+            if (viaje.getColectivo().equals(cole)) {
+                LocalTime hSalidaVieja = viaje.getHoraSalida();
+                LocalTime hLlegadaVieja = viaje.getHoraLlegada();
+
+                // Control de solape de horarios
+                boolean seCruzan = horaS.isBefore(hLlegadaVieja) && horaL.isAfter(hSalidaVieja);
+                if (seCruzan) {
+                    JOptionPane.showMessageDialog(this, "Conflicto de horario: El colectivo ya tiene otro viaje asignado en ese intervalo.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Buscar viaje ANTERIOR inmediato
+                if (hLlegadaVieja.isBefore(horaS) || hLlegadaVieja.equals(horaS)) {
+                    if (viajeAnterior == null || hLlegadaVieja.isAfter(viajeAnterior.getHoraLlegada())) {
+                        viajeAnterior = viaje;
+                    }
+                }
+
+                // Buscar viaje SIGUIENTE inmediato
+                if (hSalidaVieja.isAfter(horaL) || hSalidaVieja.equals(hSalidaVieja.with(horaL))) { // o hSalidaVieja.equals(horaL)
+                    if (viajeSiguiente == null || hSalidaVieja.isBefore(viajeSiguiente.getHoraSalida())) {
+                        viajeSiguiente = viaje;
+                    }
+                }
+            }
+        }
+
+        // 5. Validar la ubicación de salida (comparando con el viaje anterior si existe)
+        if (viajeAnterior != null) {
+            if (!origen.equalsIgnoreCase(viajeAnterior.getDestino())) {
+                JOptionPane.showMessageDialog(this,
+                        "El colectivo se encuentra en '" + viajeAnterior.getDestino()
+                        + "' (finalizó su viaje anterior a las " + viajeAnterior.getHoraLlegada()
+                        + "). Debe partir desde allí.",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // 6. Validar que el colectivo llegue a tiempo al viaje siguiente (si existe)
+        if (viajeSiguiente != null) {
+            if (horaL.isAfter(viajeSiguiente.getHoraSalida())) {
+                JOptionPane.showMessageDialog(this, "Conflicto en los viajes: Se cruza con el horario del siguiente viaje.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!destino.equalsIgnoreCase(viajeSiguiente.getOrigen())) {
+                JOptionPane.showMessageDialog(this,
+                        "Conflicto de ruta: El siguiente viaje del colectivo sale desde '"
+                        + viajeSiguiente.getOrigen() + "'. Su destino actual debe coincidir con ese origen.",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // 7. Actualizar el objeto en el ArrayList local
+        RutaViaje viajeActualizado = null;
+        for (RutaViaje rv : allViajes) {
+            if (rv.getIdRuta() == idRuta) {
+                rv.setOrigen(origen);
+                rv.setDestino(destino);
+                rv.setHoraSalida(horaS);
+                rv.setHoraLlegada(horaL);
+                rv.setColectivo(cole);
+                rv.setPrecio(precioLimpio);
+                viajeActualizado = rv;
+                break;
+            }
+        }
+
+        // 8. Persistir en la base de datos y refrescar la interfaz
+        if (viajeActualizado != null) {
+            // NOTA: Reemplaza "modificarRuta" por el nombre exacto del método de actualización en tu RutaViajeDAO
+            rvd.actualizarRuta(viajeActualizado);
+            limpiar();
+            mostrarLista();
+            JOptionPane.showMessageDialog(this, "¡Viaje actualizado con éxito!");
+        }
     }//GEN-LAST:event_JBactualizarActionPerformed
 
     private void JBaltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBaltaActionPerformed
-        //        int filaS = JTalumnos.getSelectedRow(); //Traer la fila que estoy seleccionando.
-        //        if (filaS != -1) {
-        //            int id = (int) JTalumnos.getValueAt(filaS, 0);
-        //            boolean estado = (boolean) JTalumnos.getValueAt(filaS, 4);
-        //            if (estado) {
-        //                JOptionPane.showMessageDialog(this, "No puede dar de alta a un alumno que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //            } else {
-        //                ad.altaBajaLogica(id, true);
-        //                for (Alumno a : allAlumnos) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
-        //                    if (a.getIdAlumno() == id) {
-        //                        a.setActivo(true);
-        //                        modelo.setValueAt(true, filaS, 4);
-        //                        JCactivo.setSelected(true);
-        //                        break;
-        //                    }
-        //                }
-        //                JOptionPane.showMessageDialog(this, "El alumno ha sido dado de alta con exito!");
-        //            }
-        //        } else {
-        //            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        }
+        int filaS = JTviajes.getSelectedRow(); //Traer la fila que estoy seleccionando.
+        if (filaS != -1) {
+            int id = (int) JTviajes.getValueAt(filaS, 0);
+            boolean estado = (boolean) JTviajes.getValueAt(filaS, 7);
+            if (estado) {
+                JOptionPane.showMessageDialog(this, "No puede dar de alta un viaje que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else {
+                rvd.altaBajaLogica(id, true);
+                for (RutaViaje rv : allViajes) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
+                    if (rv.getIdRuta() == id) {
+                        rv.setEstado(true);
+                        modeloV.setValueAt(true, filaS, 7);
+                        break;
+                    }
+                }
+                ld.altaBajaLogica(id, true);
+                JOptionPane.showMessageDialog(this, "El viaje ha sido dado de alta con exito!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBaltaActionPerformed
 
     private void JBbajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBbajaActionPerformed
-        //        int filaS = JTalumnos.getSelectedRow();
-        //        if (filaS != -1) { //Solo entra si hay una fila seleccionada.
-        //            int id = (int) JTalumnos.getValueAt(filaS, 0);
-        //            boolean estado = (boolean) JTalumnos.getValueAt(filaS, 4);
-        //            if (estado) {
-        //                ad.altaBajaLogica(id, false);
-        //                for (Alumno a : allAlumnos) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
-        //                    if (a.getIdAlumno() == id) {
-        //                        a.setActivo(false);
-        //                        modelo.setValueAt(false, filaS, 4);
-        //                        JCactivo.setSelected(false);
-        //                        break;
-        //                    }
-        //                }
-        //                try {
-        //                    //Permite que si se da de baja un alumno, se va a eliminar la cursada que contenga el id del alumno dado de baja.
-        //                    Menu.cd.borrarInscripcion(id);
-        //                } catch (SQLException ex) {
-        //                    JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                } catch (ClassNotFoundException ex) {
-        //                    JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                }
-        //                JOptionPane.showMessageDialog(this, "El alumno ha sido dado de baja con exito!");
-        //            } else {
-        //                JOptionPane.showMessageDialog(this, "No puede dar de baja a un alumno que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //            }
-        //        } else {
-        //            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        }
+        int filaS = JTviajes.getSelectedRow();
+        if (filaS != -1) { //Solo entra si hay una fila seleccionada.
+            int id = (int) JTviajes.getValueAt(filaS, 0);
+            boolean estado = (boolean) JTviajes.getValueAt(filaS, 7);
+            if (estado) {
+                rvd.altaBajaLogica(id, false);
+                for (RutaViaje rv : allViajes) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
+                    if (rv.getIdRuta() == id) {
+                        rv.setEstado(false);
+                        modeloV.setValueAt(false, filaS, 7);
+                        break;
+                    }
+                }
+                    //Permite que si se borra el viaje, tambien se va a eliminar la pasaje y los lugares.
+                    pd.borrarPasajeV(id);
+                    ld.altaBajaLogica(id, false);
+                    JOptionPane.showMessageDialog(this, "El viaje ha sido dado de baja con exito!");
+            } else {
+                JOptionPane.showMessageDialog(this, "No puede dar de baja un viaje que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBbajaActionPerformed
 
     private void JBlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBlimpiarActionPerformed
@@ -792,6 +860,10 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         JBactualizar.setEnabled(false);
     }
 
+    /**
+     * Compruba si todos los campos estan llenos, si lo estan se activa el boton
+     * guardar.
+     */
     private void habilitarGuardar() {
         if (!JTForigen.getText().trim().isEmpty() && !JTFdestino.getText().trim().isEmpty() && !JTFprecio.getText().trim().isEmpty() && JCBcole.getSelectedIndex() != -1 && TPsalida.getTime() != null && TPllegada.getTime() != null) {
             JBguardar.setEnabled(true);
@@ -800,6 +872,9 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Muestra todos los viajes del ArrayList
+     */
     private void mostrarLista() {
         System.out.println("------------------------");
         for (RutaViaje rv : allViajes) {

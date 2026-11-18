@@ -15,16 +15,17 @@ import modelo.RutaViaje;
 import org.mariadb.jdbc.Statement;
 
 public class LugarDAO {
+
     private Connection con;
 
     public LugarDAO() throws SQLException, ClassNotFoundException {
         con = Conexion.conectar();
     }
-    
+
     public boolean crear(Lugar lugar) throws SQLException {
         String sql = "INSERT INTO lugar (id_viaje, numeroAsiento, estado)"
                 + " VALUES (?, ?, ?)";
-        
+
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, lugar.getRuta().getIdRuta());
             ps.setInt(2, lugar.getNumeroAsiento());
@@ -44,7 +45,7 @@ public class LugarDAO {
         }
         return true;
     }
-    
+
     public List<Lugar> listar() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * "
                 + "FROM lugar ORDER BY ID_Lugar";
@@ -73,18 +74,18 @@ public class LugarDAO {
         }
         return null;
     }
-    
-    public void borrarLugaresV(int idViaje){
+
+    public void borrarLugaresV(int idViaje) {
         try {
             RutaViajeDAO rtv = new RutaViajeDAO();
             RutaViaje rv = rtv.buscarRuta(idViaje);
-            
+
             String sql = "DELETE FROM lugar WHERE ID_Viaje = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, rv.getIdRuta());
             ps.executeUpdate();
             System.out.println("Ruta eliminada correctamente");
-                
+
         } catch (SQLException ex) {
             System.out.println("No se pudo borrar los lugares");
         } catch (ClassNotFoundException ex) {
@@ -94,24 +95,32 @@ public class LugarDAO {
 
     public boolean actualizar(Lugar lugar) throws SQLException, ClassNotFoundException {
 
-    String sql = "UPDATE lugar SET id_viaje = ?, numeroasiento = ?, estado = ? WHERE id_lugar = ?";
+        String sql = "UPDATE lugar SET id_viaje = ?, numeroasiento = ?, estado = ? WHERE id_lugar = ?";
 
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setInt(1, lugar.getRuta().getIdRuta());
-        ps.setInt(2, lugar.getNumeroAsiento());
-        ps.setBoolean(3, lugar.isEstado());
-        ps.setInt(4, lugar.getIdLugar());
+            ps.setInt(1, lugar.getRuta().getIdRuta());
+            ps.setInt(2, lugar.getNumeroAsiento());
+            ps.setBoolean(3, lugar.isEstado());
+            ps.setInt(4, lugar.getIdLugar());
 
-        return ps.executeUpdate() == 1;
+            return ps.executeUpdate() == 1;
+        }
     }
-}
-    
-    public void altaBajaLogica(int id, boolean estado) throws SQLException, ClassNotFoundException {
-        Lugar rv = buscarPorId(id);
-        rv.setEstado(estado);
-        actualizar(rv);
-        System.out.println("se actualizo el estado de la ruta");
+
+    public void altaBajaLogica(int idViaje, boolean estado) {
+        String sql = "UPDATE lugar SET estado = ? WHERE ID_Viaje = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setBoolean(1, estado);
+            ps.setInt(2, idViaje);
+
+            ps.executeUpdate();
+            System.out.println("Se actualizó el estado de los lugares del viaje ID: " + idViaje);
+
+        } catch (SQLException ex) {
+            System.out.println("No se pudo dar de baja los asientos del viaje: " + ex.getMessage());
+        }
     }
 
     private Lugar leerLugar(ResultSet rs) throws SQLException, ClassNotFoundException {

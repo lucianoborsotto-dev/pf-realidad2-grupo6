@@ -123,18 +123,18 @@ public class RutaViajeDAO {
     /**
      * Método para modificar las rutas
      */
-    public void actualizarRuta(RutaViaje r) {
+    public void actualizarRuta(RutaViaje ruta) {
         String sql = "UPDATE viaje SET Origen = ?, Destino = ?, HoraSalida = ?, HoraLlegada = ?, ID_Colectivo = ?, Precio = ?, Estado = ? WHERE ID_Viaje = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, r.getOrigen());
-            ps.setString(2, r.getDestino());
-            ps.setTime(3, Time.valueOf(r.getHoraSalida()));
-            ps.setTime(4, Time.valueOf(r.getHoraLlegada()));
-            ps.setInt(5, r.getColectivo().getIdColectivo());
-            ps.setBigDecimal(6, r.getPrecio());
-            ps.setBoolean(7, r.isEstado());
-            ps.setInt(8, r.getIdRuta());
+            ps.setString(1, ruta.getOrigen());
+            ps.setString(2, ruta.getDestino());
+            ps.setTime(3, Time.valueOf(ruta.getHoraSalida()));
+            ps.setTime(4, Time.valueOf(ruta.getHoraLlegada()));
+            ps.setInt(5, ruta.getColectivo().getIdColectivo());
+            ps.setBigDecimal(6, ruta.getPrecio());
+            ps.setBoolean(7, ruta.isEstado());
+            ps.setInt(8, ruta.getIdRuta());
 
             ps.executeUpdate();
 
@@ -153,10 +153,16 @@ public class RutaViajeDAO {
         }
     }
 
-    public void altaBajaLogica(int id, boolean estado) throws SQLException, ClassNotFoundException {
-        RutaViaje rv = buscarRuta(id);
-        rv.setEstado(estado);
-        actualizarRuta(rv);
-        System.out.println("se actualizo el estado de la ruta");
+    public void altaBajaLogica(int id, boolean estado) {
+        try {
+            RutaViaje rv = buscarRuta(id);
+            rv.setEstado(estado);
+            actualizarRuta(rv);
+            System.out.println("se actualizo el estado de la ruta");
+        } catch (SQLException ex) {
+            System.out.println("No se pudo dar de baja el viaje");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error al establecer cnexion");
+        }
     }
 }

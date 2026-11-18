@@ -806,7 +806,10 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         JBborrar.setEnabled(false);
         JBactualizar.setEnabled(false);
     }
-
+    
+    /**
+     * Muestra todos los pasajeros del ArrayList
+     */
     private void mostrarLista() {
         System.out.println("------------------------");
         for (Pasajero p : allPasajeros) {
@@ -816,7 +819,11 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         System.out.println("");
         System.out.println("");
     }
-
+    
+    /**
+    * Compruba si todos los campos estan llenos, si lo
+    * estan se activa el boton guardar.
+    */
     private void habilitarGuardar() {
         if (!JTFnombre.getText().trim().isEmpty() && !JTFapellido.getText().isEmpty() && !JTFdni.getText().isEmpty() && !JTFemail.getText().isEmpty() && !JTFphone.getText().isEmpty()) {
             JBguardar.setEnabled(true);
