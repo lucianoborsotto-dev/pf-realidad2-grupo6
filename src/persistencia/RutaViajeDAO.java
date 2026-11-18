@@ -22,7 +22,7 @@ public class RutaViajeDAO {
         con = Conexion.conectar();
     }
 
-    public boolean insertar(RutaViaje ruta) throws SQLException, ClassNotFoundException {
+    public boolean insertar(RutaViaje ruta) {
         String sql = "INSERT INTO viaje "
                 + "(origen, destino,  HoraSalida, HoraLlegada, id_colectivo, precio, estado)"
                 + " VALUES (?, ?, ?,  ?, ?, ?, ?)";
@@ -39,22 +39,22 @@ public class RutaViajeDAO {
             if (ps.executeUpdate() != 1) {
                 return false;
             }
-            
+
+            ResultSet claves = ps.getGeneratedKeys();
+            if (claves.next()) {
+                ruta.setIdRuta(claves.getInt(1));
+            }
+
             int capacidadColectivo = ruta.getColectivo().getCapacidad();
-            
+            LugarDAO ld = new LugarDAO();
             for (int i = 1; i <= capacidadColectivo; i++) {
-                LugarDAO ld = new LugarDAO();
                 Lugar lugar = new Lugar(ruta, i, true);
                 ld.crear(lugar);
             }
-
-            try (ResultSet claves = ps.getGeneratedKeys()) {
-                if (claves.next()) {
-                    ruta.setIdRuta(claves.getInt(1));
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
         return true;
     }
@@ -152,8 +152,6 @@ public class RutaViajeDAO {
             System.out.println("No se pudo borrar la ruta");
         }
     }
-    
-    
 
     public void altaBajaLogica(int id, boolean estado) throws SQLException, ClassNotFoundException {
         RutaViaje rv = buscarRuta(id);

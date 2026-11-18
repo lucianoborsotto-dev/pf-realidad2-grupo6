@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Lugar;
+import modelo.RutaViaje;
 import org.mariadb.jdbc.Statement;
 
 public class LugarDAO {
-
     private Connection con;
 
     public LugarDAO() throws SQLException, ClassNotFoundException {
@@ -72,6 +72,24 @@ public class LugarDAO {
             }
         }
         return null;
+    }
+    
+    public void borrarLugaresV(int idViaje){
+        try {
+            RutaViajeDAO rtv = new RutaViajeDAO();
+            RutaViaje rv = rtv.buscarRuta(idViaje);
+            
+            String sql = "DELETE FROM lugar WHERE ID_Viaje = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, rv.getIdRuta());
+            ps.executeUpdate();
+            System.out.println("Ruta eliminada correctamente");
+                
+        } catch (SQLException ex) {
+            System.out.println("No se pudo borrar los lugares");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("No se puedo establecer conexion");
+        }
     }
 
     public boolean actualizar(Lugar lugar) throws SQLException, ClassNotFoundException {

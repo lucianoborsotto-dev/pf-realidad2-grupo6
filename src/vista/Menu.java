@@ -5,11 +5,11 @@ public class Menu extends javax.swing.JFrame {
     public Menu() {
         initComponents();
         try {
-        // Carga la imagen desde las imagenes del proyecto y la establece como ícono
-        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagen/colectivo-icon.png")).getImage());
-    } catch (Exception e) {
-        System.out.println("No se pudo cargar el ícono de la ventana: " + e.getMessage());
-    }
+            // Carga la imagen desde las imagenes del proyecto y la establece como ícono
+            setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagen/colectivo-icon.png")).getImage());
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el ícono de la ventana: " + e.getMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -35,11 +35,11 @@ public class Menu extends javax.swing.JFrame {
         JDPescritorio.setLayout(JDPescritorioLayout);
         JDPescritorioLayout.setHorizontalGroup(
             JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1037, Short.MAX_VALUE)
+            .addGap(0, 1011, Short.MAX_VALUE)
         );
         JDPescritorioLayout.setVerticalGroup(
             JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 702, Short.MAX_VALUE)
         );
 
         JMinicio.setText("Ver");

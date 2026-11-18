@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -11,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Colectivo;
 import modelo.RutaViaje;
 import persistencia.ColectivoDAO;
+import persistencia.LugarDAO;
+import persistencia.PasajeDAO;
 import persistencia.RutaViajeDAO;
 
 public class CargarViaje extends javax.swing.JInternalFrame {
@@ -22,9 +25,11 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             return false;
         }
     };
-    
+
     RutaViajeDAO rvd;
     ColectivoDAO cd;
+    PasajeDAO pd;
+    LugarDAO ld;
     List<Colectivo> allColectivos;
     List<RutaViaje> allViajes;
 
@@ -35,8 +40,10 @@ public class CargarViaje extends javax.swing.JInternalFrame {
 
         try {
             rvd = new RutaViajeDAO();
-            allViajes = rvd.listarRutas();
             cd = new ColectivoDAO();
+            pd = new PasajeDAO();
+            ld = new LugarDAO();
+            allViajes = rvd.listarRutas();
             allColectivos = cd.listarColectivosT();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -47,6 +54,10 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         cargarDatos();
         cargarComboBox();
         JCBcole.setSelectedIndex(-1);
+
+        TPsalida.addTimeChangeListener(event -> habilitarGuardar());
+        TPllegada.addTimeChangeListener(event -> habilitarGuardar());
+        mostrarLista();
 
         //Redimensionar iconos con el metodo.
         JBborrar.setIcon(redimensionIcon("/Imagen/eliminar.png", 30, 30));
@@ -100,14 +111,14 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         JLchofer.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
         JTForigen.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTForigenKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTForigenKeyReleased(evt);
             }
         });
 
         JTFdestino.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFdestinoKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTFdestinoKeyReleased(evt);
             }
         });
 
@@ -117,8 +128,20 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         JLmodelo.setText("HORA DE SALIDA:");
         JLmodelo.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
+        JCBcole.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                JCBcoleItemStateChanged(evt);
+            }
+        });
+
         JLcapacidad1.setText("PRECIO:");
         JLcapacidad1.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
+
+        JTFprecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTFprecioKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout JPdatosLayout = new javax.swing.GroupLayout(JPdatos);
         JPdatos.setLayout(JPdatosLayout);
@@ -347,139 +370,117 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void JTForigenKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTForigenKeyTyped
-        //        habilitarGuardar();
-    }//GEN-LAST:event_JTForigenKeyTyped
-
-    private void JTFdestinoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFdestinoKeyTyped
-        //        habilitarGuardar();
-    }//GEN-LAST:event_JTFdestinoKeyTyped
-
     private void JBguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBguardarActionPerformed
-        //        try {
-        //            //Variables para almacenar los datos extraidos.
-        //            String dni = JTFmodelo.getText().trim();
-        //            String nombre = JTFmatricula.getText().trim();
-        //            String apellido = JTFmarca.getText().trim();
-        //            String correo = JTFcapacidad.getText().trim();
-        //            String telefono = JTFchofer.getText().trim();
-        //
-        //            //Varibales para la verificacion de datos.
-        //            Pasajero p;
-        //            int longitudDni = dni.length();
-        //            boolean triggerDni = true;
-        //            boolean triggerCorreo = true;
-        //            boolean triggerPhone = true;
-        //
-        //            //Verificacion de datos.
-        //            if (longitudDni == 7 || longitudDni == 8) { //Verficacion de DNI (cantidad de digitos).
-        //                int dniNumber = Integer.parseInt(dni); //Se pasa a un int para verficar que solo haya numeros, si hay letras larga una excepcion al momento de convertir.
-        //                for (Pasajero pasaDni : allPasajeros) { //Recorre el Arraylist para verficacion de DNI repetido.
-        //                    if (pasaDni.getDni().equals(dni)) {
-        //                        triggerDni = false;
-        //                        break;
-        //                    }
-        //                }
-        //                if (triggerDni) { //Verficacion de DNI repetido.
-        //                    if (nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verficacion de nombre. Funcion que fue investigada, permite que solo acepte letras de la a-z, "Ñ" y tildes.
-        //                        if (nombre.length() <= 100) { //Verificacion para que el nombre no supere los 100 caracteres admitidos por la base de datos.
-        //                            if (apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) { //Verificación de apellido con solo letras
-        //                                if (apellido.length() <= 100) { // Verificación de apellido con menos de 100 dígitos
-        //                                    if (correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) { // Validación para correo con formato ejemplo@ejemplo.com
-        //                                        for (Pasajero pasaCorreo : allPasajeros) {
-        //                                            if (pasaCorreo.getCorreo().equalsIgnoreCase(correo)) {
-        //                                                triggerCorreo = false;
-        //                                                break;
-        //                                            }
-        //                                        }
-        //                                        if (triggerCorreo) {
-        //                                            if (telefono.matches("\\d{7,15}")) { // Validación que permite solo números de 7 a 15 dígitos, evita letras, simbolos...
-        //                                                for (Pasajero pasaPhone : allPasajeros) {
-        //                                                    if (pasaPhone.getTelefono().equalsIgnoreCase(telefono)) {
-        //                                                        triggerPhone = false;
-        //                                                        break;
-        //                                                    }
-        //                                                }
-        //                                                if (triggerPhone) {
-        //                                                    p = new Pasajero(dni, nombre, apellido, correo, telefono, true);
-        //                                                    pd.insertar(p);
-        //                                                    allPasajeros.add(p);
-        //                                                    limpiar();
-        //                                                    mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-        //                                                    JOptionPane.showMessageDialog(this, "Pasajero guardado!");
-        //                                                }else{
-        //                                                    JOptionPane.showMessageDialog(this, "El numero de telefono ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                                                }
-        //                                            } else {
-        //                                                JOptionPane.showMessageDialog(this, "Solo se permite números, sin espacios de 7 a 15 dígitos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                                            }
-        //                                        } else {
-        //                                            JOptionPane.showMessageDialog(this, "La direccion de correo ya se encuentra registrada", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                                        }
-        //                                    } else {
-        //                                        JOptionPane.showMessageDialog(this, "Formato inválido de correo", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                                    }
-        //                                } else {
-        //                                    JOptionPane.showMessageDialog(this, "El apellido debe contener máximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                                }
-        //
-        //                            } else {
-        //                                JOptionPane.showMessageDialog(this, "Apellido inválido", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                            }
-        //                        } else {
-        //                            JOptionPane.showMessageDialog(this, "El nombre debe contener maximo 100 caracteres", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                        }
-        //                    } else {
-        //                        JOptionPane.showMessageDialog(this, "Nombre invalido", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                    }
-        //                } else {
-        //                    JOptionPane.showMessageDialog(this, "Este DNI ya se encuentra registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                }
-        //            } else {
-        //                JOptionPane.showMessageDialog(this, "DNI invalido, debe contener una combinacion de 7-8 numeros.", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //            }
-        //        } catch (NumberFormatException nf) {
-        //            JOptionPane.showMessageDialog(this, "Solo se permiten dígitos sin espacios y puntos para el documento.", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        } catch (SQLException ex) {
-        //            JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        } catch (ClassNotFoundException ex) {
-        //            JOptionPane.showMessageDialog(this, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        }
+        // 1. Extracción de datos
+        String origen = JTForigen.getText().trim();
+        String destino = JTFdestino.getText().trim();
+        String precio = JTFprecio.getText().trim().replace(',', '.');
+        Colectivo cole = (Colectivo) JCBcole.getSelectedItem();
+        LocalTime horaS = TPsalida.getTime();
+        LocalTime horaL = TPllegada.getTime();
+        RutaViaje rv;
+
+        // 2. Validaciones de formato de texto y números
+        if (!origen.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+$") || origen.length() > 100) {
+            JOptionPane.showMessageDialog(this, "Origen no válido o excede los 100 caracteres.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!destino.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+$") || destino.length() > 100) {
+            JOptionPane.showMessageDialog(this, "Destino no válido o excede los 100 caracteres.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!precio.matches("^\\d+(\\.\\d+)?$")) {
+            JOptionPane.showMessageDialog(this, "Precio inválido.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BigDecimal precioLimpio = new BigDecimal(precio);
+        if (precioLimpio.compareTo(BigDecimal.ZERO) <= 0) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser mayor a 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 3. Validación de horario del propio viaje
+        if (!horaS.isBefore(horaL)) {
+            JOptionPane.showMessageDialog(this, "La hora de salida debe ser anterior a la hora de llegada.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 4. Verificaciones contra los viajes existentes del colectivo seleccionado
+        RutaViaje viajeAnterior = null;
+
+        for (RutaViaje viaje : allViajes) {
+            if (viaje.getColectivo().equals(cole)) {
+                LocalTime hSalidaVieja = viaje.getHoraSalida();
+                LocalTime hLlegadaVieja = viaje.getHoraLlegada();
+
+                // A) Control de solape de horarios
+                // Se cruzan si el nuevo viaje empieza antes de que termine el viejo Y termina después de que empiece el viejo
+                boolean seCruzan = horaS.isBefore(hLlegadaVieja) && horaL.isAfter(hSalidaVieja);
+                if (seCruzan) {
+                    JOptionPane.showMessageDialog(this, "Conflicto de horario: El colectivo ya tiene un viaje asignado en ese intervalo.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return; // Frena el guardado
+                }
+
+                // B) Buscar si este viaje existente es previo al nuevo que queremos cargar
+                // Un viaje es previo si su hora de llegada es anterior o igual a la hora de salida del nuevo viaje
+                if (hLlegadaVieja.isBefore(horaS) || hLlegadaVieja.equals(horaS)) {
+                    // Guardamos el viaje previo que termine más tarde (el más cercano al nuevo viaje)
+                    if (viajeAnterior == null || hLlegadaVieja.isAfter(viajeAnterior.getHoraLlegada())) {
+                        viajeAnterior = viaje;
+                    }
+                }
+            }
+        }
+
+        // 5. Validar la ubicación de salida del colectivo
+        if (viajeAnterior != null) {
+            // Si tiene un viaje previo, obligatoriamente debe salir desde el destino de ese viaje anterior
+            if (!origen.equalsIgnoreCase(viajeAnterior.getDestino())) {
+                JOptionPane.showMessageDialog(this,
+                        "El colectivo se encuentra en '" + viajeAnterior.getDestino()
+                        + "' (finalizó su viaje anterior a las " + viajeAnterior.getHoraLlegada()
+                        + "). Debe partir desde allí.",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                return; // Frena el guardado
+            }
+        }
+
+        // 6. ¡Todo validado con éxito! Guardamos el viaje una sola vez
+        rv = new RutaViaje(origen, destino, horaS, horaL, cole, precioLimpio, true);
+        rvd.insertar(rv);
+        allViajes.add(rv);
+        limpiar();
+        mostrarLista();
+        JOptionPane.showMessageDialog(this, "¡Viaje guardado con éxito!");
     }//GEN-LAST:event_JBguardarActionPerformed
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
-        //        Iterator<Alumno> it = allAlumnos.iterator(); //Se crea para borrar tambien al alumno del ArrayList.
-        //        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al alumno?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        //        int filaS = JTalumnos.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
-        //        if (filaS != -1) {
-        //
-        //            int id = (int) JTalumnos.getValueAt(filaS, 0); //Obtiene el valor que se encuentra en esa fila justo en esa columna.
-        //            if (respuesta == JOptionPane.YES_OPTION) { //Si la respuesta fue "Si".
-        //                while (it.hasNext()) {
-        //                    if (it.next().getIdAlumno() == id) { //Se fija que el valor del idAlumno coincide con el valor extraido de esa fila seleccionada en la columna idAlumno.
-        //                        it.remove(); //Si coincide lo elimina.
-        //                        break;
-        //                    }
-        //                }
-        //
-        //                try {
-        //                    //Permite que si se borra el alumno, tambien se va a eliminar la cursada que contenga el id del alumno eliminado.
-        //                    Menu.cd.borrarInscripcion(id);
-        //                } catch (SQLException ex) {
-        //                    JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                } catch (ClassNotFoundException ex) {
-        //                    JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //                }
-        //
-        //                ad.borrarAlumno(id); //Ejecuta el metodo de AlumnoData para borrar al alumno de la base de datos.
-        //                modelo.removeRow(filaS); //Elimina al alumno seleccionado de la tabla.
-        //                limpiar(); //Limpia todo al terminar.
-        //                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
-        //                JOptionPane.showMessageDialog(this, "Alumno eliminado!");
-        //            }
-        //        } else {
-        //            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
-        //        }
+        Iterator<RutaViaje> it = allViajes.iterator(); //Se crea para borrar tambien al viaje del ArrayList.
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar el viaje?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int filaS = JTviajes.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
+        if (filaS != -1) {
+            int id = (int) JTviajes.getValueAt(filaS, 0); //Obtiene el valor que se encuentra en esa fila justo en esa columna.
+            if (respuesta == JOptionPane.YES_OPTION) { //Si la respuesta fue "Si".
+                while (it.hasNext()) {
+                    if (it.next().getIdRuta() == id) { //Se fija que el valor del idRuta coincide con el valor extraido de esa fila seleccionada en la columna idRuta.
+                        it.remove(); //Si coincide lo elimina.
+                        break;
+                    }
+                }
+                //Permite que si se borra el viaje, tambien se va a eliminar la pasaje y los lugares.
+                pd.borrarPasajeV(id);
+                ld.borrarLugaresV(id);
+
+                rvd.borrarRuta(id); //Ejecuta el metodo de AlumnoData para borrar al alumno de la base de datos.
+                modeloV.removeRow(filaS); //Elimina al alumno seleccionado de la tabla.
+                limpiar(); //Limpia todo al terminar.
+                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                JOptionPane.showMessageDialog(this, "Viaje eliminado!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBborrarActionPerformed
 
     private void JBactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBactualizarActionPerformed
@@ -625,11 +626,11 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBlimpiarActionPerformed
 
     private void JTviajesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTviajesMouseClicked
-        
+
         int filaS = JTviajes.getSelectedRow();
-        
+
         if (filaS != -1) {
-           
+
             String origen = (String) JTviajes.getValueAt(filaS, 1);
             String destino = (String) JTviajes.getValueAt(filaS, 2);
             LocalTime horaS = (LocalTime) JTviajes.getValueAt(filaS, 3);
@@ -645,7 +646,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             JTFprecio.setText(precio + "");
             for (int i = 0; i < JCBcole.getItemCount(); i++) {
                 if (JCBcole.getItemAt(i).getIdColectivo() == cole.getIdColectivo()) {
-                    
+
                     JCBcole.setSelectedIndex(i);
                     break;
                 }
@@ -665,6 +666,22 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_JTFfiltrarKeyReleased
+
+    private void JCBcoleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_JCBcoleItemStateChanged
+        habilitarGuardar();
+    }//GEN-LAST:event_JCBcoleItemStateChanged
+
+    private void JTForigenKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTForigenKeyReleased
+        habilitarGuardar();
+    }//GEN-LAST:event_JTForigenKeyReleased
+
+    private void JTFdestinoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFdestinoKeyReleased
+        habilitarGuardar();
+    }//GEN-LAST:event_JTFdestinoKeyReleased
+
+    private void JTFprecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFprecioKeyReleased
+        habilitarGuardar();
+    }//GEN-LAST:event_JTFprecioKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -694,7 +711,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     private com.github.lgooddatepicker.components.TimePicker TPllegada;
     private com.github.lgooddatepicker.components.TimePicker TPsalida;
     // End of variables declaration//GEN-END:variables
-    
+
     /**
      * Agrega las cabeceras a la tabla con sus respectivos nombres.
      */
@@ -712,8 +729,8 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-    * Carga los viajes a la tabla.
-    */
+     * Carga los viajes a la tabla.
+     */
     private void cargarDatos() {
         for (RutaViaje rv : allViajes) {
             modeloV.addRow(new Object[]{rv.getIdRuta(), rv.getOrigen(), rv.getDestino(), rv.getHoraSalida(), rv.getHoraLlegada(), rv.getColectivo(), rv.getPrecio(), rv.isEstado()});
@@ -721,8 +738,8 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-    * Carga los colectivos al combobox
-    */
+     * Carga los colectivos al combobox
+     */
     private void cargarComboBox() {
         for (Colectivo c : allColectivos) {
             JCBcole.addItem(c);
@@ -731,8 +748,8 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-    * Permite borrar las filas mientras se encribe en los campos de filtrar.
-    */
+     * Permite borrar las filas mientras se encribe en los campos de filtrar.
+     */
     private void borrarFilas() {
         int filas = JTviajes.getRowCount() - 1;
         for (int f = filas; f >= 0; f--) {
@@ -741,13 +758,13 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }
 
     /**
-    * Permite redimensionar a gusto las imagenes.
-    *
-    * @param ruta
-    * @param ancho
-    * @param alto
-    * @return
-    */
+     * Permite redimensionar a gusto las imagenes.
+     *
+     * @param ruta
+     * @param ancho
+     * @param alto
+     * @return
+     */
     private ImageIcon redimensionIcon(String ruta, int ancho, int alto) {
         ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
         Image imagen = icono.getImage();
@@ -755,23 +772,41 @@ public class CargarViaje extends javax.swing.JInternalFrame {
 
         return new ImageIcon(imagenRedimensionada);
     }
-    
+
     /**
      * Vacia/restablece todos los campos.
      */
     private void limpiar() {
-        
+
         JTForigen.setText("");
         JTFdestino.setText("");
         TPsalida.clear();
         TPllegada.clear();
         JCBcole.setSelectedIndex(-1);
         JTFprecio.setText("");
-        
+
         modeloV.setRowCount(0);
         cargarDatos();
         JBguardar.setEnabled(false);
         JBborrar.setEnabled(false);
         JBactualizar.setEnabled(false);
+    }
+
+    private void habilitarGuardar() {
+        if (!JTForigen.getText().trim().isEmpty() && !JTFdestino.getText().trim().isEmpty() && !JTFprecio.getText().trim().isEmpty() && JCBcole.getSelectedIndex() != -1 && TPsalida.getTime() != null && TPllegada.getTime() != null) {
+            JBguardar.setEnabled(true);
+        } else {
+            JBguardar.setEnabled(false);
+        }
+    }
+
+    private void mostrarLista() {
+        System.out.println("------------------------");
+        for (RutaViaje rv : allViajes) {
+            System.out.println(rv);
+            System.out.println("------------------------");
+        }
+        System.out.println("");
+        System.out.println("");
     }
 }

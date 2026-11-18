@@ -245,27 +245,27 @@
         </Component>
         <Component class="javax.swing.JTextField" name="JTFnombre">
           <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFnombreKeyTyped"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFnombreKeyReleased"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFapellido">
           <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFapellidoKeyTyped"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFapellidoKeyReleased"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFdni">
           <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFdniKeyTyped"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFdniKeyReleased"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFemail">
           <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFemailKeyTyped"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFemailKeyReleased"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="JTFphone">
           <Events>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFphoneKeyTyped"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTFphoneKeyReleased"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="JLnombre">

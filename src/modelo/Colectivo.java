@@ -3,19 +3,12 @@ package modelo;
 
 /* Entidad Colectivo. La columna generada reserva_activa NO se asigna desde Java. */
 public class Colectivo {
-
     private int idColectivo;
-
     private String matricula;
-
     private String marca;
-
     private String modelo;
-
     private int capacidad;
-
     private String chofer;
-
     private boolean estado;
 
     public Colectivo() {
@@ -94,6 +87,31 @@ public class Colectivo {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + this.idColectivo;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Colectivo other = (Colectivo) obj;
+        if (this.idColectivo != other.idColectivo) {
+            return false;
+        }
+        return true;
     }
 
     @Override

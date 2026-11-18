@@ -24,7 +24,7 @@ public class PasajeDAO {
     public PasajeDAO() throws SQLException, ClassNotFoundException {
         con = Conexion.conectar();
     }
-    
+
     //Metodos
     public boolean generar(Pasaje pasaje) throws SQLException, ClassNotFoundException {
         LocalTime horaActual = LocalTime.now();
@@ -88,7 +88,7 @@ public class PasajeDAO {
             return true;
         }
     }
-   
+
     public void borrarPasaje(int idPasajero) throws SQLException, ClassNotFoundException {
         PasajeroDAO pd = new PasajeroDAO();
         Pasajero p = pd.buscarPorId(idPasajero);
@@ -103,17 +103,35 @@ public class PasajeDAO {
             System.out.println("No se pudo eliminar el pasaje");
         }
     }
-    
+
+    public void borrarPasajeV(int idViaje) {
+        try {
+            RutaViajeDAO rtv = new RutaViajeDAO();
+            RutaViaje rv = rtv.buscarRuta(idViaje);
+
+            String sql = "DELETE FROM pasajes WHERE ID_Viaje = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, rv.getIdRuta());
+            ps.executeUpdate();
+            System.out.println("Ruta eliminada correctamente");
+
+        } catch (SQLException ex) {
+            System.out.println("No se pudo borrar el pasaje");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("No se pudo establecer conexion");
+        }
+    }
+
     public List<Pasaje> listarPasajes() throws SQLException, ClassNotFoundException {
         Pasaje p = null;
         Pasajero pasa = null;
         Lugar l = null;
         RutaViaje rv = null;
-        
+
         PasajeroDAO pd = new PasajeroDAO();
         LugarDAO ld = new LugarDAO();
         RutaViajeDAO rvd = new RutaViajeDAO();
-        
+
         ArrayList<Pasaje> listaPasaje = new ArrayList<>();
         String sql = "SELECT * FROM pasajes";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -128,7 +146,7 @@ public class PasajeDAO {
                 p.setHoraVenta(rs.getTime("HoraVenta").toLocalTime());
                 p.setPrecio(rs.getBigDecimal("Precio"));
                 p.setEstado(rs.getBoolean("Estado"));
-                
+
                 listaPasaje.add(p);
             }
         } catch (SQLException e) {
@@ -137,4 +155,3 @@ public class PasajeDAO {
         return listaPasaje;
     }
 }
-    

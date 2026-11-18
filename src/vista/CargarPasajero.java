@@ -129,32 +129,32 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         JLtelefono.setText("TELEFONO:");
 
         JTFnombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFnombreKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTFnombreKeyReleased(evt);
             }
         });
 
         JTFapellido.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFapellidoKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTFapellidoKeyReleased(evt);
             }
         });
 
         JTFdni.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFdniKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTFdniKeyReleased(evt);
             }
         });
 
         JTFemail.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFemailKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTFemailKeyReleased(evt);
             }
         });
 
         JTFphone.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTFphoneKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                JTFphoneKeyReleased(evt);
             }
         });
 
@@ -693,25 +693,25 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_JTFfiltrarKeyReleased
 
-    private void JTFnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFnombreKeyTyped
+    private void JTFnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFnombreKeyReleased
         habilitarGuardar();
-    }//GEN-LAST:event_JTFnombreKeyTyped
+    }//GEN-LAST:event_JTFnombreKeyReleased
 
-    private void JTFapellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFapellidoKeyTyped
+    private void JTFapellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFapellidoKeyReleased
         habilitarGuardar();
-    }//GEN-LAST:event_JTFapellidoKeyTyped
+    }//GEN-LAST:event_JTFapellidoKeyReleased
 
-    private void JTFdniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFdniKeyTyped
+    private void JTFdniKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFdniKeyReleased
         habilitarGuardar();
-    }//GEN-LAST:event_JTFdniKeyTyped
+    }//GEN-LAST:event_JTFdniKeyReleased
 
-    private void JTFemailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFemailKeyTyped
+    private void JTFemailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFemailKeyReleased
         habilitarGuardar();
-    }//GEN-LAST:event_JTFemailKeyTyped
+    }//GEN-LAST:event_JTFemailKeyReleased
 
-    private void JTFphoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFphoneKeyTyped
+    private void JTFphoneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTFphoneKeyReleased
         habilitarGuardar();
-    }//GEN-LAST:event_JTFphoneKeyTyped
+    }//GEN-LAST:event_JTFphoneKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
