@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Colectivo;
 import persistencia.ColectivoDAO;
+import persistencia.LugarDAO;
+import persistencia.RutaViajeDAO;
 
 public class CargarColectivo extends javax.swing.JInternalFrame {
 
@@ -21,6 +23,8 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
 
     ColectivoDAO cd;
     List<Colectivo> allColectivos;
+    RutaViajeDAO rvd;
+    LugarDAO ld;
 
     public CargarColectivo() {
         initComponents();
@@ -29,6 +33,7 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
 
         try {
             cd = new ColectivoDAO();
+
             cargarColectivos();
             allColectivos = cd.listarColectivos();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -357,6 +362,10 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
                     if (cd.darDeBaja(id)) {
                         // Actualiza el estado en la tabla
                         modeloC.setValueAt(false, filaS, 6);
+                        ld = new LugarDAO();
+                        rvd = new RutaViajeDAO();
+                        ld.borrarLugaresPorColectivo(id);
+                        rvd.borrarRutaColectivo(id);
 
                         JOptionPane.showMessageDialog(this,
                                 "El colectivo ha sido dado de baja con exito!");
@@ -478,10 +487,16 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
         int filaS = JTcolectivos.getSelectedRow(); //Traer la fila que estoy seleccionando.
+
         if (filaS != -1) {
             int id = (int) JTcolectivos.getValueAt(filaS, 0);
             try {
-                if (cd.borrar(id)) {
+                if (id != -1) {
+                    rvd = new RutaViajeDAO();
+                    ld = new LugarDAO();
+                    ld.borrarLugaresPorColectivo(id);
+                    rvd.borrarRutaColectivo(id);
+                    cd.borrar(id);
                     // borra el cole de la tabla
                     modeloC.removeRow(filaS);
                     JOptionPane.showMessageDialog(this,
@@ -664,7 +679,7 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
 
         JTcolectivos.setModel(modeloC);
     }
-    
+
     private void habilitarGuardar() {
         JBguardar.setEnabled(true);
     }

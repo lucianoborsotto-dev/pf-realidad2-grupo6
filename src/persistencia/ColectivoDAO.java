@@ -55,6 +55,8 @@ public class ColectivoDAO {
         }
     }
 
+    
+
     public List<Colectivo> listarColectivos() throws SQLException {
         String sql = "SELECT * FROM colectivo";
         List<Colectivo> colectivos = new ArrayList<>();
@@ -67,6 +69,7 @@ public class ColectivoDAO {
         }
         return colectivos;
     }
+
     public List<Colectivo> listarColectivosT() throws SQLException {
         String sql = "SELECT * FROM colectivo WHERE Estado = true";
         List<Colectivo> colectivos = new ArrayList<>();

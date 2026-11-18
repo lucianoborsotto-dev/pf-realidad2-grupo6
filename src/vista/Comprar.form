@@ -69,12 +69,14 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="JLcargarLugar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="JCBpasajero" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="JLpasajero" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="JCBviajes" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="JLviajes" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="JCBpasajero" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="JLpasajero" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

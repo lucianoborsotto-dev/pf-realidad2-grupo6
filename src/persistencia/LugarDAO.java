@@ -80,7 +80,7 @@ public class LugarDAO {
             RutaViajeDAO rtv = new RutaViajeDAO();
             RutaViaje rv = rtv.buscarRuta(idViaje);
 
-            String sql = "DELETE FROM lugar WHERE ID_Viaje = ?";
+            String sql = "DELETE FROM lugar WHERE ID_Viaje = ?"; // (SELECT ID_viaje FROM viaje WHERE ID_colectivo = ?)
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, rv.getIdRuta());
             ps.executeUpdate();
@@ -90,6 +90,21 @@ public class LugarDAO {
             System.out.println("No se pudo borrar los lugares");
         } catch (ClassNotFoundException ex) {
             System.out.println("No se puedo establecer conexion");
+        }
+    }
+
+    public void borrarLugaresPorColectivo(int idColectivo) {
+        // Usamos una subconsulta para encontrar todos los viajes de ese colectivo y borrar sus lugares
+        String sql = "DELETE FROM lugar WHERE ID_Viaje IN (SELECT ID_Viaje FROM viaje WHERE ID_Colectivo = ?)";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idColectivo);
+            int filasAfectadas = ps.executeUpdate();
+
+            System.out.println("Se eliminaron " + filasAfectadas + " lugares asociados al colectivo ID: " + idColectivo);
+
+        } catch (SQLException ex) {
+            System.out.println("No se pudieron borrar los lugares del colectivo: " + ex.getMessage());
         }
     }
 

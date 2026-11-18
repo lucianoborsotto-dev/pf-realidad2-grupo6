@@ -165,4 +165,15 @@ public class RutaViajeDAO {
             System.out.println("Error al establecer cnexion");
         }
     }
+
+    public void borrarRutaColectivo(int idColectivo) {
+        
+        String sql = "DELETE FROM viaje WHERE ID_Colectivo = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idColectivo);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("No se pudo borrar la ruta");
+        }
+    }
 }
