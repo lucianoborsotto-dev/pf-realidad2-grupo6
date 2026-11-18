@@ -488,9 +488,9 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
                             "El colectivo ha sido borrado con exito");
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(CargarColectivo.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un colectivo");
