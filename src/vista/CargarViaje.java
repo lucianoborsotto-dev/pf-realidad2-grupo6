@@ -694,11 +694,8 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBlimpiarActionPerformed
 
     private void JTviajesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTviajesMouseClicked
-
         int filaS = JTviajes.getSelectedRow();
-
         if (filaS != -1) {
-
             String origen = (String) JTviajes.getValueAt(filaS, 1);
             String destino = (String) JTviajes.getValueAt(filaS, 2);
             LocalTime horaS = (LocalTime) JTviajes.getValueAt(filaS, 3);

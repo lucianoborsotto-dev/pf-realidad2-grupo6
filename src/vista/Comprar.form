@@ -24,51 +24,54 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace pref="105" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="JLprecio" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="JTFprecio" min="-2" pref="139" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="JLcargarLugar" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="JLpasajero" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="181" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="JLprecio" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="JCBpasajero" min="-2" pref="197" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-                              <Component id="JLviajes" min="-2" max="-2" attributes="0"/>
+                              <Component id="JTFprecio" min="-2" pref="139" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="JCBviajes" min="-2" pref="235" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="JLviajes" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                          <Component id="JCBviajes" min="-2" pref="235" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                          <Component id="JLpasajero" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="JCBpasajero" min="-2" pref="197" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="JLcargarLugar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="333" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="119" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               <Component id="JLcargarLugar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="JCBviajes" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="JLviajes" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="JCBpasajero" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="JLpasajero" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
-                  </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="JCBviajes" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="JLviajes" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                  <Component id="JCBpasajero" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="JLpasajero" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="JLprecio" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="JTFprecio" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -83,10 +86,10 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="JLcargarLugar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Comprar Pasaje"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dubai Medium" size="24" style="1"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="Comprar Pasaje"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="JCBviajes">
@@ -95,16 +98,19 @@
           <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="JCBviajesItemStateChanged"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ViajeString&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="JLviajes">
       <Properties>
-        <Property name="text" type="java.lang.String" value="VIAJE"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dubai Medium" size="16" style="1"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="VIAJE"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="JCBpasajero">
@@ -113,16 +119,19 @@
           <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="JCBpasajeroItemStateChanged"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PasajeroString&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="JLprecio">
       <Properties>
-        <Property name="text" type="java.lang.String" value="PRECIO: "/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dubai Medium" size="16" style="1"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="PRECIO: "/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
@@ -143,7 +152,7 @@
                   </Group>
                   <EmptySpace pref="60" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="JBguardar" min="-2" pref="153" max="-2" attributes="0"/>
+                      <Component id="JBcomprar" min="-2" pref="153" max="-2" attributes="0"/>
                       <Component id="JBbaja" min="-2" pref="153" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
@@ -161,7 +170,7 @@
                           <Component id="JSPlugar" min="-2" pref="156" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="JBguardar" min="-2" pref="66" max="-2" attributes="0"/>
+                          <Component id="JBcomprar" min="-2" pref="66" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                           <Component id="JBbaja" min="-2" pref="64" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
@@ -175,10 +184,10 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="JLlugares">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Lugares disponibles"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dubai Medium" size="20" style="1"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="Lugares disponibles"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="JSPlugar">
@@ -199,30 +208,38 @@
                   </Table>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JTlugaresMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="JBguardar">
+        <Component class="javax.swing.JButton" name="JBcomprar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Comprar pasaje"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="JBbaja">
           <Properties>
             <Property name="text" type="java.lang.String" value="Dar de Baja"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="JLpasajero">
       <Properties>
-        <Property name="text" type="java.lang.String" value="PASAJERO"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dubai Medium" size="16" style="1"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="PASAJERO"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="JTFprecio">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

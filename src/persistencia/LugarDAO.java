@@ -2,11 +2,9 @@ package persistencia;
 
 import conexion.Conexion;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -60,11 +58,28 @@ public class LugarDAO {
         return lugares;
     }
 
+    public List<Lugar> listarPorViaje(int idViaje) {
+        String sql = "SELECT * FROM lugar WHERE ID_Viaje = ? ORDER BY NumeroAsiento";
+        List<Lugar> lugares = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idViaje);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                lugares.add(leerLugar(rs));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        return lugares;
+    }
+
     public Lugar buscarPorId(int idLugar) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * "
                 + "FROM lugar WHERE ID_lugar = ?";
-        try (
-                PreparedStatement ps = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idLugar);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? leerLugar(rs) : null;

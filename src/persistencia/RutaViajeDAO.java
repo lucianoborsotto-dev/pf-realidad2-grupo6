@@ -97,6 +97,19 @@ public class RutaViajeDAO {
         return rutas;
     }
 
+    public List<RutaViaje> listarRutasT() throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM viaje WHERE Estado = 1";
+        List<RutaViaje> rutas = new ArrayList<>();
+        try (
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                rutas.add(leerRuta(rs));
+            }
+        }
+        return rutas;
+    }
+
     private RutaViaje leerRuta(ResultSet rs) throws SQLException, ClassNotFoundException {
 
         ColectivoDAO cd = new ColectivoDAO();
@@ -167,7 +180,7 @@ public class RutaViajeDAO {
     }
 
     public void borrarRutaColectivo(int idColectivo) {
-        
+
         String sql = "DELETE FROM viaje WHERE ID_Colectivo = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idColectivo);
