@@ -75,6 +75,20 @@ public class PasajeroDAO {
         }
         return pasajeros;
     }
+    
+    public List<Pasajero> listarT() throws SQLException, ClassNotFoundException {
+    String sql = "SELECT * "
+            + "FROM pasajeros WHERE Estado = 1 ORDER BY ID_Pasajero";
+    List<Pasajero> pasajeros = new ArrayList<>();
+    try (
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            pasajeros.add(leerPasajero(rs));
+        }
+    }
+    return pasajeros;
+}
 
     public Pasajero buscarPorId(int idPasajero) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * "

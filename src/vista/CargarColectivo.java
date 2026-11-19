@@ -1,9 +1,11 @@
 package vista;
 
+import java.awt.Image;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Colectivo;
@@ -45,6 +47,14 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
             Logger.getLogger(CargarColectivo.class.getName())
                     .log(Level.SEVERE, null, ex);
         }
+        
+        //Redimensionar iconos con el metodo.
+        JBborrar.setIcon(redimensionIcon("/Imagen/eliminar.png", 30, 30));
+        JBguardar.setIcon(redimensionIcon("/Imagen/guardar.png", 40, 40));
+        JBactualizar.setIcon(redimensionIcon("/Imagen/actualizar.png", 30, 30));
+        JBlimpiar.setIcon(redimensionIcon("/Imagen/limpiar.png", 30, 30));
+        JBalta.setIcon(redimensionIcon("/Imagen/check.png", 25, 25));
+        JBbaja.setIcon(redimensionIcon("/Imagen/cruz.png", 25, 25));
     }
 
     @SuppressWarnings("unchecked")
@@ -187,8 +197,8 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         JPdatos.setLayout(JPdatosLayout);
         JPdatosLayout.setHorizontalGroup(
             JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPdatosLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPdatosLayout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JPdatosLayout.createSequentialGroup()
                         .addComponent(JLmodelo)
@@ -208,12 +218,12 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
                         .addComponent(JLchofer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JTFchofer, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGap(27, 27, 27))
         );
         JPdatosLayout.setVerticalGroup(
             JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPdatosLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPdatosLayout.createSequentialGroup()
+                .addContainerGap(50, Short.MAX_VALUE)
                 .addGroup(JPdatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLmatricula)
                     .addComponent(JLmarca)
@@ -225,7 +235,7 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
                     .addComponent(JTFmodelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLchofer)
                     .addComponent(JTFchofer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addGap(43, 43, 43))
         );
 
         JBguardar.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
@@ -720,5 +730,21 @@ public class CargarColectivo extends javax.swing.JInternalFrame {
         for (int f = filas; f >= 0; f--) {
             modeloC.removeRow(f);
         }
+    }
+    
+    /**
+     * Permite redimensionar a gusto las imagenes.
+     *
+     * @param ruta
+     * @param ancho
+     * @param alto
+     * @return
+     */
+    private ImageIcon redimensionIcon(String ruta, int ancho, int alto) {
+        ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
+        Image imagen = icono.getImage();
+        Image imagenRedimensionada = imagen.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+
+        return new ImageIcon(imagenRedimensionada);
     }
 }
