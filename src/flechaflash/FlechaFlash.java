@@ -22,46 +22,46 @@ import persistencia.RutaViajeDAO;
 public class FlechaFlash {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-
-        try {
-
-            Colectivo c = new Colectivo(3, "ABA444", "CHEVROLET", "16PROMAX", 46, "CHIQUI TAPIA", true);
+//
+//        try {
+//
+//            Colectivo c = new Colectivo(3, "ABA444", "CHEVROLET", "16PROMAX", 46, "CHIQUI TAPIA", true);
 //            ColectivoDAO cd = new ColectivoDAO();
 //            cd.insertar(c);
 //            cd.actualizar(c);
-
-            RutaViaje r = new RutaViaje(3, "Vos", "A mi casa", LocalTime.of(22, 30), LocalTime.of(23, 00), c, BigDecimal.valueOf(2.33), true);
+//
+//            RutaViaje r = new RutaViaje(3, "Vos", "A mi casa", LocalTime.of(22, 30), LocalTime.of(23, 00), c, BigDecimal.valueOf(2.33), true);
 //            RutaViajeDAO rd = new RutaViajeDAO();
 //            rd.actualizarRuta(r);
 //            rd.insertar(r);
 //            System.out.println(rd.buscarRuta(1));
 //            rd.altaBajaLogica(1, false);
 //            System.out.println(rd.listarRutas());
-
-            PasajeroDAO pd = new PasajeroDAO();
-            Pasajero pasajero = pd.buscarPorId(1);
-
-            LugarDAO ld = new LugarDAO();
-            Lugar lugar = new Lugar(7, r, 2, true);
+//
+//            PasajeroDAO pd = new PasajeroDAO();
+//            Pasajero pasajero = pd.buscarPorId(1);
+//
+//            LugarDAO ld = new LugarDAO();
+//            Lugar lugar = new Lugar(7, r, 2, true);
 //              ld.crear(lugar);
-
-            PasajeDAO pjd = new PasajeDAO();
-            Pasaje pasaje = new Pasaje(
-                    0,
-                    pasajero,
-                    lugar,
-                    r,
-                    LocalDate.now(),
-                    LocalTime.now(),
-                    BigDecimal.valueOf(2500)
-            );
-
-            //pjd.generar(pasaje);
-            System.out.println(pjd.listarPasajes());
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } catch (ClassNotFoundException x) {
-            JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
+//
+//            PasajeDAO pjd = new PasajeDAO();
+//            Pasaje pasaje = new Pasaje(
+//                    0,
+//                    pasajero,
+//                    lugar,
+//                    r,
+//                    LocalDate.now(),
+//                    LocalTime.now(),
+//                    BigDecimal.valueOf(2500)
+//            );
+//
+//            pjd.generar(pasaje);
+//            System.out.println(pjd.listarPasajes());
+//        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(null, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+//        } catch (ClassNotFoundException x) {
+//            JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
+//        }
     }
 }

@@ -439,16 +439,16 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBguardarActionPerformed
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
-        Iterator<Pasajero> it = allPasajeros.iterator(); //Se crea para borrar tambien al pasajero del ArrayList.
+        Iterator<Pasajero> it = allPasajeros.iterator();
         int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al pasajero?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        int filaS = JTpasajero.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
+        int filaS = JTpasajero.getSelectedRow();
         if (filaS != -1) {
 
-            int id = (int) JTpasajero.getValueAt(filaS, 0); //Obtiene el valor que se encuentra en esa fila justo en esa columna.
-            if (respuesta == JOptionPane.YES_OPTION) { //Si la respuesta fue "Si".
+            int id = (int) JTpasajero.getValueAt(filaS, 0);
+            if (respuesta == JOptionPane.YES_OPTION) {
                 while (it.hasNext()) {
-                    if (it.next().getIdPasajero() == id) { //Se fija que el valor del idAlumno coincide con el valor extraido de esa fila seleccionada en la columna idAlumno.
-                        it.remove(); //Si coincide lo elimina.
+                    if (it.next().getIdPasajero() == id) {
+                        it.remove();
                         break;
                     }
                 }
@@ -462,10 +462,10 @@ public class CargarPasajero extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Error al cargar los drivers", "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
 
-                pd.borrarPasajero(id); //Ejecuta el metodo de PasajeroDAO para borrar al pasajero de la base de datos.
-                modeloP.removeRow(filaS); //Elimina al pasajero seleccionado de la tabla.
-                limpiar(); //Limpia todo al terminar.
-                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                pd.borrarPasajero(id);
+                modeloP.removeRow(filaS);
+                limpiar();
+                mostrarLista();
                 JOptionPane.showMessageDialog(this, "Pasajero eliminado!");
             }
         } else {

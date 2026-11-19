@@ -1,12 +1,10 @@
 package vista;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,7 +77,7 @@ public class Comprar extends javax.swing.JInternalFrame {
         JSPlugar = new javax.swing.JScrollPane();
         JTlugares = new javax.swing.JTable();
         JBcomprar = new javax.swing.JButton();
-        JBbaja = new javax.swing.JButton();
+        JBbajaPasaje = new javax.swing.JButton();
         JLpasajero = new javax.swing.JLabel();
         JTFprecio = new javax.swing.JTextField();
         JLhoraVenta = new javax.swing.JLabel();
@@ -91,8 +89,8 @@ public class Comprar extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setTitle("Cargar Lugar");
 
-        JLcargarLugar.setFont(new java.awt.Font("Dubai Medium", 1, 24)); // NOI18N
         JLcargarLugar.setText("Comprar Pasaje");
+        JLcargarLugar.setFont(new java.awt.Font("Dubai Medium", 1, 24)); // NOI18N
 
         JCBviajes.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -100,8 +98,8 @@ public class Comprar extends javax.swing.JInternalFrame {
             }
         });
 
-        JLviajes.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLviajes.setText("VIAJE");
+        JLviajes.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
         JCBpasajero.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -109,11 +107,11 @@ public class Comprar extends javax.swing.JInternalFrame {
             }
         });
 
-        JLprecio.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLprecio.setText("PRECIO: ");
+        JLprecio.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
-        JLlugares.setFont(new java.awt.Font("Dubai Medium", 1, 20)); // NOI18N
         JLlugares.setText("Lugares disponibles");
+        JLlugares.setFont(new java.awt.Font("Dubai Medium", 1, 20)); // NOI18N
 
         JTlugares.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -141,8 +139,13 @@ public class Comprar extends javax.swing.JInternalFrame {
             }
         });
 
-        JBbaja.setText("Dar de Baja");
-        JBbaja.setEnabled(false);
+        JBbajaPasaje.setText("Dar de Baja Pasaje");
+        JBbajaPasaje.setEnabled(false);
+        JBbajaPasaje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBbajaPasajeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -156,11 +159,11 @@ public class Comprar extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addComponent(JLlugares)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addGap(44, 44, 44)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JBcomprar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JBbaja, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(61, 61, 61))
+                    .addComponent(JBbajaPasaje, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,22 +176,22 @@ public class Comprar extends javax.swing.JInternalFrame {
                         .addComponent(JSPlugar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(JBcomprar, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(JBbaja, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(JBbajaPasaje, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        JLpasajero.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLpasajero.setText("PASAJERO");
+        JLpasajero.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
         JTFprecio.setEditable(false);
 
-        JLhoraVenta.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLhoraVenta.setText("HORA VENTA:");
+        JLhoraVenta.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
-        JLfechaVenta.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
         JLfechaVenta.setText("FECHA VENTA:");
+        JLfechaVenta.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -197,34 +200,37 @@ public class Comprar extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(105, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(181, 181, 181))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(JLviajes)
-                            .addGap(12, 12, 12)
-                            .addComponent(JCBviajes, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(70, 70, 70)
-                            .addComponent(JLpasajero)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(JCBpasajero, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(JLprecio)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(JTFprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(98, 98, 98)
-                                    .addComponent(JLhoraVenta))
-                                .addComponent(JLfechaVenta))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(TPhoraVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(JDCfechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(JLviajes)
+                                .addGap(12, 12, 12)
+                                .addComponent(JCBviajes, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(70, 70, 70)
+                                .addComponent(JLpasajero)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(JCBpasajero, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(JLprecio)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(JTFprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(98, 98, 98)
+                                        .addComponent(JLhoraVenta))
+                                    .addComponent(JLfechaVenta))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(TPhoraVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(JDCfechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(101, 101, 101))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(JLcargarLugar)
                         .addGap(333, 333, 333))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(144, 144, 144)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,9 +253,9 @@ public class Comprar extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JDCfechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLfechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(34, 34, 34)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         pack();
@@ -342,8 +348,31 @@ public class Comprar extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_JBcomprarActionPerformed
 
+    private void JBbajaPasajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBbajaPasajeActionPerformed
+        int filaS = JTlugares.getSelectedRow();
+        ViajeString viaje = (ViajeString) JCBviajes.getSelectedItem();
+        if (filaS == -1 || viaje == null) {
+            return;
+        }
+
+        Lugar lugar = lugaresViajeS.get(filaS);
+        int idLugar = lugar.getIdLugar();
+        int idViaje = viaje.getViaje().getIdRuta();
+
+        try {
+            pd.borrarPorLugarYViaje(idLugar, idViaje);
+            ld.altaBajaLogicaLugar(true, idLugar, idViaje);
+            lugar.setEstado(true);
+            modeloPasa.setValueAt(true, filaS, 1);
+            JOptionPane.showMessageDialog(this, "Pasaje dado de baja.");
+        } catch (SQLException ex) {
+            Logger.getLogger(Comprar.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al dar de baja el pasaje.", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_JBbajaPasajeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton JBbaja;
+    private javax.swing.JButton JBbajaPasaje;
     private javax.swing.JButton JBcomprar;
     private javax.swing.JComboBox<PasajeroString> JCBpasajero;
     private javax.swing.JComboBox<ViajeString> JCBviajes;
@@ -403,6 +432,6 @@ public class Comprar extends javax.swing.JInternalFrame {
                 && JDCfechaVenta.getDate() != null
                 && TPhoraVenta.getTime() != null;
         JBcomprar.setEnabled(listo);
-        JBcomprar.setEnabled(listo);
+        JBbajaPasaje.setEnabled(listo);
     }
 }

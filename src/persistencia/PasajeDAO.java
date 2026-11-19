@@ -7,10 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import modelo.Lugar;
 import modelo.Pasaje;
 import modelo.Pasajero;
@@ -27,7 +25,7 @@ public class PasajeDAO {
 
     //Metodos
     public boolean generar(Pasaje pasaje) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO pasajes (id_pasajero, id_lugar, id_ruta, fechaVenta, horaVenta, precio, estado)"
+        String sql = "INSERT INTO pasajes (id_pasajero, id_lugar, ID_Ruta, fechaVenta, horaVenta, precio, estado)"
                 + " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -64,6 +62,15 @@ public class PasajeDAO {
             System.out.println("Pasaje eliminado correctamente");
         } catch (SQLException ex) {
             System.out.println("No se pudo eliminar el pasaje");
+        }
+    }
+    
+    public void borrarPorLugarYViaje(int idLugar, int idViaje) throws SQLException {
+        String sql = "DELETE FROM pasajes WHERE ID_Lugar = ? AND ID_Ruta = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idLugar);
+            ps.setInt(2, idViaje);
+            ps.executeUpdate();
         }
     }
 

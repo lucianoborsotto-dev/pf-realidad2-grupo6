@@ -18,9 +18,6 @@ public class Menu extends javax.swing.JFrame {
 
         JDPescritorio = new DesktopConFondo("/Imagen/fondo-principal.jpg");
         JMBventanas = new javax.swing.JMenuBar();
-        JMinicio = new javax.swing.JMenu();
-        JMIver = new javax.swing.JMenuItem();
-        JMIallColeChof = new javax.swing.JMenuItem();
         JMadministrar = new javax.swing.JMenu();
         JMIpasajero = new javax.swing.JMenuItem();
         JMIcargarCole = new javax.swing.JMenuItem();
@@ -41,21 +38,6 @@ public class Menu extends javax.swing.JFrame {
             JDPescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 702, Short.MAX_VALUE)
         );
-
-        JMinicio.setText("Ver");
-
-        JMIver.setText("All pasajes pasajero");
-        JMIver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JMIverActionPerformed(evt);
-            }
-        });
-        JMinicio.add(JMIver);
-
-        JMIallColeChof.setText("Todos los buses y chofres");
-        JMinicio.add(JMIallColeChof);
-
-        JMBventanas.add(JMinicio);
 
         JMadministrar.setText("Administrar");
 
@@ -108,10 +90,6 @@ public class Menu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void JMIverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIverActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JMIverActionPerformed
 
     private void JMIlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIlugarActionPerformed
         JDPescritorio.removeAll();
@@ -190,14 +168,11 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane JDPescritorio;
     private javax.swing.JMenuBar JMBventanas;
-    private javax.swing.JMenuItem JMIallColeChof;
     private javax.swing.JMenuItem JMIcargarCole;
     private javax.swing.JMenuItem JMIcargarViaje;
     private javax.swing.JMenuItem JMIlugar;
     private javax.swing.JMenuItem JMIpasajero;
-    private javax.swing.JMenuItem JMIver;
     private javax.swing.JMenu JMadministrar;
-    private javax.swing.JMenu JMinicio;
     // End of variables declaration//GEN-END:variables
 }
 

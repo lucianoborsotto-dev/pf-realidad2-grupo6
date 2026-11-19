@@ -478,26 +478,26 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBguardarActionPerformed
 
     private void JBborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBborrarActionPerformed
-        Iterator<RutaViaje> it = allViajes.iterator(); //Se crea para borrar tambien al viaje del ArrayList.
+        Iterator<RutaViaje> it = allViajes.iterator();
         int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar el viaje?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        int filaS = JTviajes.getSelectedRow(); //Obtiene el indice de la fila que el usuario selecciono en la tabla.
+        int filaS = JTviajes.getSelectedRow();
         if (filaS != -1) {
-            int id = (int) JTviajes.getValueAt(filaS, 0); //Obtiene el valor que se encuentra en esa fila justo en esa columna.
-            if (respuesta == JOptionPane.YES_OPTION) { //Si la respuesta fue "Si".
+            int id = (int) JTviajes.getValueAt(filaS, 0); 
+            if (respuesta == JOptionPane.YES_OPTION) { 
                 while (it.hasNext()) {
-                    if (it.next().getIdRuta() == id) { //Se fija que el valor del idRuta coincide con el valor extraido de esa fila seleccionada en la columna idRuta.
-                        it.remove(); //Si coincide lo elimina.
+                    if (it.next().getIdRuta() == id) {
+                        it.remove(); 
                         break;
                     }
                 }
-                //Permite que si se borra el viaje, tambien se va a eliminar la pasaje y los lugares.
+
                 pd.borrarPasajeV(id);
                 ld.borrarLugaresV(id);
 
-                rvd.borrarRuta(id); //Ejecuta el metodo de AlumnoData para borrar al alumno de la base de datos.
-                modeloV.removeRow(filaS); //Elimina al alumno seleccionado de la tabla.
-                limpiar(); //Limpia todo al terminar.
-                mostrarLista(); //Muestra la lista para corroborar que se actualizo el ArrayList.
+                rvd.borrarRuta(id);
+                modeloV.removeRow(filaS);
+                limpiar();
+                mostrarLista();
                 JOptionPane.showMessageDialog(this, "Viaje eliminado!");
             }
         } else {
@@ -506,17 +506,14 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBborrarActionPerformed
 
     private void JBactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBactualizarActionPerformed
-        // 1. Verificar que haya una fila seleccionada
         int filaS = JTviajes.getSelectedRow();
         if (filaS == -1) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila para actualizar.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Obtener el ID del viaje que se está editando
         int idRuta = (int) JTviajes.getValueAt(filaS, 0);
 
-        // 2. Extraer los datos nuevos de la interfaz
         String origen = JTForigen.getText().trim();
         String destino = JTFdestino.getText().trim();
         String precio = JTFprecio.getText().trim().replace(',', '.');
@@ -524,7 +521,6 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         LocalTime horaS = TPsalida.getTime();
         LocalTime horaL = TPllegada.getTime();
 
-        // 3. Validaciones de formato (iguales a las de guardar)
         if (!origen.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+$") || origen.length() > 100) {
             JOptionPane.showMessageDialog(this, "Origen no válido o excede los 100 caracteres.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
@@ -549,12 +545,10 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             return;
         }
 
-        // 4. Verificaciones contra los demás viajes, OMITIENDO el viaje actual
         RutaViaje viajeAnterior = null;
         RutaViaje viajeSiguiente = null;
 
         for (RutaViaje viaje : allViajes) {
-            // ¡CRUCIAL! Si es el mismo viaje que estamos editando, lo salteamos
             if (viaje.getIdRuta() == idRuta) {
                 continue;
             }
@@ -563,22 +557,19 @@ public class CargarViaje extends javax.swing.JInternalFrame {
                 LocalTime hSalidaVieja = viaje.getHoraSalida();
                 LocalTime hLlegadaVieja = viaje.getHoraLlegada();
 
-                // Control de solape de horarios
                 boolean seCruzan = horaS.isBefore(hLlegadaVieja) && horaL.isAfter(hSalidaVieja);
                 if (seCruzan) {
                     JOptionPane.showMessageDialog(this, "Conflicto de horario: El colectivo ya tiene otro viaje asignado en ese intervalo.", "ERROR", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Buscar viaje ANTERIOR inmediato
                 if (hLlegadaVieja.isBefore(horaS) || hLlegadaVieja.equals(horaS)) {
                     if (viajeAnterior == null || hLlegadaVieja.isAfter(viajeAnterior.getHoraLlegada())) {
                         viajeAnterior = viaje;
                     }
                 }
 
-                // Buscar viaje SIGUIENTE inmediato
-                if (hSalidaVieja.isAfter(horaL) || hSalidaVieja.equals(hSalidaVieja.with(horaL))) { // o hSalidaVieja.equals(horaL)
+                if (hSalidaVieja.isAfter(horaL) || hSalidaVieja.equals(hSalidaVieja.with(horaL))) { 
                     if (viajeSiguiente == null || hSalidaVieja.isBefore(viajeSiguiente.getHoraSalida())) {
                         viajeSiguiente = viaje;
                     }
@@ -586,7 +577,6 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             }
         }
 
-        // 5. Validar la ubicación de salida (comparando con el viaje anterior si existe)
         if (viajeAnterior != null) {
             if (!origen.equalsIgnoreCase(viajeAnterior.getDestino())) {
                 JOptionPane.showMessageDialog(this,
@@ -598,7 +588,6 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             }
         }
 
-        // 6. Validar que el colectivo llegue a tiempo al viaje siguiente (si existe)
         if (viajeSiguiente != null) {
             if (horaL.isAfter(viajeSiguiente.getHoraSalida())) {
                 JOptionPane.showMessageDialog(this, "Conflicto en los viajes: Se cruza con el horario del siguiente viaje.", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -614,7 +603,6 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             }
         }
 
-        // 7. Actualizar el objeto en el ArrayList local
         RutaViaje viajeActualizado = null;
         for (RutaViaje rv : allViajes) {
             if (rv.getIdRuta() == idRuta) {
@@ -629,9 +617,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
             }
         }
 
-        // 8. Persistir en la base de datos y refrescar la interfaz
         if (viajeActualizado != null) {
-            // NOTA: Reemplaza "modificarRuta" por el nombre exacto del método de actualización en tu RutaViajeDAO
             rvd.actualizarRuta(viajeActualizado);
             limpiar();
             mostrarLista();
@@ -640,7 +626,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBactualizarActionPerformed
 
     private void JBaltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBaltaActionPerformed
-        int filaS = JTviajes.getSelectedRow(); //Traer la fila que estoy seleccionando.
+        int filaS = JTviajes.getSelectedRow(); 
         if (filaS != -1) {
             int id = (int) JTviajes.getValueAt(filaS, 0);
             boolean estado = (boolean) JTviajes.getValueAt(filaS, 7);
@@ -648,7 +634,7 @@ public class CargarViaje extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "No puede dar de alta un viaje que ya lo esta! :b", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
                 rvd.altaBajaLogica(id, true);
-                for (RutaViaje rv : allViajes) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
+                for (RutaViaje rv : allViajes) { 
                     if (rv.getIdRuta() == id) {
                         rv.setEstado(true);
                         modeloV.setValueAt(true, filaS, 7);
@@ -665,19 +651,19 @@ public class CargarViaje extends javax.swing.JInternalFrame {
 
     private void JBbajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBbajaActionPerformed
         int filaS = JTviajes.getSelectedRow();
-        if (filaS != -1) { //Solo entra si hay una fila seleccionada.
+        if (filaS != -1) { 
             int id = (int) JTviajes.getValueAt(filaS, 0);
             boolean estado = (boolean) JTviajes.getValueAt(filaS, 7);
             if (estado) {
                 rvd.altaBajaLogica(id, false);
-                for (RutaViaje rv : allViajes) { //Recorre el ArrayList para verificar si el alumno esta dado de baja o alta.
+                for (RutaViaje rv : allViajes) { 
                     if (rv.getIdRuta() == id) {
                         rv.setEstado(false);
                         modeloV.setValueAt(false, filaS, 7);
                         break;
                     }
                 }
-                    //Permite que si se borra el viaje, tambien se va a eliminar la pasaje y los lugares.
+                    
                     pd.borrarPasajeV(id);
                     ld.altaBajaLogica(id, false);
                     JOptionPane.showMessageDialog(this, "El viaje ha sido dado de baja con exito!");
@@ -809,7 +795,6 @@ public class CargarViaje extends javax.swing.JInternalFrame {
         for (Colectivo c : allColectivos) {
             JCBcole.addItem(c);
         }
-
     }
 
     /**
@@ -842,7 +827,6 @@ public class CargarViaje extends javax.swing.JInternalFrame {
      * Vacia/restablece todos los campos.
      */
     private void limpiar() {
-
         JTForigen.setText("");
         JTFdestino.setText("");
         TPsalida.clear();

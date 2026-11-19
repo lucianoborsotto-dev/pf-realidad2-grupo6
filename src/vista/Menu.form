@@ -4,26 +4,6 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="JMBventanas">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="JMinicio">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Ver"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="JMIver">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="All pasajes pasajero"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIverActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="JMIallColeChof">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Todos los buses y chofres"/>
-              </Properties>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
         <Menu class="javax.swing.JMenu" name="JMadministrar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Administrar"/>
