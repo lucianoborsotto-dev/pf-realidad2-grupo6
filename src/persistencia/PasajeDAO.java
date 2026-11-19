@@ -79,7 +79,7 @@ public class PasajeDAO {
             RutaViajeDAO rtv = new RutaViajeDAO();
             RutaViaje rv = rtv.buscarRuta(idViaje);
 
-            String sql = "DELETE FROM pasajes WHERE ID_Viaje = ?";
+            String sql = "DELETE FROM pasajes WHERE ID_Ruta = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, rv.getIdRuta());
             ps.executeUpdate();
