@@ -8,22 +8,25 @@ import java.time.LocalTime;
 public class Pasaje {
 
     private int idPasaje;
-
     private Pasajero pasajero;
-
     private Lugar asiento;
-
     private RutaViaje ruta;
-
     private LocalDate fechaVenta;
-
     private LocalTime horaVenta;
-
     private BigDecimal precio;
 
     private boolean estado = true;
 
     public Pasaje() {
+    }
+
+    public Pasaje(Pasajero pasajero, Lugar asiento, RutaViaje ruta, LocalDate fechaVenta, LocalTime horaVenta, BigDecimal precio) {
+        this.pasajero = pasajero;
+        this.asiento = asiento;
+        this.ruta = ruta;
+        this.fechaVenta = fechaVenta;
+        this.horaVenta = horaVenta;
+        this.precio = precio;
     }
 
     public Pasaje(int idPasaje, Pasajero pasajero, Lugar asiento, RutaViaje ruta, LocalDate fechaVenta, LocalTime horaVenta, BigDecimal precio) {

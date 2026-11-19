@@ -153,6 +153,22 @@ public class LugarDAO {
         }
     }
 
+    public void altaBajaLogicaLugar(boolean estado, int idLugar, int idViaje) {
+        String sql = "UPDATE lugar SET estado = ? WHERE ID_lugar = ? AND ID_viaje = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setBoolean(1, estado);
+            ps.setInt(2, idLugar);
+            ps.setInt(3, idViaje);
+
+            ps.executeUpdate();
+            System.out.println("Se actualizó el estado de los lugares del viaje ID: " + idLugar);
+
+        } catch (SQLException ex) {
+            System.out.println("No se pudo dar de baja los asientos del viaje: " + ex.getMessage());
+        }
+    }
+
     private Lugar leerLugar(ResultSet rs) throws SQLException, ClassNotFoundException {
 
         RutaViajeDAO rd = new RutaViajeDAO();

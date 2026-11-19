@@ -1,13 +1,23 @@
 package vista;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Lugar;
+import modelo.Pasaje;
 import modelo.Pasajero;
 import modelo.RutaViaje;
 import persistencia.LugarDAO;
+import persistencia.PasajeDAO;
 import persistencia.PasajeroDAO;
 import persistencia.RutaViajeDAO;
 
@@ -23,6 +33,7 @@ public class Comprar extends javax.swing.JInternalFrame {
 
     RutaViajeDAO rvd;
     PasajeroDAO pjd;
+    PasajeDAO pd;
     LugarDAO ld;
     List<Pasajero> allPasajeros;
     List<RutaViaje> allViajes;
@@ -31,13 +42,16 @@ public class Comprar extends javax.swing.JInternalFrame {
 
     public Comprar() {
         initComponents();
-        UtilidadesGenerales.ocultarMenu(this);
+
+        JDCfechaVenta.setDate(new java.util.Date());
+
         try {
             rvd = new RutaViajeDAO();
             pjd = new PasajeroDAO();
             allViajes = rvd.listarRutasT();
             allPasajeros = pjd.listarT();
             ld = new LugarDAO();
+            pd = new PasajeDAO();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al establecer la conexion con la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
 
@@ -68,6 +82,10 @@ public class Comprar extends javax.swing.JInternalFrame {
         JBbaja = new javax.swing.JButton();
         JLpasajero = new javax.swing.JLabel();
         JTFprecio = new javax.swing.JTextField();
+        JLhoraVenta = new javax.swing.JLabel();
+        TPhoraVenta = new com.github.lgooddatepicker.components.TimePicker();
+        JDCfechaVenta = new com.toedter.calendar.JDateChooser();
+        JLfechaVenta = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -117,6 +135,11 @@ public class Comprar extends javax.swing.JInternalFrame {
 
         JBcomprar.setText("Comprar pasaje");
         JBcomprar.setEnabled(false);
+        JBcomprar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBcomprarActionPerformed(evt);
+            }
+        });
 
         JBbaja.setText("Dar de Baja");
         JBbaja.setEnabled(false);
@@ -161,6 +184,12 @@ public class Comprar extends javax.swing.JInternalFrame {
 
         JTFprecio.setEditable(false);
 
+        JLhoraVenta.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
+        JLhoraVenta.setText("HORA VENTA:");
+
+        JLfechaVenta.setFont(new java.awt.Font("Dubai Medium", 1, 16)); // NOI18N
+        JLfechaVenta.setText("FECHA VENTA:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,15 +198,9 @@ public class Comprar extends javax.swing.JInternalFrame {
                 .addContainerGap(105, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(181, 181, 181))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(JLprecio)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JTFprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(116, 116, 116)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(181, 181, 181))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(JLviajes)
                             .addGap(12, 12, 12)
@@ -185,8 +208,20 @@ public class Comprar extends javax.swing.JInternalFrame {
                             .addGap(70, 70, 70)
                             .addComponent(JLpasajero)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(JCBpasajero, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap()))
+                            .addComponent(JCBpasajero, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(JLprecio)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(JTFprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(98, 98, 98)
+                                    .addComponent(JLhoraVenta))
+                                .addComponent(JLfechaVenta))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(TPhoraVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(JDCfechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(JLcargarLugar)
                         .addGap(333, 333, 333))))
@@ -205,10 +240,16 @@ public class Comprar extends javax.swing.JInternalFrame {
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTFprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
+                    .addComponent(JTFprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLhoraVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TPhoraVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JDCfechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLfechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         pack();
@@ -242,13 +283,74 @@ public class Comprar extends javax.swing.JInternalFrame {
         guardarBoton();
     }//GEN-LAST:event_JCBpasajeroItemStateChanged
 
+    private void JBcomprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBcomprarActionPerformed
+        ViajeString viaje = (ViajeString) JCBviajes.getSelectedItem();
+        PasajeroString pasajero = (PasajeroString) JCBpasajero.getSelectedItem();
+        int idPasajero = pasajero.getPasajero().getIdPasajero();
+        int idViaje = viaje.getViaje().getIdRuta();
+        LocalDate fechaVenta = JDCfechaVenta.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalTime horaVenta = TPhoraVenta.getTime();
+        String texto = JTFprecio.getText().replace("$", "").trim();
+        BigDecimal precio = new BigDecimal(texto);
+        Pasaje pasaje = null;
+
+        // Verificaciones
+        int filaS = JTlugares.getSelectedRow();
+        lugaresViajeS = ld.listarPorViaje(idViaje);
+        Lugar lugar = lugaresViajeS.get(filaS);
+        boolean estado = lugar.isEstado();
+        int idLugar = lugar.getIdLugar();
+
+        LocalTime horaSalida = viaje.getViaje().getHoraSalida();
+        boolean estaDisponible = (boolean) JTlugares.getValueAt(filaS, 1);
+
+        if (filaS != -1 && !estaDisponible) {
+            JOptionPane.showMessageDialog(this, "Este lugar está ocupado.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!horaVenta.isBefore(horaSalida)) {
+            JOptionPane.showMessageDialog(this, "ERROR: La hora de venta tiene que ser anterior a la hora de salida del viaje.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (fechaVenta.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(this, "No se puede comprar un pasaje anterior a la fecha de hoy.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (estado) {
+            ld.altaBajaLogicaLugar(false, idLugar, idViaje);
+            for (Lugar l : lugaresViajeS) {
+                if (l.getIdLugar() == idLugar) {
+                    l.setEstado(false);
+                    modeloPasa.setValueAt(false, filaS, 1);
+                    break;
+                }
+            }
+        }
+        pasaje = new Pasaje(pasajero.getPasajero(), lugar, viaje.getViaje(), fechaVenta, horaVenta, precio);
+        try {
+            pd.generar(pasaje);
+        } catch (SQLException ex) {
+            Logger.getLogger(Comprar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Comprar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(this, "Pasaje comprado!");
+
+
+    }//GEN-LAST:event_JBcomprarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBbaja;
     private javax.swing.JButton JBcomprar;
     private javax.swing.JComboBox<PasajeroString> JCBpasajero;
     private javax.swing.JComboBox<ViajeString> JCBviajes;
+    private com.toedter.calendar.JDateChooser JDCfechaVenta;
     private javax.swing.JLabel JLcargarLugar;
+    private javax.swing.JLabel JLfechaVenta;
+    private javax.swing.JLabel JLhoraVenta;
     private javax.swing.JLabel JLlugares;
     private javax.swing.JLabel JLpasajero;
     private javax.swing.JLabel JLprecio;
@@ -256,6 +358,7 @@ public class Comprar extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane JSPlugar;
     private javax.swing.JTextField JTFprecio;
     private javax.swing.JTable JTlugares;
+    private com.github.lgooddatepicker.components.TimePicker TPhoraVenta;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
@@ -280,7 +383,7 @@ public class Comprar extends javax.swing.JInternalFrame {
 
         JTlugares.setModel(modeloPasa);
     }
-    
+
     /**
      * Carga los viajes a la tabla.
      */
@@ -290,12 +393,16 @@ public class Comprar extends javax.swing.JInternalFrame {
             modeloPasa.addRow(new Object[]{l.getNumeroAsiento(), l.isEstado()});
         }
     }
-    
+
     /**
      * Habilita el boton guardar
      */
     private void guardarBoton() {
-        boolean listo = JTlugares.getSelectedRow() != -1 && JCBpasajero.getSelectedIndex() != -1;
+        boolean listo = JTlugares.getSelectedRow() != -1
+                && JCBpasajero.getSelectedIndex() != -1
+                && JDCfechaVenta.getDate() != null
+                && TPhoraVenta.getTime() != null;
+        JBcomprar.setEnabled(listo);
         JBcomprar.setEnabled(listo);
     }
 }
